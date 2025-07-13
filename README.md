@@ -1,193 +1,164 @@
-# Project Name: Cashense
+# 📱 Cashense: Your Intelligent Finance Companion
 
-## Tagline:
-**"The AI-First Expense Operating System—For Everyone from Individuals to Enterprises."**
-
-## Summary:
-**Cashense** is an AI-native personal & group expense manager that combines the best ideas from Splitwise, Walnut, Notion, and Fireflies.ai into a next-gen expense ecosystem. Designed for solopreneurs, friend groups, families, and SMBs, users can create smart "Cashbooks"—modular expense ledgers for every context (projects, roommates, startups, trips)—with collaborative controls, AI explanations, real-time analytics, and receipt intelligence.
+Welcome to **Cashense** — a smart, scalable, and culturally-rooted personal finance application, designed to revolutionize the way individuals manage, track, and optimize their finances.
 
 ---
 
-## Personal Vision
+## 🔥 Vision
 
-**Cashense** is a long-term, income-generating personal project built with care, depth, and scalability in mind. The goal is to:
+To empower every individual — from college students to working professionals — to **understand**, **control**, and **grow** their money using intuitive tools, intelligent automation, and community-driven finance features.
 
-- Launch an innovative product for both individual and team use
-- Incorporate AI into real-world finance tooling
-- Monetize via freemium and enterprise plans
-- Iterate over multiple versions for stability, growth, and delight
-- Build using Flutter for cross-platform performance and native-like experiences
+> "More than just an app — it's your personal financial conscience."
 
 ---
 
-## Tech Stack (July 2025)
+## 🌱 Mission
 
-### 🔹 **Frontend**
-- **Flutter SDK** ≥ 3.7 (Dart ≥ 3.3)
-
-### 🔹 **Firebase Backend**
-| Package           | Version |
-| ----------------- | ------- |
-| `firebase_core`   | ^2.14.0 |
-| `cloud_firestore` | ^4.9.0  |
-| `firebase_auth`   | ^4.6.0  |
-| `cloud_functions` | ^4.5.0  |
-
-### 🔹 **Local Database (Isar)**
-| Package             | Version  |
-| ------------------- | -------- |
-| `isar`              | ^3.1.0+1 |
-| `isar_flutter_libs` | ^3.1.0+1 |
-| `isar_generator`    | ^3.1.0+1 |
-| `build_runner`      | ^2.4.0   |
-
-### 🔹 **Connectivity / Offline Detection**
-| Package                            | Version |
-| ---------------------------------- | ------- |
-| `connectivity_plus`                | ^6.1.4  |
-| `internet_connection_checker_plus` | ^2.0.0  |
-
-### 🔹 **State Management**
-| Package               | Version |
-| --------------------- | ------- |
-| `flutter_riverpod`    | ^2.2.0  |
-| `riverpod_annotation` | ^2.6.1  |
-| `riverpod_generator`  | ^2.2.0  |
-| `riverpod_lint`       | ^2.0.0  |
-
-### 🔹 **Navigation**
-| Package     | Version |
-| ----------- | ------- |
-| `go_router` | ^8.1.0  |
-
-### 🔹 **HTTP Client**
-| Package | Version |
-| ------- | ------- |
-| `dio`   | ^6.0.0  |
-
-### 🔹 **Authentication & Security**
-| Package                  | Version |
-| ------------------------ | ------- |
-| `local_auth`             | ^2.1.8  |
-| `local_auth_android`     | ^1.0.43 |
-| `local_auth_darwin`      | ^1.5.0  |
-| `flutter_secure_storage` | ^9.0.0  |
-
-### 🔹 **Developer / Debug Tools (Optional)**
-| Package          | Version  |
-| ---------------- | -------- |
-| `flutter_hooks`  | ^0.20.5  |
-| `isar_inspector` | ^3.1.0+3 |
+* To make **money management intuitive**, not intimidating.
+* To **support smart saving** and intentional spending.
+* To **scale from individual to group-based finance** with ease.
+* To **infuse AI guidance** with native usability and cultural relevance.
 
 ---
 
-## Core Features
+## 🧩 Core Identity
 
-### 🔗 Modular Cashbooks
-- Create separate "Cashbooks" for:
-  - Personal tracking
-  - Group trips
-  - Family expenses
-  - Business projects
-- Each cashbook maintains:
-  - Accounts & Sub-accounts
-  - Group members
-  - Loans & debts
-  - Shared ownership & permissions
+* **App Name**: Cashense
+* **Meaning**: A portmanteau of *Cash* + *Sense*, bringing clarity, control, and cleverness to every rupee
+* **Target Market**: Young Indians, families, students, couples, and friends sharing group expenses
+* **Tagline Options**:
 
-### 🧠 AI + Voice + Video Assistants
-- Ask: “Explain this expense” or “Summarize group spend in April”
-- AI-generated video explainers
-- AI-generated audio reports
-- Voice/chat assistant for adding transactions
-
-### 🤝 Group Expense Mode (Splitwise+)
-- Invite members to Cashbooks
-- Auto-split shared expenses
-- Weighted splits, UPI reimbursements
-- One-off group tagging
-
-### 📋 Receipt Intelligence
-- Upload bills/invoices
-- AI parses and tags expenses
-- Detect duplicates and categorize automatically
-
-### 📊 Smart Budgeting & Saving Goals
-- Budget limits inside Cashbooks
-- Alerts, savings targets, nudges
-- AI: “Overspending on food this week”
-
-### 💰 Sub-Account Logic
-- Handle fund shortfalls intelligently
-- Inter-sub-account transfers
-
-### 💳 Debt & Loan Ledger
-- Log and manage debts within Cashbooks
-- Actions: Settle, Collect, Reassign
-
-### 🔐 Ghost Mode Cashbooks
-- PIN/biometric protected private Cashbooks
-
-### 🗓 Visual Timeline View
-- Diary-style calendar of expenses
-- AI summaries, media, notes per day
-
-### 🤖 Auto-Reconciliation Agent
-- Upload bank statements (PDF/CSV)
-- AI matches with logged transactions
-- Flags anomalies
-
-### 🌐 Collaborative Cashbooks
-- Multi-user, role-based expense management
-
-### 🌍 FinanceVerse Mode (Top-Secret Future Vision)
-- Connect multiple cashbooks
-- AI predicts cross-impact:
-  - “Delaying vendor payout improves savings goal timeline”
-- Visualize financial flow as a network
+  * "Make Every Rupee Count."
+  * "Smart. Simple. Cashense."
+  * "Track. Save. Grow. Together."
 
 ---
 
-## Monetization Plan
+## 📋 Project Overview
 
-**Freemium**
-- 3 Cashbooks
-- Limited AI usage
+Cashense is being developed with a phased approach, focusing on building a strong foundation first and progressively adding more complex features. Our implementation is divided into six phases:
 
-**Pro Plan**
-- Unlimited Cashbooks
-- Access to premium AI features
+1. **Core Foundation**: Accounts, transactions, and synchronization
+2. **Financial Planning**: Budgeting, goals, and analytics
+3. **Social Features**: Group expenses and debt tracking
+4. **AI Integration**: Natural language and voice interfaces
+5. **Advanced Features**: Bank integration and investment tracking
+6. **Future Expansion**: Additional features post-initial release
 
-**Enterprise Plan**
-- Team workspace features
-- White-labeled apps
-- Admin-level controls and auditing
+For detailed implementation plans and technical documentation, see the [docs](docs/index.md) directory.
 
 ---
 
-## MVP Sprint Plan (Realistic Timeline)
+## 📂 Project Structure
 
-| Day | Focus Area                                                  |
-| --- | ----------------------------------------------------------- |
-| 1   | Flutter project setup, authentication, dashboard UI         |
-| 2   | Cashbook creation, listing, deletion                        |
-| 3   | Expense form, local logic, AI explanation (OpenAI API)      |
-| 4   | Group invites, shared ledger, split logic                   |
-| 5   | Audio/video AI assistant integration                        |
-| 6   | Receipt upload, OCR + AI tagging                            |
-| 7   | UI polish and bug fixes                                     |
+```
+cashense/
+├── android/               # Android-specific configuration 
+├── ios/                   # iOS-specific configuration
+├── lib/
+│   ├── core/              # Core utilities and constants
+│   ├── data/              # Data models and repositories
+│   ├── domain/            # Business logic and entities
+│   ├── presentation/      # UI components
+│   ├── features/          # Feature modules
+│   ├── routes/            # App routing
+│   ├── theme/             # App theming
+│   └── main.dart          # App entry point
+├── assets/                # App assets (images, fonts)
+├── test/                  # Unit and widget tests
+└── docs/                  # Documentation
+```
+
+For a more detailed structure, see [Project Structure](docs/project_structure.md).
 
 ---
 
-## Competitor Landscape
+## 📦 Key Modules
 
-| Competitor         | Strengths                   | Weaknesses (Our Edge)                   |
-| ------------------ | --------------------------- | --------------------------------------- |
-| Splitwise          | Group splitting             | No AI, no modular books, no voice/video |
-| Walnut             | SMS-based tracking in India | No groups, no modular books             |
-| Goodbudget         | Envelope method             | Clunky UI, lacks AI                     |
-| Notion + Templates | Custom expense pages        | Manual, no financial logic              |
-| Fireflies.ai       | AI for meetings             | Doesn’t handle expenses                 |
+| Module                       | Description                                                                                                          |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Expense Tracking**         | Log daily transactions, filter by categories, tags, time, and accounts                                               |
+| **Accounts & Sub-Accounts**  | Support for wallet, bank, UPI, and custom accounts with nested sub-accounts                                          |
+| **Budgeting**                | Create monthly budgets, category-wise caps, and recurring goals                                                      |
+| **Saving Goals**             | Define custom financial goals with timelines and AI recommendations                                                  |
+| **Group Expenses**           | Add, split, settle, or collect expenses across friends, couples, and teams                                           |
+| **Debt Tracker**             | Track money lent or borrowed with options to mark as collected, paid, or settled without affecting account balance    |
+| **Subscription Manager**     | Track recurring subscriptions with renewal alerts and spending analytics                                             |
+| **Recurring Transactions**   | Set up automated entries for regular income/expenses with customizable frequency                                     |
+| **AI Assistant**             | Natural language & voice interface for adding transactions, suggesting budgets, reminding overages, and offering saving tips |
+| **Cash & Manual Handling**   | Optional cash-tracking with physical denomination detail                                                             |
+| **Linked Accounts**          | Optional bank integrations for automatic transaction syncing                                                         |
+| **Smart Reminders & Alerts** | Notify users of budget breaches, goal timelines, dues from others, or settlement options                             |
+| **Analytics & Insights**     | Visualizations, monthly summaries, pie charts, and income vs. expense trends                                         |
+| **Multi-Workspace**          | Create separate financial spaces (notebooks) for personal, business, or specific projects                            |
+| **Investment Tracking**      | Monitor stocks, mutual funds, fixed deposits, and other investment vehicles                                          |
 
-**Cashense is the first AI-native, modular expense ecosystem built for real-world financial flow.**
+---
 
+## 🧐 Intelligent Features
+
+* Conversational interface: *"I spent ₹500 on groceries yesterday from HDFC."* → auto-logged.
+* Voice command support: Speak transactions and commands for hands-free operation.
+* Smart classification: Suggests category and labels based on text or amount.
+* Goal advisor: Suggests how much to save monthly to reach a custom financial target.
+* Group sync: Real-time sync with other app users in shared accounts/groups.
+* Settlement logic: Choose to **collect** (adds amount to your account) or **settle** (clears dues without balance impact).
+* AI-powered saving strategies: Get personalized recommendations to optimize savings based on spending patterns.
+* Smart onboarding: Choose from AI-recommended templates (student, family, professional) or let AI create a custom setup.
+* Auto debt settlement: Intelligently suggest how to clear debts within groups with minimal transactions.
+* Financial tips integration: Quick financial advice on loading screens and within the app dashboard.
+
+---
+
+## 🔒 Security & Personalization
+
+* Biometric authentication (fingerprint and face unlock)
+* End-to-end encryption for sensitive financial data
+* Custom themes and appearance settings
+* Adjustable font sizes and accessibility options
+* Cross-device synchronization with offline support
+* Automatic data backup and recovery options
+
+---
+
+## 🎯 User Personas
+
+* **Riya**, a college student budgeting her monthly pocket money.
+* **Amit & Neha**, a newly married couple using a joint "Home" account.
+* **Sahil**, a working professional splitting car fuel expenses with 4 roommates.
+* **Deepika**, a solo saver tracking every cash detail and planning for travel.
+* **Vikram**, a freelancer managing both personal finances and business expenses in separate workspaces.
+
+---
+
+## 🌐 Tech Stack (Finalized)
+
+* **Frontend**: Flutter (Dart) — managed with FVM (Flutter Version Management)
+* **Backend**: Supabase (PostgreSQL, Auth, Storage, Edge Functions)
+* **Database**: PostgreSQL (via Supabase)
+* **Authentication**: Supabase Auth
+* **AI Integration**: OpenAI API (for NLP & suggestions)
+* **Push Notifications**: Firebase Cloud Messaging (FCM)
+* **CI/CD**: GitHub Actions (for backend and Flutter builds), Codemagic (optional for Flutter app distribution)
+
+For detailed technical requirements and dependencies, see [Tech Requirements](docs/tech_requirements.md).
+
+---
+
+## 🚀 Getting Started
+
+For developer setup instructions and contribution guidelines, see [Getting Started](docs/guides/getting_started.md).
+
+---
+
+## 📖 Documentation
+
+Comprehensive documentation is available in the [docs](docs/index.md) directory, including:
+
+* Detailed implementation plans for each phase
+* Technical specifications and architecture
+* Database schemas and API documentation
+* Developer guides and standards
+* UI/UX design specifications
+
+---
