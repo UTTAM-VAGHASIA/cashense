@@ -160,5 +160,6 @@ Comprehensive documentation is available in the [docs](docs/index.md) directory,
 * Database schemas and API documentation
 * Developer guides and standards
 * UI/UX design specifications
+* [Team Collaboration Plan](docs/team_collaboration.md)
 
 ---
