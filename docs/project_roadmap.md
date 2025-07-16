@@ -41,3 +41,22 @@
 28. **Financial Education Modules**
 29. **UPI & Payment Integration**
 30. **Community-Driven Features** 
+
+```mermaid
+gantt
+    title Cashense High-Level Roadmap
+    dateFormat  YYYY-MM-DD
+    section Phase 1
+    Core Foundation      :active, a1, 2024-07-01, 6w
+    section Phase 2
+    Financial Planning   :a2, after a1, 6w
+    section Phase 3
+    Social Features      :a3, after a2, 6w
+    section Phase 4
+    AI Integration       :a4, after a3, 5w
+    section Phase 5
+    Advanced Features    :a5, after a4, 6w
+    section Phase 6
+    Future Expansion     :a6, after a5, 4w
+```
+

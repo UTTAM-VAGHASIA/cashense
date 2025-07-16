@@ -10,6 +10,7 @@ Welcome to the Cashense documentation. This repository contains detailed impleme
 - [Project Structure](project_structure.md)
 - [Tech Requirements](tech_requirements.md)
 - [Project Progress Tracker](project_progress.md) ✅
+- [Team Collaboration Plan](team_collaboration.md) ✅
 
 ### Phase Documentation
 1. [Phase 1: Core Foundation](phase_details/phase1_core_foundation.md)
@@ -22,27 +23,27 @@ Welcome to the Cashense documentation. This repository contains detailed impleme
 ### Progress Tracking
 - [Overall Project Progress](project_progress.md) ✅
 - [Phase 1 Progress](phase_progress/phase1_progress.md) ✅
-- [Phase 2 Progress](phase_progress/phase2_progress.md) (TODO)
-- [Phase 3 Progress](phase_progress/phase3_progress.md) (TODO)
-- [Phase 4 Progress](phase_progress/phase4_progress.md) (TODO)
-- [Phase 5 Progress](phase_progress/phase5_progress.md) (TODO)
-- [Phase 6 Progress](phase_progress/phase6_progress.md) (TODO)
+- [Phase 2 Progress](phase_progress/phase2_progress.md) (Planning)
+- [Phase 3 Progress](phase_progress/phase3_progress.md) (Planning)
+- [Phase 4 Progress](phase_progress/phase4_progress.md) (Planning)
+- [Phase 5 Progress](phase_progress/phase5_progress.md) (Planning)
+- [Phase 6 Progress](phase_progress/phase6_progress.md) (Planning)
 
 ### Database and API Documentation
 - [Database Schema](database/schema.md) ✅
-- [API Documentation](api/index.md) (TODO)
-- [Supabase Integration](database/supabase_setup.md) (TODO)
+- [API Documentation](api/index.md) (Planning)
+- [Supabase Integration](database/supabase_setup.md) (Planning)
 
 ### Developer Guides
 - [Getting Started](guides/getting_started.md) ✅
 - [Coding Standards](guides/coding_standards.md) ✅
 - [Testing Guide](guides/testing.md) ✅
-- [Git Workflow](guides/git_workflow.md) (TODO)
+- [Git Workflow](guides/git_workflow.md) ✅
 
 ### UI/UX Design
-- [Design System](design/design_system.md) (TODO)
-- [Screen Mockups](design/mockups.md) (TODO)
-- [User Flows](design/user_flows.md) (TODO)
+- [Design System](design/design_system.md) (Planning)
+- [Screen Mockups](design/mockups.md) (Planning)
+- [User Flows](design/user_flows.md) (Planning)
 
 ## How to Use This Documentation
 
@@ -69,3 +70,4 @@ We are now ready to proceed with:
 1. Completing the remaining phase documentation (Phase 3-6)
 2. Setting up the initial Flutter project structure
 3. Beginning implementation of Phase 1 features 
+

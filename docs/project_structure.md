@@ -46,3 +46,14 @@ cashense/
 ├── pubspec.yaml           # Project dependencies
 └── README.md              # Project overview
 ``` 
+
+```mermaid
+graph TD
+    A[Flutter App]
+    B[Supabase Backend]
+    C[External APIs]
+    A -- REST/RPC --> B
+    B -- Webhooks --> A
+    B -- Integrates --> C
+```
+
