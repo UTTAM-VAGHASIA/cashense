@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "name": "Flutter Documentation Sync",
+  "description": "Listens to Flutter source files and related configuration files, then updates documentation in README.md or docs folder when changes occur",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.dart",
+      "*.yaml",
+      "*.yml",
+      "pubspec.yaml",
+      "pubspec.lock",
+      "*.json",
+      "*.md",
+      "*.txt",
+      "*.config"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Source files have been modified in this Flutter project. Please review the changes and update the documentation accordingly. Focus on updating either the README.md file or relevant files in the docs/ folder (API.md, ARCHITECTURE.md, DEPLOYMENT.md) to reflect any new features, API changes, architectural updates, or deployment considerations. Ensure the documentation stays current with the codebase changes."
+  }
+}

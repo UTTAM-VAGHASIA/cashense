@@ -1,164 +1,416 @@
-# 📱 Cashense: Your Intelligent Finance Companion
+# Cashense - AI-Powered Financial Management Platform
 
-Welcome to **Cashense** — a smart, scalable, and culturally-rooted personal finance application, designed to revolutionize the way individuals manage, track, and optimize their finances.
+Cashense is an AI-powered, cross-platform financial management application that combines traditional expense tracking with intelligent features and social finance capabilities. Built with Flutter and Firebase, it serves as the ultimate financial companion for individuals and groups, providing comprehensive financial management tools that are intelligent, accessible, and cost-effective.
 
----
+## 🌟 Key Features
 
-## 🔥 Vision
+- **Multi-Platform**: Single Flutter codebase for mobile (iOS/Android), web, and desktop
+- **AI-Powered**: Natural language processing for effortless transaction entry and voice input
+- **Multi-Cashbook**: Separate financial contexts (personal, business, family) with role-based permissions
+- **Social Finance**: Group expense sharing, debt tracking, and settlement optimization
+- **Advanced Analytics**: Comprehensive reporting, spending insights, and financial health scoring
+- **Investment Tracking**: Portfolio management with real-time market data
+- **Bank Integration**: Secure automatic transaction import with intelligent categorization
+- **Offline-First**: Full functionality with local storage and seamless synchronization
 
-To empower every individual — from college students to working professionals — to **understand**, **control**, and **grow** their money using intuitive tools, intelligent automation, and community-driven finance features.
+## 🏗️ Architecture Overview
 
-> "More than just an app — it's your personal financial conscience."
-
----
-
-## 🌱 Mission
-
-* To make **money management intuitive**, not intimidating.
-* To **support smart saving** and intentional spending.
-* To **scale from individual to group-based finance** with ease.
-* To **infuse AI guidance** with native usability and cultural relevance.
-
----
-
-## 🧩 Core Identity
-
-* **App Name**: Cashense
-* **Meaning**: A portmanteau of *Cash* + *Sense*, bringing clarity, control, and cleverness to every rupee
-* **Target Market**: Young Indians, families, students, couples, and friends sharing group expenses
-* **Tagline Options**:
-
-  * "Make Every Rupee Count."
-  * "Smart. Simple. Cashense."
-  * "Track. Save. Grow. Together."
-
----
-
-## 📋 Project Overview
-
-Cashense is being developed with a phased approach, focusing on building a strong foundation first and progressively adding more complex features. Our implementation is divided into six phases:
-
-1. **Core Foundation**: Accounts, transactions, and synchronization
-2. **Financial Planning**: Budgeting, goals, and analytics
-3. **Social Features**: Group expenses and debt tracking
-4. **AI Integration**: Natural language and voice interfaces
-5. **Advanced Features**: Bank integration and investment tracking
-6. **Future Expansion**: Additional features post-initial release
-
-For detailed implementation plans and technical documentation, see the [docs](docs/index.md) directory.
-
----
-
-## 📂 Project Structure
+Cashense follows a modern, scalable architecture built on Firebase backend-as-a-service:
 
 ```
-cashense/
-├── android/               # Android-specific configuration 
-├── ios/                   # iOS-specific configuration
-├── lib/
-│   ├── core/              # Core utilities and constants
-│   ├── data/              # Data models and repositories
-│   ├── domain/            # Business logic and entities
-│   ├── presentation/      # UI components
-│   ├── features/          # Feature modules
-│   ├── routes/            # App routing
-│   ├── theme/             # App theming
-│   └── main.dart          # App entry point
-├── assets/                # App assets (images, fonts)
-├── test/                  # Unit and widget tests
-└── docs/                  # Documentation
+Flutter Application (Cross-Platform)
+├── Mobile (iOS/Android)
+├── Web (PWA)
+└── Desktop (Windows/Mac/Linux)
+
+State Management: Riverpod
+├── Authentication Providers
+├── Data Management Providers
+└── UI State Providers
+
+Local Storage Layer
+├── Hive Database (Primary)
+├── Secure Storage (Sensitive Data)
+└── SharedPreferences (Settings)
+
+Firebase Backend
+├── Firestore (Database)
+├── Authentication
+├── Storage (Files)
+├── Functions (Serverless)
+├── AI Logic (Gemini)
+└── Analytics/Crashlytics
 ```
 
-For a more detailed structure, see [Project Structure](docs/project_structure.md).
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Flutter SDK (latest stable) - managed via FVM
+- Firebase CLI
+- Git
+- IDE: VS Code or Android Studio
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-org/cashense.git
+   cd cashense
+   ```
+
+2. **Set up Flutter version**
+   ```bash
+   # Install FVM if not already installed
+   dart pub global activate fvm
+   
+   # Use project Flutter version
+   fvm use
+   fvm flutter --version
+   ```
+
+3. **Install dependencies**
+   ```bash
+   fvm flutter pub get
+   ```
+
+4. **Firebase Setup**
+   ```bash
+   # Install Firebase CLI
+   npm install -g firebase-tools
+   
+   # Login to Firebase
+   firebase login
+   
+   # Initialize Firebase (if not already done)
+   firebase init
+   ```
+
+5. **Configure Firebase**
+   - Copy `firebase_options_template.dart` to `lib/firebase_options.dart`
+   - Update with your Firebase project configuration
+   - Ensure all Firebase services are enabled in your project
+
+6. **Generate Code**
+   ```bash
+   fvm flutter packages pub run build_runner build
+   ```
+
+7. **Run the application**
+   ```bash
+   # Mobile
+   fvm flutter run
+   
+   # Web
+   fvm flutter run -d chrome
+   
+   # Desktop
+   fvm flutter run -d windows  # or macos/linux
+   ```
+
+## 📱 Platform-Specific Setup
+
+### Mobile Development
+
+**Android:**
+- Minimum SDK: 21 (Android 5.0)
+- Target SDK: 34 (Android 14)
+- Permissions: Camera, Location, Biometric, Internet
+
+**iOS:**
+- Minimum iOS: 12.0
+- Required capabilities: Camera, Location, FaceID/TouchID
+
+### Web Development
+
+- Hosted on Firebase Hosting
+- PWA capabilities enabled
+- Responsive design for all screen sizes
+- Offline functionality with service workers
+
+### Desktop Development
+
+- Windows: Windows 10 or later
+- macOS: macOS 10.14 or later  
+- Linux: Ubuntu 18.04 or later
+
+## 🛠️ Development Workflow
+
+### Code Organization
+
+```
+lib/
+├── main.dart                    # App entry point
+├── app/                        # App-level configuration
+├── core/                       # Core utilities and shared code
+├── shared/                     # Shared components and services
+├── features/                   # Feature modules
+│   ├── authentication/
+│   ├── accounts/
+│   ├── transactions/
+│   ├── budgets/
+│   └── analytics/
+└── l10n/                      # Localization files
+```
+
+### Development Commands
+
+```bash
+# Code generation
+fvm flutter packages pub run build_runner build
+
+# Clean and rebuild
+fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+
+# Run tests
+fvm flutter test
+
+# Analyze code
+fvm flutter analyze
+
+# Format code
+fvm flutter format .
+
+# Generate documentation
+dart doc
+
+# Build for production
+fvm flutter build apk --release      # Android
+fvm flutter build ios --release      # iOS
+fvm flutter build web --release      # Web
+```
+
+### Development Tools
+
+**Model Context Protocol (MCP) Integration:**
+- **GitMCP Server**: Currently configured for AI-assisted Git operations and repository analysis
+  - Enables intelligent Git workflow assistance through Kiro AI assistant
+  - Configured at user level (`~/.kiro/settings/mcp.json`) for cross-project availability
+  - Provides contextual repository insights and code analysis
+  - Command: `npx mcp-remote https://gitmcp.io/{owner}/{repo}`
+- **Sequential Thinking MCP**: Advanced reasoning capabilities for complex problem-solving
+  - Provides structured thinking processes for development decisions
+  - Command: `npx -y @modelcontextprotocol/server-sequential-thinking`
+  - Enables multi-step analysis and solution development
+- **Flutter Inspector MCP**: Available for enhanced debugging capabilities
+  - Real-time widget tree inspection and performance analysis via `flutter-mcp` package
+  - AI-assisted development environment for improved productivity and debugging workflows
+  - Connects to Dart VM (localhost:8181) for live application debugging during development
+  - Integrated resource inspection and image analysis capabilities
+
+### Git Workflow
+
+1. Create feature branch from `develop`
+2. Make changes following coding standards
+3. Run tests and ensure code quality
+4. Create pull request with detailed description
+5. Code review and approval required
+6. Merge to `develop` branch
+
+## 🧪 Testing Strategy
+
+### Test Types
+
+- **Unit Tests**: Business logic and utilities
+- **Widget Tests**: UI components and interactions
+- **Integration Tests**: Complete user workflows
+- **Performance Tests**: Memory usage and rendering
+
+### Running Tests
+
+```bash
+# All tests
+fvm flutter test
+
+# Specific test file
+fvm flutter test test/features/transactions/transaction_service_test.dart
+
+# Integration tests
+fvm flutter test integration_test/
+
+# Test coverage
+fvm flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create `.env` files for different environments:
+
+```bash
+# .env.development
+FIREBASE_PROJECT_ID=cashense-dev
+API_BASE_URL=https://api-dev.cashense.com
+ENABLE_ANALYTICS=false
+
+# .env.production  
+FIREBASE_PROJECT_ID=cashense-prod
+API_BASE_URL=https://api.cashense.com
+ENABLE_ANALYTICS=true
+```
+
+### Firebase Configuration
+
+Key Firebase services used:
+- **Firestore**: Primary database (1GB free)
+- **Authentication**: User management (50K MAU free)
+- **Storage**: File attachments (5GB free)
+- **Functions**: Serverless backend (2M invocations/month free)
+- **Hosting**: Web deployment (10GB storage free)
+
+## 🌍 Localization
+
+Supported languages:
+- English (en_US) - Default
+- Spanish (es_ES)
+- French (fr_FR)
+- German (de_DE)
+- Arabic (ar_SA) - RTL support
+- Hindi (hi_IN)
+- Chinese (zh_CN)
+
+### Adding New Translations
+
+1. Add strings to `l10n/app_en.arb`
+2. Generate translations for other languages
+3. Run code generation: `fvm flutter gen-l10n`
+4. Use in code: `context.l10n.stringKey`
+
+## 💰 Business Model & Cost Optimization
+
+Cashense follows a freemium model leveraging Firebase free tiers:
+
+**Target Monthly Costs: $0-10**
+
+- Firestore: 1GB storage + 50K reads/20K writes (free)
+- Authentication: 50K monthly active users (free)
+- Storage: 5GB storage (free)
+- Functions: 2M invocations/month (free)
+- Hosting: 10GB storage + 360MB/day transfer (free)
+
+Premium features will be available for advanced analytics and integrations while maintaining cost efficiency within Firebase limits.
+
+## 🔒 Security
+
+### Data Protection
+- End-to-end encryption for all financial data
+- Local data encryption using Hive encryption
+- Secure key storage with flutter_secure_storage
+- TLS encryption for all network communications
+
+### Authentication
+- Multi-factor authentication support
+- Biometric authentication (fingerprint, face)
+- Session management with automatic timeout
+- OAuth integration for social logins
+
+### Privacy
+- GDPR compliance with data export/deletion
+- Local-first data storage options
+- Granular privacy controls
+- Data anonymization features
+
+## 📊 Performance
+
+### Optimization Strategies
+- Lazy loading for large datasets
+- Image optimization and caching
+- Efficient Firestore queries with composite indexes
+- Local storage optimization with automatic cleanup
+- Progressive sync with priority-based updates
+
+### Monitoring
+- Firebase Performance Monitoring
+- Crashlytics for error tracking
+- Analytics for user behavior insights
+- Custom performance metrics
+
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+### Quick Contribution Steps
+
+1. Fork the repository
+2. Create a feature branch
+3. Follow coding standards
+4. Add tests for new features
+5. Submit a pull request
+
+## 📚 Documentation
+
+- [Architecture Guide](docs/ARCHITECTURE.md)
+- [API Documentation](docs/API.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)
+- [Testing Guide](docs/TESTING.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Build Errors:**
+```bash
+# Clean and rebuild
+fvm flutter clean
+fvm flutter pub get
+fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+```
+
+**Firebase Connection Issues:**
+- Verify Firebase configuration in `lib/firebase_options.dart`
+- Check internet connectivity
+- Ensure Firebase services are enabled
+
+**Performance Issues:**
+- Check for memory leaks in providers
+- Optimize image loading and caching
+- Review Firestore query efficiency
+
+**Development Tools Issues:**
+- **GitMCP**: Verify `mcp-remote` is installed: `npm install -g mcp-remote`
+- **Sequential Thinking MCP**: Test server: `npx -y @modelcontextprotocol/server-sequential-thinking`
+- **Flutter Inspector MCP**: Ensure Dart VM is running on localhost:8181 for live debugging
+- **MCP Configuration**: Check MCP server configuration in `.kiro/settings/mcp.json`
+- **Connectivity**: Test MCP server connectivity: `npx flutter-mcp --stdio` (for Flutter Inspector)
+- **Restart**: Restart Kiro if MCP server connection fails after configuration changes
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🎯 Target Users
+
+- Individuals seeking comprehensive personal finance management
+- Families managing shared expenses and budgets
+- Small businesses tracking expenses and cash flow
+- Groups sharing expenses (roommates, travel, events)
+- Anyone wanting AI-assisted financial insights
+
+## 📊 Success Metrics
+
+- User engagement and retention
+- Transaction volume and accuracy
+- Cost efficiency within Firebase limits
+- Cross-platform adoption rates
+
+## 🙏 Acknowledgments
+
+- Flutter team for the amazing framework
+- Firebase team for the comprehensive backend services
+- Riverpod for excellent state management
+- Material Design team for design guidelines
+- Open source community for various packages used
+
+## 📞 Support
+
+- **Documentation**: Check the docs/ directory
+- **Issues**: Create a GitHub issue
+- **Discussions**: Use GitHub Discussions
+- **Email**: support@cashense.com
 
 ---
 
-## 📦 Key Modules
-
-| Module                       | Description                                                                                                          |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **Expense Tracking**         | Log daily transactions, filter by categories, tags, time, and accounts                                               |
-| **Accounts & Sub-Accounts**  | Support for wallet, bank, UPI, and custom accounts with nested sub-accounts                                          |
-| **Budgeting**                | Create monthly budgets, category-wise caps, and recurring goals                                                      |
-| **Saving Goals**             | Define custom financial goals with timelines and AI recommendations                                                  |
-| **Group Expenses**           | Add, split, settle, or collect expenses across friends, couples, and teams                                           |
-| **Debt Tracker**             | Track money lent or borrowed with options to mark as collected, paid, or settled without affecting account balance    |
-| **Subscription Manager**     | Track recurring subscriptions with renewal alerts and spending analytics                                             |
-| **Recurring Transactions**   | Set up automated entries for regular income/expenses with customizable frequency                                     |
-| **AI Assistant**             | Natural language & voice interface for adding transactions, suggesting budgets, reminding overages, and offering saving tips |
-| **Cash & Manual Handling**   | Optional cash-tracking with physical denomination detail                                                             |
-| **Linked Accounts**          | Optional bank integrations for automatic transaction syncing                                                         |
-| **Smart Reminders & Alerts** | Notify users of budget breaches, goal timelines, dues from others, or settlement options                             |
-| **Analytics & Insights**     | Visualizations, monthly summaries, pie charts, and income vs. expense trends                                         |
-| **Multi-Workspace**          | Create separate financial spaces (notebooks) for personal, business, or specific projects                            |
-| **Investment Tracking**      | Monitor stocks, mutual funds, fixed deposits, and other investment vehicles                                          |
-
----
-
-## 🧐 Intelligent Features
-
-* Conversational interface: *"I spent ₹500 on groceries yesterday from HDFC."* → auto-logged.
-* Voice command support: Speak transactions and commands for hands-free operation.
-* Smart classification: Suggests category and labels based on text or amount.
-* Goal advisor: Suggests how much to save monthly to reach a custom financial target.
-* Group sync: Real-time sync with other app users in shared accounts/groups.
-* Settlement logic: Choose to **collect** (adds amount to your account) or **settle** (clears dues without balance impact).
-* AI-powered saving strategies: Get personalized recommendations to optimize savings based on spending patterns.
-* Smart onboarding: Choose from AI-recommended templates (student, family, professional) or let AI create a custom setup.
-* Auto debt settlement: Intelligently suggest how to clear debts within groups with minimal transactions.
-* Financial tips integration: Quick financial advice on loading screens and within the app dashboard.
-
----
-
-## 🔒 Security & Personalization
-
-* Biometric authentication (fingerprint and face unlock)
-* End-to-end encryption for sensitive financial data
-* Custom themes and appearance settings
-* Adjustable font sizes and accessibility options
-* Cross-device synchronization with offline support
-* Automatic data backup and recovery options
-
----
-
-## 🎯 User Personas
-
-* **Riya**, a college student budgeting her monthly pocket money.
-* **Amit & Neha**, a newly married couple using a joint "Home" account.
-* **Sahil**, a working professional splitting car fuel expenses with 4 roommates.
-* **Deepika**, a solo saver tracking every cash detail and planning for travel.
-* **Vikram**, a freelancer managing both personal finances and business expenses in separate workspaces.
-
----
-
-## 🌐 Tech Stack (Finalized)
-
-* **Frontend**: Flutter (Dart) — managed with FVM (Flutter Version Management)
-* **Backend**: Supabase (PostgreSQL, Auth, Storage, Edge Functions)
-* **Database**: PostgreSQL (via Supabase)
-* **Authentication**: Supabase Auth
-* **AI Integration**: OpenAI API (for NLP & suggestions)
-* **Push Notifications**: Firebase Cloud Messaging (FCM)
-* **CI/CD**: GitHub Actions (for backend and Flutter builds), Codemagic (optional for Flutter app distribution)
-
-For detailed technical requirements and dependencies, see [Tech Requirements](docs/tech_requirements.md).
-
----
-
-## 🚀 Getting Started
-
-For developer setup instructions and contribution guidelines, see [Getting Started](docs/guides/getting_started.md).
-
----
-
-## 📖 Documentation
-
-Comprehensive documentation is available in the [docs](docs/index.md) directory, including:
-
-* Detailed implementation plans for each phase
-* Technical specifications and architecture
-* Database schemas and API documentation
-* Developer guides and standards
-* UI/UX design specifications
-
----
+**Built with ❤️ using Flutter and Firebase**
