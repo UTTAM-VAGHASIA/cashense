@@ -1,0 +1,27 @@
+{
+    "@@locale": "en",
+    "appTitle": "Cashense",
+    "@appTitle": {
+        "description": "The title of the application"
+    },
+    "welcome": "Welcome to Cashense",
+    "@welcome": {
+        "description": "Welcome message"
+    },
+    "signIn": "Sign In",
+    "@signIn": {
+        "description": "Sign in button text"
+    },
+    "signUp": "Sign Up",
+    "@signUp": {
+        "description": "Sign up button text"
+    },
+    "email": "Email",
+    "@email": {
+        "description": "Email field label"
+    },
+    "password": "Password",
+    "@password": {
+        "description": "Password field label"
+    }
+}

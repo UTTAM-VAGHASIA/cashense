@@ -4,7 +4,7 @@
   "description": "Monitors changes to localization files (JSON, YAML, ARB) and automatically generates translations for all configured target languages while maintaining context and Flutter-specific conventions",
   "version": "1",
   "when": {
-    "type": "fileEdited",
+    "type": "userTriggered",
     "patterns": [
       "**/*.json",
       "**/*.yaml",

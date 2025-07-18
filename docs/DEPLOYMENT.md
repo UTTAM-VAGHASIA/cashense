@@ -18,19 +18,19 @@ This guide covers deployment procedures for all Cashense platforms including mob
 
 ### Required Tools
 
-- **Flutter SDK**: Latest stable version (managed via FVM)
+- **Flutter SDK**: Latest stable version (^3.8.1, managed via FVM)
 - **Firebase CLI**: Latest version
 - **Git**: Version control
-- **Node.js**: For Firebase Functions (if used)
+- **Node.js**: For Firebase Functions and MCP servers
 - **Development Tools**:
   - Flutter Inspector MCP Server: Enhanced debugging via `flutter-mcp` package integration
   - Model Context Protocol (MCP): AI-assisted development environment with Kiro integration
   - Node.js: Required for running Flutter MCP server (`npx flutter-mcp --stdio`)
 - **Platform-specific tools**:
-  - Android: Android Studio, Android SDK
-  - iOS: Xcode (macOS only)
-  - Web: Modern browser for testing
-  - Desktop: Platform-specific build tools
+  - Android: Android Studio, Android SDK (API 21+ target)
+  - iOS: Xcode (macOS only, iOS 12.0+ target)
+  - Web: Modern browser for testing (PWA capabilities)
+  - Desktop: Platform-specific build tools (Windows 10+, macOS 10.14+, Ubuntu 18.04+)
 
 ### Development Environment
 
@@ -41,10 +41,18 @@ dart pub global activate fvm
 # Install Firebase CLI
 npm install -g firebase-tools
 
+# Install MCP Remote (for GitMCP integration)
+npm install -g mcp-remote
+
 # Verify installations
 fvm --version
 firebase --version
 flutter doctor
+npx mcp-remote --version
+
+# Test MCP servers
+npx -y @modelcontextprotocol/server-sequential-thinking
+npx mcp-remote https://gitmcp.io/{owner}/{repo}
 ```
 
 ## 🌍 Environment Setup

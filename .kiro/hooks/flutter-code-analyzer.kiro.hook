@@ -4,7 +4,7 @@
   "description": "Monitors Flutter source code files for changes and provides automated code quality analysis, suggesting improvements for readability, maintainability, and performance while preserving original code in comments with detailed explanations.",
   "version": "1",
   "when": {
-    "type": "fileEdited",
+    "type": "userTriggered",
     "patterns": [
       "**/*.dart",
       "**/*.yaml",

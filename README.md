@@ -87,8 +87,8 @@ Firebase Backend
    ```
 
 5. **Configure Firebase**
-   - Copy `firebase_options_template.dart` to `lib/firebase_options.dart`
-   - Update with your Firebase project configuration
+   - Set up Firebase project with Firestore, Authentication, Storage, Functions, and Hosting
+   - Configure `lib/firebase_options.dart` with your project settings
    - Ensure all Firebase services are enabled in your project
 
 6. **Generate Code**
@@ -160,6 +160,8 @@ lib/
 fvm flutter packages pub run build_runner build
 
 # Clean and rebuild
+fvm flutter clean
+fvm flutter pub get
 fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 
 # Run tests
@@ -178,6 +180,9 @@ dart doc
 fvm flutter build apk --release      # Android
 fvm flutter build ios --release      # iOS
 fvm flutter build web --release      # Web
+fvm flutter build windows --release  # Windows
+fvm flutter build macos --release    # macOS
+fvm flutter build linux --release    # Linux
 ```
 
 ### Development Tools
@@ -235,6 +240,40 @@ genhtml coverage/lcov.info -o coverage/html
 
 ## 🔧 Configuration
 
+### Project Dependencies
+
+The project is configured with comprehensive dependencies for:
+
+**Core Framework:**
+- Flutter SDK (^3.8.1) with FVM management
+- Material 3 design system with dynamic theming
+- Cross-platform support (mobile, web, desktop)
+
+**State Management:**
+- Riverpod (^2.6.1) for compile-time safe providers
+- Advanced async/sync state management
+
+**Firebase Integration:**
+- Complete Firebase suite (Core, Auth, Firestore, Storage, Analytics, Crashlytics, Messaging, Functions)
+- Real-time synchronization and offline capabilities
+
+**Local Storage:**
+- Hive (^2.2.3) for primary local database
+- flutter_secure_storage for sensitive data encryption
+- SharedPreferences for app settings
+
+**UI & Navigation:**
+- go_router (^16.0.0) for declarative navigation
+- fl_chart for financial data visualization
+- flutter_form_builder for complex forms
+- dynamic_color for Material You theming
+
+**Localization & Utilities:**
+- Multi-language support with flutter_localizations
+- Currency handling with currency_picker and money2
+- Network requests with dio
+- Text-to-speech capabilities with flutter_tts
+
 ### Environment Variables
 
 Create `.env` files for different environments:
@@ -253,12 +292,15 @@ ENABLE_ANALYTICS=true
 
 ### Firebase Configuration
 
-Key Firebase services used:
-- **Firestore**: Primary database (1GB free)
+Key Firebase services configured:
+- **Firestore**: Primary database (1GB + 50K reads/20K writes free)
 - **Authentication**: User management (50K MAU free)
 - **Storage**: File attachments (5GB free)
-- **Functions**: Serverless backend (2M invocations/month free)
-- **Hosting**: Web deployment (10GB storage free)
+- **Functions**: Serverless backend logic (2M invocations/month free)
+- **Hosting**: Web deployment (10GB storage + 360MB/day transfer free)
+- **Analytics**: User behavior tracking and insights
+- **Crashlytics**: Error reporting and crash analysis
+- **Messaging**: Push notifications for alerts and updates
 
 ## 🌍 Localization
 

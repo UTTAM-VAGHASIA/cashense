@@ -131,11 +131,14 @@ lib/
 - Firebase Storage for file attachments (5GB free)
 - Firebase Functions for serverless backend logic (2M invocations/month free)
 - Firebase Hosting for web deployment (10GB storage + 360MB/day transfer free)
+- Firebase Analytics for user behavior tracking and insights
+- Firebase Crashlytics for error reporting and crash analysis
+- Firebase Messaging for push notifications and real-time alerts
 
 **Local Storage:**
-- Hive for mobile/desktop/web local storage (faster than Isar, simpler API)
-- flutter_secure_storage for sensitive data encryption
-- SharedPreferences for app settings and preferences
+- Hive (^2.2.3) for mobile/desktop/web local storage (faster than Isar, simpler API)
+- flutter_secure_storage (^4.2.1) for sensitive data encryption
+- SharedPreferences (^2.5.3) for app settings and preferences
 
 ## 🔐 Security Architecture
 
@@ -157,7 +160,8 @@ lib/
 - Firebase AI Logic (Vertex AI integration) for intelligent categorization
 - Gemini in Firebase for contextual awareness and insights
 - OpenAI API for advanced NLP processing (pay-per-use, cost-optimized)
-- Local alternatives: flutter_tts + speech_to_text for offline voice features
+- Local alternatives: flutter_tts (^4.2.3) + speech_to_text for offline voice features
+- Natural language transaction parsing and voice input capabilities
 
 ## 📊 Performance Architecture
 
