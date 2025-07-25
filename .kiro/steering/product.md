@@ -1,34 +1,36 @@
 # Cashense Product Overview
 
-Cashense is an AI-powered, cross-platform financial management application that combines traditional expense tracking with intelligent features and social finance capabilities.
+Cashense is an AI-powered, cross-platform financial management application that combines traditional expense tracking with intelligent features and social finance capabilities. Built with Flutter and Firebase, it serves as the ultimate financial companion for individuals and groups.
 
-## Core Purpose
-Create the ultimate financial companion for individuals and groups by providing comprehensive financial management tools that are intelligent, accessible, and cost-effective.
+## Core Value Proposition
 
-## Key Features
-- **Multi-Platform**: Single Flutter codebase for mobile (iOS/Android), web, and desktop
 - **AI-Powered**: Natural language processing for effortless transaction entry and voice input
-- **Multi-Cashbook**: Separate financial contexts (personal, business, family) with role-based permissions
-- **Social Finance**: Group expense sharing, debt tracking, and settlement optimization
-- **Advanced Analytics**: Comprehensive reporting, spending insights, and financial health scoring
-- **Investment Tracking**: Portfolio management with real-time market data
-- **Bank Integration**: Secure automatic transaction import with intelligent categorization
+- **Multi-Platform**: Single Flutter codebase for mobile (iOS/Android), web, and desktop
 - **Offline-First**: Full functionality with local storage and seamless synchronization
+- **Social Finance**: Group expense sharing, debt tracking, and settlement optimization
+- **Cost-Effective**: Freemium model targeting $0-10/month operational costs
 
 ## Target Users
-- Individuals seeking comprehensive personal finance management
-- Families managing shared expenses and budgets
-- Small businesses tracking expenses and cash flow
-- Groups sharing expenses (roommates, travel, events)
-- Anyone wanting AI-assisted financial insights
+
+- **Individuals**: Personal finance management with AI assistance
+- **Families**: Shared expense management with role-based permissions  
+- **Small Businesses**: Expense tracking and cash flow management
+- **Groups**: Collaborative expense sharing (roommates, travel, events)
+
+## Key Features
+
+- Multi-Cashbook support (personal, business, family contexts)
+- Advanced analytics with spending insights and financial health scoring
+- Investment tracking with portfolio management
+- Bank integration with automatic transaction import
+- Multi-currency support with real-time exchange rates
+- Comprehensive reporting and budgeting tools
+- End-to-end encryption for all financial data
 
 ## Business Model
-- Freemium model leveraging Firebase free tiers
-- Target operational cost: $0-10/month
-- Premium features for advanced analytics and integrations
 
-## Success Metrics
-- User engagement and retention
-- Transaction volume and accuracy
-- Cost efficiency within Firebase limits
-- Cross-platform adoption rates
+Freemium approach leveraging Firebase free tiers:
+- Core features available for free
+- Premium features for advanced analytics and integrations
+- Target operational costs: $0-10/month
+- Revenue through premium subscriptions and advanced features

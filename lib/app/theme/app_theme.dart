@@ -1,23 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Import the centralized provider
+import '../../viewmodels/features/settings/settings_viewmodel.dart'
+    show sharedPreferencesProvider;
 
 /// Provider for theme mode state management with persistence
 final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>(
-  (ref) => ThemeModeNotifier(),
+  (ref) => ThemeModeNotifier(ref.watch(sharedPreferencesProvider)),
 );
 
-/// Theme mode notifier for state management
+/// Enhanced theme mode notifier with persistence
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
-  ThemeModeNotifier() : super(ThemeMode.system);
-
-  void setThemeMode(ThemeMode mode) {
-    state = mode;
-    // Here you could add persistence logic (SharedPreferences, etc.)
+  ThemeModeNotifier(this._prefs) : super(ThemeMode.system) {
+    _loadThemeMode();
   }
 
-  void toggleTheme() {
-    state = state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+  final SharedPreferences _prefs;
+  static const String _themeModeKey = 'theme_mode';
+
+  /// Load theme mode from persistent storage
+  void _loadThemeMode() {
+    final savedThemeIndex = _prefs.getInt(_themeModeKey);
+    if (savedThemeIndex != null && savedThemeIndex < ThemeMode.values.length) {
+      state = ThemeMode.values[savedThemeIndex];
+    }
+  }
+
+  /// Save theme mode to persistent storage
+  Future<void> _saveThemeMode(ThemeMode mode) async {
+    await _prefs.setInt(_themeModeKey, mode.index);
+  }
+
+  /// Set theme mode with persistence
+  Future<void> setThemeMode(ThemeMode mode) async {
+    if (state != mode) {
+      state = mode;
+      await _saveThemeMode(mode);
+    }
+  }
+
+  /// Toggle between light and dark themes
+  Future<void> toggleTheme() async {
+    final newMode = switch (state) {
+      ThemeMode.light => ThemeMode.dark,
+      ThemeMode.dark => ThemeMode.light,
+      ThemeMode.system =>
+        ThemeMode.light, // Default to light when toggling from system
+    };
+    await setThemeMode(newMode);
+  }
+
+  /// Reset to system theme
+  Future<void> resetToSystem() async {
+    await setThemeMode(ThemeMode.system);
   }
 }
 
@@ -26,9 +64,15 @@ class AppTheme {
   AppTheme._();
 
   // Enhanced brand colors with semantic meaning
-  static const Color _primarySeedColor = Color(0xFF1B5E20); // Deep green for growth
-  static const Color _secondarySeedColor = Color(0xFF0D47A1); // Blue for trust/stability
-  static const Color _tertiarySeedColor = Color(0xFF4A148C); // Purple for premium
+  static const Color _primarySeedColor = Color(
+    0xFF1B5E20,
+  ); // Deep green for growth
+  static const Color _secondarySeedColor = Color(
+    0xFF0D47A1,
+  ); // Blue for trust/stability
+  static const Color _tertiarySeedColor = Color(
+    0xFF4A148C,
+  ); // Purple for premium
   static const Color _errorSeedColor = Color(0xFFB71C1C); // Deep red for errors
   static const Color _successColor = Color(0xFF2E7D32); // Success green
   static const Color _warningColor = Color(0xFFEF6C00); // Warning orange
@@ -40,7 +84,8 @@ class AppTheme {
 
   /// Enhanced light theme configuration
   static ThemeData light([ColorScheme? lightColorScheme]) {
-    final colorScheme = lightColorScheme ?? 
+    final colorScheme =
+        lightColorScheme ??
         ColorScheme.fromSeed(
           seedColor: _primarySeedColor,
           secondary: _secondarySeedColor,
@@ -52,10 +97,10 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      
+
       // Enhanced typography with better hierarchy
       textTheme: _buildTextTheme(colorScheme, Brightness.light),
-      
+
       // Enhanced app bar with better elevation handling
       appBarTheme: AppBarTheme(
         centerTitle: true,
@@ -71,22 +116,23 @@ class AppTheme {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      
+
       // Enhanced card theme with better shadows
       cardTheme: CardThemeData(
         elevation: 2,
         shadowColor: colorScheme.shadow.withValues(alpha: 0.08),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
-      
+
       // Enhanced input decoration with better states
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -99,23 +145,15 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.error,
-          ),
+          borderSide: BorderSide(color: colorScheme.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.error,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
         labelStyle: TextStyle(
           color: colorScheme.onSurfaceVariant,
@@ -125,7 +163,7 @@ class AppTheme {
           color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
         ),
       ),
-      
+
       // Enhanced button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -137,7 +175,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -146,30 +184,26 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          side: BorderSide(
-            color: colorScheme.outline,
-          ),
+          side: BorderSide(color: colorScheme.outline),
         ),
       ),
-      
+
       // Enhanced FAB theme
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 6,
         focusElevation: 8,
         hoverElevation: 8,
         highlightElevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
-      
+
       // Enhanced navigation themes
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
@@ -186,7 +220,7 @@ class AppTheme {
           fontSize: 12,
         ),
       ),
-      
+
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.surface,
         elevation: 3,
@@ -207,15 +241,13 @@ class AppTheme {
           );
         }),
       ),
-      
+
       // Enhanced list tile theme
       listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
-      
+
       // Enhanced chip theme
       chipTheme: ChipThemeData(
         backgroundColor: colorScheme.surfaceContainerHighest,
@@ -225,47 +257,39 @@ class AppTheme {
           fontWeight: FontWeight.w500,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
-      
+
       // Enhanced divider theme
       dividerTheme: DividerThemeData(
         color: colorScheme.outlineVariant,
         thickness: 1,
         space: 1,
       ),
-      
+
       // Enhanced progress indicator theme
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: colorScheme.primary,
         linearTrackColor: colorScheme.surfaceContainerHighest,
         circularTrackColor: colorScheme.surfaceContainerHighest,
       ),
-      
+
       // Enhanced snackbar theme
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
-        contentTextStyle: TextStyle(
-          color: colorScheme.onInverseSurface,
-        ),
+        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
         actionTextColor: colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         behavior: SnackBarBehavior.floating,
       ),
-      
+
       // Enhanced dialog theme
       dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         surfaceTintColor: colorScheme.surfaceTint,
         elevation: 6,
         shadowColor: colorScheme.shadow.withValues(alpha: 0.15),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -276,7 +300,7 @@ class AppTheme {
           color: colorScheme.onSurfaceVariant,
         ),
       ),
-      
+
       // Custom extensions for financial app
       extensions: const [
         FinancialColors(
@@ -294,7 +318,8 @@ class AppTheme {
 
   /// Enhanced dark theme configuration
   static ThemeData dark([ColorScheme? darkColorScheme]) {
-    final colorScheme = darkColorScheme ?? 
+    final colorScheme =
+        darkColorScheme ??
         ColorScheme.fromSeed(
           seedColor: _primarySeedColor,
           secondary: _secondarySeedColor,
@@ -306,10 +331,10 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      
+
       // Enhanced typography with better hierarchy
       textTheme: _buildTextTheme(colorScheme, Brightness.dark),
-      
+
       // Enhanced app bar with better elevation handling
       appBarTheme: AppBarTheme(
         centerTitle: true,
@@ -325,22 +350,23 @@ class AppTheme {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      
+
       // Enhanced card theme with better shadows
       cardTheme: CardThemeData(
         elevation: 4,
         shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
-      
+
       // Enhanced input decoration with better states
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -353,23 +379,15 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.error,
-          ),
+          borderSide: BorderSide(color: colorScheme.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.error,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
         labelStyle: TextStyle(
           color: colorScheme.onSurfaceVariant,
@@ -379,7 +397,7 @@ class AppTheme {
           color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
         ),
       ),
-      
+
       // Enhanced button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -391,7 +409,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -400,30 +418,26 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          side: BorderSide(
-            color: colorScheme.outline,
-          ),
+          side: BorderSide(color: colorScheme.outline),
         ),
       ),
-      
+
       // Enhanced FAB theme
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 8,
         focusElevation: 10,
         hoverElevation: 10,
         highlightElevation: 12,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
-      
+
       // Enhanced navigation themes
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
@@ -440,7 +454,7 @@ class AppTheme {
           fontSize: 12,
         ),
       ),
-      
+
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.surface,
         elevation: 3,
@@ -461,15 +475,13 @@ class AppTheme {
           );
         }),
       ),
-      
+
       // Enhanced list tile theme
       listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
-      
+
       // Enhanced chip theme
       chipTheme: ChipThemeData(
         backgroundColor: colorScheme.surfaceContainerHighest,
@@ -479,47 +491,39 @@ class AppTheme {
           fontWeight: FontWeight.w500,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
-      
+
       // Enhanced divider theme
       dividerTheme: DividerThemeData(
         color: colorScheme.outlineVariant,
         thickness: 1,
         space: 1,
       ),
-      
+
       // Enhanced progress indicator theme
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: colorScheme.primary,
         linearTrackColor: colorScheme.surfaceContainerHighest,
         circularTrackColor: colorScheme.surfaceContainerHighest,
       ),
-      
+
       // Enhanced snackbar theme
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
-        contentTextStyle: TextStyle(
-          color: colorScheme.onInverseSurface,
-        ),
+        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
         actionTextColor: colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         behavior: SnackBarBehavior.floating,
       ),
-      
+
       // Enhanced dialog theme
       dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         surfaceTintColor: colorScheme.surfaceTint,
         elevation: 8,
         shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -530,7 +534,7 @@ class AppTheme {
           color: colorScheme.onSurfaceVariant,
         ),
       ),
-      
+
       // Custom extensions for financial app
       extensions: const [
         FinancialColors(
@@ -547,14 +551,17 @@ class AppTheme {
   }
 
   /// Enhanced text theme optimized for financial data display
-  static TextTheme _buildTextTheme(ColorScheme colorScheme, Brightness brightness) {
+  static TextTheme _buildTextTheme(
+    ColorScheme colorScheme,
+    Brightness brightness,
+  ) {
     // Base text color with better contrast
-    final baseTextColor = brightness == Brightness.light 
-        ? colorScheme.onSurface 
+    final baseTextColor = brightness == Brightness.light
+        ? colorScheme.onSurface
         : colorScheme.onSurface;
-    
-    final secondaryTextColor = brightness == Brightness.light 
-        ? colorScheme.onSurfaceVariant 
+
+    final secondaryTextColor = brightness == Brightness.light
+        ? colorScheme.onSurfaceVariant
         : colorScheme.onSurfaceVariant;
 
     return TextTheme(
@@ -580,7 +587,7 @@ class AppTheme {
         letterSpacing: 0,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
-      
+
       // Headline styles for transaction amounts
       headlineLarge: TextStyle(
         fontSize: 32,
@@ -603,7 +610,7 @@ class AppTheme {
         letterSpacing: 0,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
-      
+
       // Title styles
       titleLarge: TextStyle(
         fontSize: 22,
@@ -623,7 +630,7 @@ class AppTheme {
         color: baseTextColor,
         letterSpacing: 0.1,
       ),
-      
+
       // Body styles
       bodyLarge: TextStyle(
         fontSize: 16,
@@ -643,7 +650,7 @@ class AppTheme {
         color: secondaryTextColor,
         letterSpacing: 0.4,
       ),
-      
+
       // Label styles
       labelLarge: TextStyle(
         fontSize: 14,
@@ -729,7 +736,8 @@ class FinancialColors extends ThemeExtension<FinancialColors> {
 /// Extension to access financial colors from theme
 extension FinancialColorsExtension on ThemeData {
   FinancialColors get financialColors =>
-      extension<FinancialColors>() ?? const FinancialColors(
+      extension<FinancialColors>() ??
+      const FinancialColors(
         success: Color(0xFF2E7D32),
         warning: Color(0xFFEF6C00),
         info: Color(0xFF0288D1),
@@ -747,12 +755,27 @@ class ThemeConstants {
   static const double buttonBorderRadius = 12.0;
   static const double fabBorderRadius = 16.0;
   static const double dialogBorderRadius = 20.0;
-  
-  static const EdgeInsets cardMargin = EdgeInsets.symmetric(horizontal: 16, vertical: 8);
-  static const EdgeInsets buttonPadding = EdgeInsets.symmetric(horizontal: 24, vertical: 12);
-  static const EdgeInsets inputPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
-  static const EdgeInsets listTilePadding = EdgeInsets.symmetric(horizontal: 16, vertical: 8);
-  static const EdgeInsets chipPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 8);
+
+  static const EdgeInsets cardMargin = EdgeInsets.symmetric(
+    horizontal: 16,
+    vertical: 8,
+  );
+  static const EdgeInsets buttonPadding = EdgeInsets.symmetric(
+    horizontal: 24,
+    vertical: 12,
+  );
+  static const EdgeInsets inputPadding = EdgeInsets.symmetric(
+    horizontal: 16,
+    vertical: 16,
+  );
+  static const EdgeInsets listTilePadding = EdgeInsets.symmetric(
+    horizontal: 16,
+    vertical: 8,
+  );
+  static const EdgeInsets chipPadding = EdgeInsets.symmetric(
+    horizontal: 12,
+    vertical: 8,
+  );
 }
 
 /// Example usage in your main app
@@ -762,7 +785,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
-    
+
     return MaterialApp(
       title: 'Cashense',
       theme: AppTheme.light(),
@@ -781,22 +804,20 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final financialColors = theme.financialColors;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cashense'),
         actions: [
           IconButton(
-            icon: Icon(Icons.brightness_6, color: financialColors.investment,),
+            icon: Icon(Icons.brightness_6, color: financialColors.investment),
             onPressed: () {
               // Toggle theme
             },
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Your financial app content here'),
-      ),
+      body: const Center(child: Text('Your financial app content here')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.add),

@@ -53,7 +53,19 @@ npx mcp-remote --version
 # Test MCP servers
 npx -y @modelcontextprotocol/server-sequential-thinking
 npx mcp-remote https://gitmcp.io/{owner}/{repo}
+
+# Generate code (required after MVVM migration)
+fvm flutter packages pub run build_runner build
 ```
+
+### MVVM Architecture Notes
+
+Cashense has migrated to Flutter's recommended MVVM pattern. Key deployment considerations:
+
+- **Code Generation**: Always run `build_runner` after dependency changes
+- **Import Structure**: New barrel exports in `models/`, `views/`, and `viewmodels/`
+- **State Management**: Riverpod providers centralized in `viewmodels/providers.dart`
+- **Testing**: Updated test structure to match MVVM organization
 
 ## 🌍 Environment Setup
 
@@ -515,6 +527,12 @@ jobs:
 
       - name: Run tests
         run: flutter test --coverage
+
+      # Note: Test structure updated for MVVM pattern
+      # - test/models/ for model unit tests
+      # - test/viewmodels/ for ViewModel unit tests  
+      # - test/views/ for widget tests
+      # - test/integration/ for integration tests
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

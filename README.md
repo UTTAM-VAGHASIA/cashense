@@ -15,7 +15,7 @@ Cashense is an AI-powered, cross-platform financial management application that 
 
 ## 🏗️ Architecture Overview
 
-Cashense follows a modern, scalable architecture built on Firebase backend-as-a-service:
+Cashense follows Flutter's recommended MVVM (Model-View-ViewModel) architecture pattern, built on Firebase backend-as-a-service for optimal development experience and maintainability:
 
 ```
 Flutter Application (Cross-Platform)
@@ -23,10 +23,15 @@ Flutter Application (Cross-Platform)
 ├── Web (PWA)
 └── Desktop (Windows/Mac/Linux)
 
+MVVM Architecture Pattern
+├── Models (Data & Business Logic)
+├── Views (UI Components & Pages)
+└── ViewModels (State Management & Coordination)
+
 State Management: Riverpod
-├── Authentication Providers
-├── Data Management Providers
-└── UI State Providers
+├── ViewModels with StateNotifier
+├── Provider-based Dependency Injection
+└── Reactive State Updates
 
 Local Storage Layer
 ├── Hive Database (Primary)
@@ -134,38 +139,188 @@ Firebase Backend
 - macOS: macOS 10.14 or later  
 - Linux: Ubuntu 18.04 or later
 
+## 🔄 Recent Architecture Migration
+
+Cashense has successfully migrated from Clean Architecture to Flutter's recommended MVVM (Model-View-ViewModel) pattern. This migration provides:
+
+### Key Changes
+- **Simplified Structure**: Consolidated data/domain/presentation layers into models/views/viewmodels
+- **Direct Service Calls**: Eliminated repository abstraction layer for better performance
+- **Feature-Based Organization**: Maintained logical grouping within MVVM structure
+- **Enhanced Developer Experience**: More intuitive Flutter development patterns
+
+### Migration Benefits
+- ✅ Reduced code complexity and boilerplate
+- ✅ Improved maintainability and navigation
+- ✅ Better testability with focused scope
+- ✅ Faster development cycles
+- ✅ Preserved all existing functionality
+
+### Updated Structure
+```
+lib/
+├── models/          # Data models with business logic
+├── views/           # UI components and pages  
+├── viewmodels/      # State management with Riverpod
+├── services/        # Core services (unchanged)
+├── utils/           # Utilities and helpers
+└── constants/       # App constants
+```
+
 ## 🛠️ Development Workflow
+
+### Enhanced Error Handling & App Initialization
+
+Cashense implements comprehensive error handling throughout the application:
+
+**Global Error Boundary:**
+- Centralized error handling with `runZonedGuarded` for uncaught exceptions
+- Flutter error boundary with custom error widgets
+- Graceful error recovery with user-friendly error screens
+- Comprehensive error logging with Crashlytics integration
+
+**App Initialization:**
+- Robust Firebase initialization with timeout and retry logic
+- Proper service initialization order with error recovery
+- SharedPreferences initialization with retry mechanism
+- DevicePreview integration for enhanced debug experience
+
+**Error Recovery Patterns:**
+```dart
+// Global error handling in main.dart
+await runZonedGuarded<Future<void>>(
+  () async {
+    await _initializeApp();
+  },
+  (error, stack) => _handleGlobalError(error, stack),
+);
+```
+
+### Advanced Theming System
+
+Cashense features a sophisticated Material 3 theming system:
+
+**Dynamic Color Support:**
+- Material You dynamic color integration with `DynamicColorBuilder`
+- Automatic light/dark theme generation from seed colors
+- Custom financial color palette for expense tracking
+
+**FinancialColors Extension:**
+```dart
+// Access financial-specific colors
+final theme = Theme.of(context);
+final financialColors = theme.financialColors;
+
+// Use in widgets
+Container(
+  color: financialColors.income,  // Green for income
+  child: Text('Income: \$1,234'),
+)
+```
+
+**Theme Persistence:**
+- Theme mode persistence with SharedPreferences
+- Reactive theme switching with Riverpod state management
+- System theme detection and automatic switching
+
+**Available Financial Colors:**
+- `income` - Green for income transactions
+- `expense` - Red for expense transactions  
+- `investment` - Purple for investment tracking
+- `savings` - Blue for savings goals
+- `success`, `warning`, `info` - Status indicators
 
 ### Code Organization
 
+The project follows Flutter's recommended MVVM (Model-View-ViewModel) architecture pattern for simplified development and maintenance:
+
 ```
 lib/
-├── main.dart                    # App entry point
-├── app/                        # App-level configuration
-├── core/                       # Core utilities and shared code
-├── shared/                     # Shared components and services
-├── features/                   # Feature modules
-│   ├── authentication/
-│   ├── accounts/
-│   ├── transactions/
-│   ├── budgets/
-│   └── analytics/
-└── l10n/                      # Localization files
+├── main.dart                          # App entry point
+├── app/                              # App-level configuration
+│   ├── router/                       # Navigation configuration
+│   ├── theme/                        # Theme configuration
+│   └── localization/                 # Localization setup
+├── models/                           # Data models and business entities
+│   ├── shared/                       # Shared data models
+│   └── features/                     # Feature-specific models
+│       ├── auth/                     # Authentication models
+│       ├── settings/                 # Settings models
+│       └── [other features]/        # Additional feature models
+├── views/                            # UI components and pages
+│   ├── shared/                       # Shared UI components
+│   └── features/                     # Feature-specific views
+│       ├── auth/                     # Authentication pages
+│       ├── settings/                 # Settings pages
+│       └── [other features]/        # Additional feature views
+├── viewmodels/                       # State management and business logic
+│   ├── shared/                       # Shared view models
+│   ├── features/                     # Feature-specific view models
+│   │   ├── auth/                     # Authentication view models
+│   │   ├── settings/                 # Settings view models
+│   │   └── [other features]/        # Additional feature view models
+│   └── providers.dart                # Riverpod provider exports
+├── services/                         # Core services and integrations
+│   ├── firebase_service.dart         # Firebase integration
+│   ├── crashlytics_service.dart      # Error reporting
+│   └── [other services]/            # Additional services
+├── utils/                            # Utility functions and helpers
+│   ├── exceptions.dart               # Custom exceptions
+│   └── [other utilities]/           # Additional utilities
+├── constants/                        # App constants and configuration
+└── l10n/                            # Localization files
+```
+
+### Constants Organization
+
+Cashense uses a well-organized constants structure for maintainability:
+
+```dart
+// App metadata and configuration
+AppConstants.appName        // "Cashense"
+AppConstants.appVersion     // "1.0.0"
+AppConstants.baseUrl        // API base URL
+
+// UI constants for consistent spacing
+UIConstants.defaultPadding  // 16.0
+UIConstants.defaultBorderRadius // 12.0
+UIConstants.mediumAnimation // 300ms
+
+// Financial business logic
+FinancialConstants.defaultCurrency // "USD"
+FinancialConstants.maxTransactionAmount // 999999999.99
+
+// Validation rules
+ValidationConstants.minPasswordLength // 8
+ValidationConstants.maxTransactionDescriptionLength // 255
+
+// Feature flags
+FeatureFlags.enableBiometricAuth // true
+FeatureFlags.enableAIInsights // true
 ```
 
 ### Development Commands
 
 ```bash
-# Code generation
+# Code generation (required for MVVM pattern)
 fvm flutter packages pub run build_runner build
+
+# Watch mode for continuous code generation
+fvm flutter packages pub run build_runner watch
 
 # Clean and rebuild
 fvm flutter clean
 fvm flutter pub get
 fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 
-# Run tests
+# Run tests (updated for MVVM structure)
 fvm flutter test
+
+# Run specific test categories
+fvm flutter test test/models/        # Model tests
+fvm flutter test test/viewmodels/    # ViewModel tests
+fvm flutter test test/views/         # Widget tests
+fvm flutter test test/integration/   # Integration tests
 
 # Analyze code
 fvm flutter analyze
@@ -411,6 +566,18 @@ fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 - Optimize image loading and caching
 - Review Firestore query efficiency
 
+**Error Handling Issues:**
+- **Global Errors**: Check `main.dart` for proper error boundary setup
+- **Theme Errors**: Verify `ThemeModeNotifier` initialization in providers
+- **Crashlytics**: Ensure Crashlytics is properly initialized for error reporting
+- **Error Recovery**: Use the built-in error recovery mechanisms in `_ErrorScreen`
+
+**Theme and UI Issues:**
+- **Dynamic Colors**: Ensure `DynamicColorBuilder` is properly configured
+- **Financial Colors**: Access via `Theme.of(context).financialColors`
+- **Theme Persistence**: Check SharedPreferences initialization
+- **Material 3**: Verify `useMaterial3: true` in theme configuration
+
 **Development Tools Issues:**
 - **GitMCP**: Verify `mcp-remote` is installed: `npm install -g mcp-remote`
 - **Sequential Thinking MCP**: Test server: `npx -y @modelcontextprotocol/server-sequential-thinking`
@@ -418,6 +585,12 @@ fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 - **MCP Configuration**: Check MCP server configuration in `.kiro/settings/mcp.json`
 - **Connectivity**: Test MCP server connectivity: `npx flutter-mcp --stdio` (for Flutter Inspector)
 - **Restart**: Restart Kiro if MCP server connection fails after configuration changes
+
+**MVVM Migration Issues:**
+- **Code Generation**: Run `fvm flutter packages pub run build_runner build` after any model changes
+- **Import Errors**: Use barrel exports from `models/index.dart`, `views/index.dart`, `viewmodels/index.dart`
+- **Provider Issues**: Check `viewmodels/providers.dart` for correct provider configuration
+- **State Management**: Ensure ViewModels extend StateNotifier and use AsyncValue pattern
 
 ## 📄 License
 

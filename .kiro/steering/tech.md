@@ -1,113 +1,142 @@
 # Cashense Technology Stack
 
-## Framework & Platform
+## Framework & Architecture
+
 - **Flutter SDK**: Latest stable version managed via FVM (Flutter Version Management)
-- **Target Platforms**: Mobile (iOS/Android), Web (PWA), Desktop (Windows/Mac/Linux)
-- **UI Framework**: Material 3 design system for consistent cross-platform experience
+- **Architecture Pattern**: MVVM (Model-View-ViewModel) - recently migrated from Clean Architecture
+- **State Management**: Riverpod (^2.6.1) for compile-time safe providers and reactive state
+- **Design System**: Material 3 with dynamic color theming
 
-## State Management
-- **Primary**: Riverpod for compile-time safe providers and advanced async/sync state management
-- **Fallback**: Provider for simpler use cases
+## Backend & Services
 
-## Backend & Database (Firebase-Only)
-- **Firestore**: Primary database (1GB + 50K reads/20K writes free tier)
-- **Firebase Authentication**: User management (50K MAU free)
-- **Firebase Storage**: File attachments (5GB free)
-- **Firebase Functions**: Serverless backend logic (2M invocations/month free)
-- **Firebase Hosting**: Web deployment (10GB storage + 360MB/day transfer free)
+### Firebase Suite (Primary Backend)
+- **Firestore**: Primary database (1GB + 50K reads/20K writes free)
+- **Authentication**: User management (50K MAU free)
+- **Storage**: File attachments (5GB free)
+- **Functions**: Serverless backend logic (2M invocations/month free)
+- **Hosting**: Web deployment (10GB storage + 360MB/day transfer free)
+- **Analytics**: User behavior tracking and insights
+- **Crashlytics**: Error reporting and crash analysis
+- **Messaging**: Push notifications and real-time alerts
+
+### AI Integration
+- **Firebase AI Logic**: Vertex AI integration for intelligent categorization
+- **Gemini**: Contextual awareness and insights
+- **Natural Language Processing**: Transaction parsing and voice input
 
 ## Local Storage
-- **Hive**: Primary local database for mobile/desktop/web (faster than Isar, simpler API)
-- **flutter_secure_storage**: Sensitive data encryption
-- **SharedPreferences**: App settings and preferences
 
-## AI/ML Integration
-- **Firebase AI Logic**: Vertex AI integration for intelligent categorization
-- **Gemini in Firebase**: Contextual awareness and insights
-- **OpenAI API**: Advanced NLP processing (pay-per-use, cost-optimized)
-- **Local alternatives**: flutter_tts + speech_to_text for offline voice features
+- **Hive** (^2.2.3): Primary local database for offline-first functionality
+- **flutter_secure_storage** (^9.2.4): Sensitive data encryption
+- **SharedPreferences** (^2.5.3): App settings and preferences
+
+## Key Dependencies
+
+### Navigation & UI
+- **go_router** (^16.0.0): Declarative navigation
+- **fl_chart** (^1.0.0): Financial data visualization
+- **flutter_form_builder** (^10.1.0): Complex forms
+- **dynamic_color** (^1.7.0): Material You theming
+
+### Utilities
+- **currency_picker** (^2.0.21): Multi-currency support
+- **money2** (^6.0.3): Currency handling and calculations
+- **dio** (^5.8.0+1): Network requests
+- **uuid** (^4.5.1): Unique identifier generation
+
+### Code Generation
+- **build_runner** (^2.4.13): Code generation runner
+- **freezed** (^3.0.0): Immutable data classes
+- **json_serializable** (^6.8.0): JSON serialization
+- **hive_generator** (^2.0.1): Hive type adapters
 
 ## Development Tools
-- **FVM**: Flutter version management
-- **Firebase CLI**: Backend management
-- **build_runner**: Code generation
-- **Git**: Version control with Git Flow branching strategy
+
+### Code Quality
+- **flutter_lints** (^6.0.0): Comprehensive linting rules
+- **analysis_options.yaml**: Strict analysis configuration with financial app security focus
+
+### Testing
+- **flutter_test**: Widget and unit testing
+- **integration_test**: End-to-end testing
+
+### Model Context Protocol (MCP)
+- **Context 7**: Get latest documentation for any library or dependency or framework
+- **GitMCP Server**: Repository analysis and Git operations
+- **Sequential Thinking MCP**: Advanced reasoning for complex problems
+- **Flutter Inspector MCP**: Real-time debugging and widget inspection
 
 ## Common Commands
 
-### Setup
+### Development Workflow
 ```bash
-# Install FVM and use project Flutter version
-dart pub global activate fvm
+# Setup project
 fvm use
-fvm flutter --version
-
-# Install dependencies
 fvm flutter pub get
 
-# Generate code
+# Code generation (required after model changes)
 fvm flutter packages pub run build_runner build
-```
 
-### Development
-```bash
-# Run app (mobile)
-fvm flutter run
-
-# Run web
-fvm flutter run -d chrome
-
-# Run desktop
-fvm flutter run -d windows  # or macos/linux
-
-# Hot reload code generation
+# Watch mode for continuous generation
 fvm flutter packages pub run build_runner watch
+
+# Clean and rebuild
+fvm flutter clean
+fvm flutter pub get
+fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
 
-### Testing & Quality
+### Testing
 ```bash
 # Run all tests
 fvm flutter test
 
-# Run tests with coverage
-fvm flutter test --coverage
+# Run specific test categories
+fvm flutter test test/models/        # Model tests
+fvm flutter test test/viewmodels/    # ViewModel tests
+fvm flutter test test/views/         # Widget tests
+fvm flutter test test/integration/   # Integration tests
 
+# Test with coverage
+fvm flutter test --coverage
+```
+
+### Platform Builds
+```bash
+# Development builds
+fvm flutter run                      # Default platform
+fvm flutter run -d chrome           # Web
+fvm flutter run -d windows          # Desktop
+
+# Production builds
+fvm flutter build apk --release     # Android
+fvm flutter build ios --release     # iOS
+fvm flutter build web --release     # Web
+fvm flutter build windows --release # Windows
+```
+
+### Code Quality
+```bash
 # Analyze code
 fvm flutter analyze
 
 # Format code
 fvm flutter format .
+
+# Generate documentation
+dart doc
 ```
 
-### Building
-```bash
-# Clean and rebuild
-fvm flutter clean
-fvm flutter pub get
-fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+## Platform Support
 
-# Build for production
-fvm flutter build apk --release      # Android
-fvm flutter build ios --release      # iOS
-fvm flutter build web --release      # Web
-fvm flutter build windows --release  # Windows
-```
+- **Mobile**: iOS 12.0+, Android API 21+
+- **Web**: PWA with offline capabilities
+- **Desktop**: Windows 10+, macOS 10.14+, Ubuntu 18.04+
 
-### Firebase
-```bash
-# Deploy web app
-firebase deploy --only hosting
+## Performance Considerations
 
-# Deploy functions
-firebase deploy --only functions
-
-# View logs
-firebase functions:log
-```
-
-## Cost Optimization Strategy
-- Leverage Firebase free tiers effectively
-- Target monthly operational cost: $0-10
-- Monitor usage with automated alerts
-- Implement efficient Firestore queries with composite indexes
-- Use local storage to minimize cloud reads/writes
+- Lazy loading for large datasets
+- Image optimization and caching with cached_network_image
+- Efficient Firestore queries with composite indexes
+- Local storage optimization with automatic cleanup
+- Progressive sync with priority-based updates

@@ -44,6 +44,55 @@ Cashense follows a modern, scalable architecture built on Firebase backend-as-a-
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## 🏛️ MVVM Architecture Pattern
+
+### Architecture Migration
+
+Cashense has successfully migrated from Clean Architecture (data/domain/presentation layers) to Flutter's recommended MVVM pattern. This migration provides:
+
+- **Simplified Structure**: Reduced complexity by consolidating three layers into a more manageable MVVM pattern
+- **Better Developer Experience**: More intuitive Flutter development patterns with clearer separation of concerns
+- **Improved Maintainability**: Easier navigation and file discovery with feature-based organization
+- **Enhanced Testability**: Clearer test organization with focused unit test scope
+
+### MVVM Components
+
+#### Models Layer
+- **Purpose**: Data models with business logic, validation, and serialization
+- **Location**: `lib/models/`
+- **Features**: 
+  - JSON serialization (fromJson/toJson)
+  - Data validation methods
+  - Business logic integration
+  - Immutability with copyWith methods
+  - Proper equality implementation
+
+#### Views Layer
+- **Purpose**: UI components, pages, and widgets
+- **Location**: `lib/views/`
+- **Features**:
+  - Feature-based organization
+  - Shared component reusability
+  - Reactive UI updates with Riverpod
+  - Platform-adaptive design
+
+#### ViewModels Layer
+- **Purpose**: State management and business logic coordination
+- **Location**: `lib/viewmodels/`
+- **Features**:
+  - Riverpod StateNotifier integration
+  - Direct service calls (no repository abstraction)
+  - Reactive state management
+  - Error handling with AsyncValue pattern
+
+### Migration Benefits
+
+1. **Reduced Boilerplate**: Eliminated repository abstraction layer
+2. **Clearer Architecture**: More intuitive for Flutter developers
+3. **Better Performance**: Direct service calls reduce overhead
+4. **Simplified Testing**: Focused mocking requirements
+5. **Enhanced Productivity**: Faster development cycles
+
 ## 🎯 Design Principles
 
 ### 1. Cost-Effective Architecture
@@ -79,9 +128,203 @@ The system is designed to serve multiple user segments:
 - **Small Businesses**: Expense tracking and cash flow management
 - **Groups**: Collaborative expense sharing and settlement optimization
 
+## 🔧 MVVM Implementation Details
+
+### Model Implementation
+
+Models in Cashense combine data representation with business logic:
+
+```dart
+// Example: lib/models/features/settings/app_settings_model.dart
+@freezed
+class AppSettingsModel with _$AppSettingsModel {
+  const factory AppSettingsModel({
+    required String theme,
+    required String language,
+    required String currency,
+    required bool notificationsEnabled,
+    required bool biometricEnabled,
+  }) = _AppSettingsModel;
+
+  factory AppSettingsModel.fromJson(Map<String, dynamic> json) =>
+      _$AppSettingsModelFromJson(json);
+
+  // Business logic methods
+  const AppSettingsModel._();
+  
+  bool get isDarkTheme => theme == 'dark';
+  bool get isSystemTheme => theme == 'system';
+  
+  AppSettingsModel toggleTheme() {
+    return copyWith(
+      theme: isDarkTheme ? 'light' : 'dark',
+    );
+  }
+}
+```
+
+### ViewModel Implementation
+
+ViewModels manage state and coordinate business logic:
+
+```dart
+// Example: lib/viewmodels/features/settings/settings_viewmodel.dart
+class SettingsViewModel extends StateNotifier<AsyncValue<AppSettingsModel>> {
+  SettingsViewModel(this._prefs, this._crashlytics) 
+      : super(const AsyncValue.loading()) {
+    _loadSettings();
+  }
+
+  final SharedPreferences _prefs;
+  final CrashlyticsService _crashlytics;
+
+  Future<void> _loadSettings() async {
+    try {
+      final settings = await _loadFromPreferences();
+      state = AsyncValue.data(settings);
+    } catch (error, stackTrace) {
+      await _crashlytics.recordError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
+
+  Future<void> updateTheme(String theme) async {
+    final currentSettings = state.value;
+    if (currentSettings == null) return;
+
+    try {
+      final updatedSettings = currentSettings.copyWith(theme: theme);
+      await _saveToPreferences(updatedSettings);
+      state = AsyncValue.data(updatedSettings);
+    } catch (error, stackTrace) {
+      await _crashlytics.recordError(error, stackTrace);
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
+
+  // Direct service calls - no repository layer
+  Future<AppSettingsModel> _loadFromPreferences() async {
+    return AppSettingsModel(
+      theme: _prefs.getString('theme') ?? 'system',
+      language: _prefs.getString('language') ?? 'en',
+      currency: _prefs.getString('currency') ?? 'USD',
+      notificationsEnabled: _prefs.getBool('notifications') ?? true,
+      biometricEnabled: _prefs.getBool('biometric') ?? false,
+    );
+  }
+}
+```
+
+### View Implementation
+
+Views consume ViewModels and render UI:
+
+```dart
+// Example: lib/views/features/settings/pages/settings_page.dart
+class SettingsPage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsState = ref.watch(settingsViewModelProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Settings')),
+      body: settingsState.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => ErrorWidget(error),
+        data: (settings) => _buildSettingsContent(context, ref, settings),
+      ),
+    );
+  }
+
+  Widget _buildSettingsContent(
+    BuildContext context,
+    WidgetRef ref,
+    AppSettingsModel settings,
+  ) {
+    return ListView(
+      children: [
+        ListTile(
+          title: Text('Theme'),
+          subtitle: Text(settings.theme),
+          trailing: DropdownButton<String>(
+            value: settings.theme,
+            onChanged: (theme) {
+              if (theme != null) {
+                ref.read(settingsViewModelProvider.notifier).updateTheme(theme);
+              }
+            },
+            items: ['light', 'dark', 'system']
+                .map((theme) => DropdownMenuItem(
+                      value: theme,
+                      child: Text(theme),
+                    ))
+                .toList(),
+          ),
+        ),
+        // Additional settings...
+      ],
+    );
+  }
+}
+```
+
+### Provider Configuration
+
+Centralized provider exports for dependency injection:
+
+```dart
+// lib/viewmodels/providers.dart - Barrel file for all providers
+export 'features/settings/settings_viewmodel.dart'
+    show settingsViewModelProvider, SettingsViewModel, sharedPreferencesProvider;
+
+export '../app/theme/app_theme.dart' 
+    show themeModeProvider, ThemeModeNotifier;
+
+export '../app/router/app_router.dart' 
+    show appRouterProvider, RouteNames;
+
+// Utility exports
+export '../utils/result.dart';
+export '../utils/exceptions.dart';
+```
+
+#### Theme Provider Implementation
+```dart
+// Theme management with persistence
+final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>(
+  (ref) => ThemeModeNotifier(ref.watch(sharedPreferencesProvider)),
+);
+
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  ThemeModeNotifier(this._prefs) : super(ThemeMode.system) {
+    _loadThemeMode();
+  }
+
+  final SharedPreferences _prefs;
+  
+  Future<void> setThemeMode(ThemeMode mode) async {
+    if (state != mode) {
+      state = mode;
+      await _prefs.setInt('theme_mode', mode.index);
+    }
+  }
+  
+  Future<void> toggleTheme() async {
+    final newMode = switch (state) {
+      ThemeMode.light => ThemeMode.dark,
+      ThemeMode.dark => ThemeMode.light,
+      ThemeMode.system => ThemeMode.light,
+    };
+    await setThemeMode(newMode);
+  }
+}
+```
+
 ## 📱 Frontend Architecture
 
 ### Flutter Application Structure
+
+Cashense has migrated to Flutter's recommended MVVM (Model-View-ViewModel) architecture pattern for improved maintainability and developer experience:
 
 ```
 lib/
@@ -91,24 +334,47 @@ lib/
 │   ├── router/                       # Navigation configuration
 │   ├── theme/                        # Theme configuration
 │   └── localization/                 # Localization setup
-├── core/                             # Core utilities and shared code
-│   ├── constants/                    # App constants and enums
-│   ├── extensions/                   # Dart extensions
-│   ├── utils/                        # Utility functions
-│   ├── validators/                   # Input validation
-│   ├── formatters/                   # Data formatters
-│   └── exceptions/                   # Custom exceptions
-├── shared/                           # Shared components and services
-│   ├── widgets/                      # Reusable UI components
-│   ├── services/                     # Core services
-│   ├── models/                       # Shared data models
-│   └── providers/                    # Shared Riverpod providers
-├── features/                         # Feature modules
-│   ├── authentication/               # Auth feature
-│   ├── accounts/                     # Account management
-│   ├── transactions/                 # Transaction management
-│   ├── budgets/                      # Budget management
-│   └── analytics/                    # Analytics and reporting
+├── models/                           # Data models and business entities
+│   ├── shared/                       # Shared data models
+│   └── features/                     # Feature-specific models
+│       ├── auth/                     # Authentication models
+│       ├── settings/                 # Settings models
+│       ├── accounts/                 # Account management models
+│       ├── transactions/             # Transaction models
+│       ├── budgets/                  # Budget models
+│       └── analytics/                # Analytics models
+├── views/                            # UI components and pages
+│   ├── shared/                       # Reusable UI components
+│   └── features/                     # Feature-specific views
+│       ├── auth/                     # Authentication pages
+│       ├── settings/                 # Settings pages
+│       ├── accounts/                 # Account management views
+│       ├── transactions/             # Transaction views
+│       ├── budgets/                  # Budget views
+│       └── analytics/                # Analytics views
+├── viewmodels/                       # State management and business logic
+│   ├── shared/                       # Shared view models
+│   ├── features/                     # Feature-specific view models
+│   │   ├── auth/                     # Authentication view models
+│   │   ├── settings/                 # Settings view models
+│   │   ├── accounts/                 # Account management view models
+│   │   ├── transactions/             # Transaction view models
+│   │   ├── budgets/                  # Budget view models
+│   │   └── analytics/                # Analytics view models
+│   └── providers.dart                # Riverpod provider exports
+├── services/                         # Core services and integrations
+│   ├── firebase_service.dart         # Firebase integration
+│   ├── crashlytics_service.dart      # Error reporting
+│   ├── storage_service.dart          # Local storage
+│   ├── auth_service.dart             # Authentication service
+│   └── ai_service.dart               # AI/ML integration
+├── utils/                            # Utility functions and helpers
+│   ├── exceptions.dart               # Custom exceptions
+│   ├── validators.dart               # Input validation
+│   ├── formatters.dart               # Data formatters
+│   └── extensions.dart               # Dart extensions
+├── constants/                        # App constants and configuration
+│   └── app_constants.dart            # Application constants
 └── l10n/                            # Localization files
 ```
 
@@ -139,6 +405,132 @@ lib/
 - Hive (^2.2.3) for mobile/desktop/web local storage (faster than Isar, simpler API)
 - flutter_secure_storage (^4.2.1) for sensitive data encryption
 - SharedPreferences (^2.5.3) for app settings and preferences
+
+## 🛡️ Error Handling Architecture
+
+### Global Error Management
+
+Cashense implements a comprehensive error handling system designed for financial applications where reliability is critical:
+
+#### Error Boundary Implementation
+```dart
+// Global error zone in main.dart
+await runZonedGuarded<Future<void>>(
+  () async {
+    await _initializeApp();
+  },
+  (error, stack) => _handleGlobalError(error, stack),
+);
+```
+
+#### Error Recovery Patterns
+- **Graceful Degradation**: App continues functioning with reduced features during errors
+- **User-Friendly Messages**: Technical errors translated to user-understandable messages
+- **Automatic Retry**: Network and initialization errors include retry mechanisms
+- **Error Reporting**: All errors automatically logged to Crashlytics for analysis
+
+#### Error Screen Implementation
+- Custom error widgets for different error types
+- Debug information available in development mode
+- Restart functionality for critical errors
+- Contextual error messages based on error type
+
+### App Initialization Architecture
+
+#### Robust Initialization Process
+```dart
+Future<void> _initializeApp() async {
+  // 1. Initialize core services with timeout
+  await _initializeCoreServices();
+  
+  // 2. Initialize local storage
+  await _initializeLocalStorage();
+  
+  // 3. Initialize SharedPreferences with retry
+  final sharedPreferences = await _initializeSharedPreferences();
+  
+  // 4. Setup error handlers
+  _setupErrorHandlers();
+  
+  // 5. Launch app
+  _launchApp(sharedPreferences);
+}
+```
+
+#### Service Initialization Features
+- **Timeout Protection**: 30-second timeout for Firebase initialization
+- **Retry Logic**: Automatic retry for SharedPreferences initialization
+- **Error Recovery**: Fallback error app if initialization fails
+- **Dependency Injection**: Proper provider setup with initialized services
+
+## 🎨 Theming Architecture
+
+### Material 3 Implementation
+
+Cashense uses an advanced theming system built on Material 3 with financial app-specific enhancements:
+
+#### Dynamic Color Integration
+```dart
+return DynamicColorBuilder(
+  builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+    return MaterialApp.router(
+      theme: AppTheme.light(lightDynamic),
+      darkTheme: AppTheme.dark(darkDynamic),
+      themeMode: themeMode,
+    );
+  },
+);
+```
+
+#### Financial Color System
+```dart
+@immutable
+class FinancialColors extends ThemeExtension<FinancialColors> {
+  const FinancialColors({
+    required this.income,      // Green for income
+    required this.expense,     // Red for expenses
+    required this.investment,  // Purple for investments
+    required this.savings,     // Blue for savings
+    required this.success,     // Success states
+    required this.warning,     // Warning states
+    required this.info,        // Information states
+  });
+}
+```
+
+#### Theme Persistence
+- **StateNotifier Integration**: Reactive theme management with Riverpod
+- **SharedPreferences Storage**: Theme preference persistence across app restarts
+- **System Theme Detection**: Automatic light/dark mode based on system settings
+- **Toggle Functionality**: Easy theme switching with state management
+
+#### Advanced Theme Features
+- **Tabular Figures**: Monospace numbers for financial data display
+- **Enhanced Typography**: Optimized text styles for financial information
+- **Semantic Colors**: Context-aware colors for different transaction types
+- **Accessibility**: High contrast ratios and proper color semantics
+- **Cross-Platform**: Consistent theming across mobile, web, and desktop
+
+### Theme Usage Patterns
+```dart
+// Access theme colors
+final theme = Theme.of(context);
+final financialColors = theme.financialColors;
+
+// Use in widgets
+Container(
+  color: financialColors.income,
+  child: Text(
+    '\$1,234.56',
+    style: theme.textTheme.headlineMedium?.copyWith(
+      fontFeatures: [FontFeature.tabularFigures()],
+    ),
+  ),
+)
+
+// Theme switching
+ref.read(themeModeProvider.notifier).toggleTheme();
+```
 
 ## 🔐 Security Architecture
 

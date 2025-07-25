@@ -2,8 +2,21 @@
 
 This document provides comprehensive API documentation for Cashense services and interfaces. Cashense is an AI-powered, cross-platform financial management application that serves as the ultimate financial companion for individuals and groups.
 
+## 🏛️ Architecture Overview
+
+Cashense follows Flutter's recommended MVVM (Model-View-ViewModel) architecture pattern:
+
+- **Models**: Data models with business logic, validation, and serialization (`lib/models/`)
+- **Views**: UI components and pages (`lib/views/`)
+- **ViewModels**: State management and business logic coordination (`lib/viewmodels/`)
+- **Services**: Core services and integrations (`lib/services/`)
+
+This architecture provides simplified development, better maintainability, and improved testability compared to traditional Clean Architecture patterns.
+
 ## 📋 Table of Contents
 
+- [MVVM Architecture Pattern](#mvvm-architecture-pattern)
+- [Theme Management API](#theme-management-api)
 - [Authentication API](#authentication-api)
 - [Cashbook Management API](#cashbook-management-api)
 - [Account Management API](#account-management-api)
@@ -15,6 +28,206 @@ This document provides comprehensive API documentation for Cashense services and
 - [Loan Management API](#loan-management-api)
 - [Data Models](#data-models)
 - [Error Handling](#error-handling)
+
+## 🏛️ MVVM Architecture Pattern
+
+### Overview
+
+Cashense has migrated from Clean Architecture to Flutter's recommended MVVM pattern for improved developer experience and maintainability. The MVVM pattern consists of:
+
+#### Models (`lib/models/`)
+Data models that combine:
+- Data representation with JSON serialization
+- Business logic and validation
+- Immutable structures with copyWith methods
+- Feature-based organization under `models/features/`
+
+#### Views (`lib/views/`)
+UI components that:
+- Consume ViewModels through Riverpod providers
+- Handle user interactions and navigation
+- Render reactive UI based on state changes
+- Organized by features under `views/features/`
+
+#### ViewModels (`lib/viewmodels/`)
+State management classes that:
+- Extend StateNotifier for reactive state management
+- Make direct service calls (no repository abstraction)
+- Handle business logic coordination
+- Manage error states with AsyncValue pattern
+- Organized by features under `viewmodels/features/`
+
+#### Services (`lib/services/`)
+Core services that:
+- Handle external integrations (Firebase, APIs)
+- Provide data persistence and retrieval
+- Manage platform-specific functionality
+- Remain unchanged from previous architecture
+
+### Benefits of MVVM Migration
+
+1. **Simplified Architecture**: Reduced from 3 layers to a more manageable structure
+2. **Better Developer Experience**: More intuitive Flutter development patterns
+3. **Improved Maintainability**: Easier navigation and file discovery
+4. **Enhanced Testability**: Clearer test organization with focused scope
+5. **Reduced Boilerplate**: Eliminated repository abstraction overhead
+
+## 🎨 Theme Management API
+
+### ThemeModeNotifier
+
+The `ThemeModeNotifier` manages application theming with persistence and reactive updates.
+
+#### Methods
+
+##### `setThemeMode(ThemeMode mode)`
+
+Sets the application theme mode with persistence.
+
+**Parameters:**
+- `mode` (ThemeMode): Theme mode (light, dark, system)
+
+**Returns:** `Future<void>`
+
+**Example:**
+```dart
+final themeNotifier = ref.read(themeModeProvider.notifier);
+await themeNotifier.setThemeMode(ThemeMode.dark);
+```
+
+##### `toggleTheme()`
+
+Toggles between light and dark themes.
+
+**Returns:** `Future<void>`
+
+**Example:**
+```dart
+final themeNotifier = ref.read(themeModeProvider.notifier);
+await themeNotifier.toggleTheme();
+```
+
+##### `resetToSystem()`
+
+Resets theme to follow system settings.
+
+**Returns:** `Future<void>`
+
+**Example:**
+```dart
+final themeNotifier = ref.read(themeModeProvider.notifier);
+await themeNotifier.resetToSystem();
+```
+
+#### State Access
+
+##### `themeModeProvider`
+
+Provider for accessing current theme mode.
+
+**Returns:** `ThemeMode`
+
+**Example:**
+```dart
+class MyWidget extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+    
+    return Switch(
+      value: themeMode == ThemeMode.dark,
+      onChanged: (isDark) {
+        ref.read(themeModeProvider.notifier).setThemeMode(
+          isDark ? ThemeMode.dark : ThemeMode.light,
+        );
+      },
+    );
+  }
+}
+```
+
+### FinancialColors Extension
+
+Access financial-specific colors through the theme extension.
+
+#### Properties
+
+- `income` (Color): Green color for income transactions
+- `expense` (Color): Red color for expense transactions
+- `investment` (Color): Purple color for investment tracking
+- `savings` (Color): Blue color for savings goals
+- `success` (Color): Success state indicator
+- `warning` (Color): Warning state indicator
+- `info` (Color): Information state indicator
+
+#### Usage
+
+```dart
+class TransactionTile extends StatelessWidget {
+  final Transaction transaction;
+  
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final financialColors = theme.financialColors;
+    
+    final color = transaction.amount > 0 
+        ? financialColors.income 
+        : financialColors.expense;
+    
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: color.withValues(alpha: 0.1),
+        child: Icon(
+          transaction.amount > 0 ? Icons.add : Icons.remove,
+          color: color,
+        ),
+      ),
+      title: Text(transaction.description),
+      trailing: Text(
+        '\$${transaction.amount.abs().toStringAsFixed(2)}',
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontFeatures: [FontFeature.tabularFigures()],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Theme Configuration
+
+#### AppTheme Class
+
+Static methods for creating light and dark themes with financial app optimizations.
+
+##### `AppTheme.light([ColorScheme? lightColorScheme])`
+
+Creates light theme with optional dynamic colors.
+
+**Parameters:**
+- `lightColorScheme` (ColorScheme?): Optional dynamic color scheme
+
+**Returns:** `ThemeData`
+
+##### `AppTheme.dark([ColorScheme? darkColorScheme])`
+
+Creates dark theme with optional dynamic colors.
+
+**Parameters:**
+- `darkColorScheme` (ColorScheme?): Optional dynamic color scheme
+
+**Returns:** `ThemeData`
+
+#### Theme Features
+
+- **Material 3 Design**: Full Material 3 component theming
+- **Dynamic Colors**: Support for Material You dynamic colors
+- **Financial Typography**: Tabular figures for monetary amounts
+- **Accessibility**: High contrast ratios and semantic colors
+- **Cross-Platform**: Consistent theming across all platforms
 
 ## 🔐 Authentication API
 
@@ -917,6 +1130,100 @@ class Success<T> extends Result<T> {
 class Failure<T> extends Result<T> {
   const Failure(this.error);
   final Exception error;
+}
+```
+
+## 📊 Constants API
+
+### AppConstants
+
+Application metadata and configuration constants.
+
+```dart
+class AppConstants {
+  static const String appName = 'Cashense';
+  static const String appVersion = '1.0.0';
+  static const String appDescription = 'AI-powered financial management';
+  static const String baseUrl = 'https://api.cashense.com';
+  static const String supportEmail = 'support@cashense.com';
+}
+```
+
+### UIConstants
+
+UI design and spacing constants for consistent design.
+
+```dart
+class UIConstants {
+  // Spacing and padding
+  static const double extraSmallPadding = 4.0;
+  static const double smallPadding = 8.0;
+  static const double defaultPadding = 16.0;
+  static const double largePadding = 24.0;
+  
+  // Border radius values
+  static const double defaultBorderRadius = 12.0;
+  static const double largeBorderRadius = 16.0;
+  
+  // Animation durations
+  static const Duration shortAnimation = Duration(milliseconds: 200);
+  static const Duration mediumAnimation = Duration(milliseconds: 300);
+}
+```
+
+### FinancialConstants
+
+Financial business logic and validation constants.
+
+```dart
+class FinancialConstants {
+  static const int maxDecimalPlaces = 2;
+  static const String defaultCurrency = 'USD';
+  static const double maxTransactionAmount = 999999999.99;
+  static const double minTransactionAmount = 0.01;
+  static const int maxBudgetPeriodDays = 365;
+}
+```
+
+### ValidationConstants
+
+Input validation rules and constraints.
+
+```dart
+class ValidationConstants {
+  static const int minPasswordLength = 8;
+  static const int maxPasswordLength = 128;
+  static const int maxTransactionDescriptionLength = 255;
+  static const int maxCategoryNameLength = 50;
+  static const int maxFileSize = 10 * 1024 * 1024; // 10MB
+}
+```
+
+### FeatureFlags
+
+Feature toggles for development and production environments.
+
+```dart
+class FeatureFlags {
+  static const bool enableBiometricAuth = true;
+  static const bool enableDarkMode = true;
+  static const bool enableAIInsights = true;
+  static const bool enableInvestmentTracking = true;
+  static const bool enableBankSync = false; // Coming soon
+}
+```
+
+### ErrorMessages
+
+User-facing error messages and text constants.
+
+```dart
+class ErrorMessages {
+  static const String networkError = 
+      'Network connection failed. Please check your internet connection.';
+  static const String invalidCredentials = 'Invalid email or password.';
+  static const String requiredField = 'This field is required.';
+  static const String invalidAmount = 'Please enter a valid amount.';
 }
 ```
 
