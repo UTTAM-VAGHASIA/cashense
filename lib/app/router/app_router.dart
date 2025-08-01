@@ -17,8 +17,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // TODO: Add authentication state checking here
       // final isAuthenticated = ref.read(authStateProvider).isAuthenticated;
       if (
-        // !isAuthenticated && 
-        !_isPublicRoute(state.matchedLocation)) {
+      // !isAuthenticated &&
+      !_isPublicRoute(state.matchedLocation)) {
         return '/sign-in';
       }
       return null; // No redirect needed
@@ -63,6 +63,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: RouteNames.settings,
             pageBuilder: (context, state) =>
                 _buildPageWithTransition(context, state, const SettingsPage()),
+            routes: [
+              GoRoute(
+                path: '/theme',
+                name: RouteNames.themeSettings,
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                  context,
+                  state,
+                  const ThemeSettingsPage(),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -81,15 +92,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         location: state.matchedLocation,
       );
     },
-
-    // Enhanced route matching with fallback
-    onException: (context, state, router) {
-      developer.log(
-        'Router exception at ${state.matchedLocation}: ${state.error}',
-        name: 'AppRouter',
-        error: state.error,
-      );
-    },
   );
 });
 
@@ -102,6 +104,7 @@ class RouteNames {
   static const String signUp = 'signUp';
   static const String home = 'home';
   static const String settings = 'settings';
+  static const String themeSettings = 'themeSettings';
 }
 
 /// Helper function to build pages with consistent transitions
@@ -193,7 +196,9 @@ class _ErrorPage extends StatelessWidget {
               Text(
                 'Location: $location',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onErrorContainer.withValues(alpha: 0.7),
+                  color: theme.colorScheme.onErrorContainer.withValues(
+                    alpha: 0.7,
+                  ),
                   fontFamily: 'monospace',
                 ),
                 textAlign: TextAlign.center,

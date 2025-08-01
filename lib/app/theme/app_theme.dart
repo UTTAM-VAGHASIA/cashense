@@ -6,13 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Import the centralized provider
 import '../../viewmodels/features/settings/settings_viewmodel.dart'
     show sharedPreferencesProvider;
+import 'theme_extensions.dart';
+import 'dynamic_colors.dart' hide FinancialColors;
+import 'theme_config.dart';
 
-/// Provider for theme mode state management with persistence
+/// Provider for theme mode state management with persistence (backward compatibility)
 final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>(
   (ref) => ThemeModeNotifier(ref.watch(sharedPreferencesProvider)),
 );
 
-/// Enhanced theme mode notifier with persistence
+/// Enhanced theme mode notifier with persistence (backward compatibility)
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   ThemeModeNotifier(this._prefs) : super(ThemeMode.system) {
     _loadThemeMode();
@@ -63,330 +66,114 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 class AppTheme {
   AppTheme._();
 
-  // Enhanced brand colors with semantic meaning
-  static const Color _primarySeedColor = Color(
-    0xFF1B5E20,
-  ); // Deep green for growth
-  static const Color _secondarySeedColor = Color(
-    0xFF0D47A1,
-  ); // Blue for trust/stability
-  static const Color _tertiarySeedColor = Color(
-    0xFF4A148C,
-  ); // Purple for premium
-  static const Color _errorSeedColor = Color(0xFFB71C1C); // Deep red for errors
-  static const Color _successColor = Color(0xFF2E7D32); // Success green
-  static const Color _warningColor = Color(0xFFEF6C00); // Warning orange
-  static const Color _infoColor = Color(0xFF0288D1); // Info blue
-  static const Color _incomeColor = Color(0xFF388E3C); // Income green
-  static const Color _expenseColor = Color(0xFFD32F2F); // Expense red
-  static const Color _investmentColor = Color(0xFF7B1FA2); // Investment purple
-  static const Color _savingsColor = Color(0xFF1976D2); // Savings blue
-
-  /// Enhanced light theme configuration
+  /// Enhanced light theme configuration with dynamic color support
   static ThemeData light([ColorScheme? lightColorScheme]) {
     final colorScheme =
-        lightColorScheme ??
-        ColorScheme.fromSeed(
-          seedColor: _primarySeedColor,
-          secondary: _secondarySeedColor,
-          tertiary: _tertiarySeedColor,
-          error: _errorSeedColor,
-          brightness: Brightness.light,
-        );
+        lightColorScheme ?? DynamicColors.generateLightColorScheme();
 
-    return ThemeData(
-      useMaterial3: true,
+    return _buildThemeData(
       colorScheme: colorScheme,
-
-      // Enhanced typography with better hierarchy
-      textTheme: _buildTextTheme(colorScheme, Brightness.light),
-
-      // Enhanced app bar with better elevation handling
-      appBarTheme: AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-        scrolledUnderElevation: 2,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.1),
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        titleTextStyle: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: colorScheme.onSurface,
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      ),
-
-      // Enhanced card theme with better shadows
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.08),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      ),
-
-      // Enhanced input decoration with better states
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withValues(alpha: 0.3),
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.error, width: 2),
-        ),
-        labelStyle: TextStyle(
-          color: colorScheme.onSurfaceVariant,
-          fontWeight: FontWeight.w500,
-        ),
-        hintStyle: TextStyle(
-          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-        ),
-      ),
-
-      // Enhanced button themes
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          elevation: 2,
-          shadowColor: colorScheme.shadow.withValues(alpha: 0.1),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          side: BorderSide(color: colorScheme.outline),
-        ),
-      ),
-
-      // Enhanced FAB theme
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        elevation: 6,
-        focusElevation: 8,
-        hoverElevation: 8,
-        highlightElevation: 10,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      ),
-
-      // Enhanced navigation themes
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: colorScheme.surface,
-        selectedItemColor: colorScheme.primary,
-        unselectedItemColor: colorScheme.onSurfaceVariant,
-        elevation: 8,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-        ),
-      ),
-
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: colorScheme.surface,
-        elevation: 3,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.1),
-        indicatorColor: colorScheme.secondaryContainer,
-        labelTextStyle: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
-            return TextStyle(
-              color: colorScheme.onSecondaryContainer,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            );
-          }
-          return TextStyle(
-            color: colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
-          );
-        }),
-      ),
-
-      // Enhanced list tile theme
-      listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      ),
-
-      // Enhanced chip theme
-      chipTheme: ChipThemeData(
-        backgroundColor: colorScheme.surfaceContainerHighest,
-        selectedColor: colorScheme.primaryContainer,
-        labelStyle: TextStyle(
-          color: colorScheme.onSurfaceVariant,
-          fontWeight: FontWeight.w500,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-
-      // Enhanced divider theme
-      dividerTheme: DividerThemeData(
-        color: colorScheme.outlineVariant,
-        thickness: 1,
-        space: 1,
-      ),
-
-      // Enhanced progress indicator theme
-      progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: colorScheme.primary,
-        linearTrackColor: colorScheme.surfaceContainerHighest,
-        circularTrackColor: colorScheme.surfaceContainerHighest,
-      ),
-
-      // Enhanced snackbar theme
-      snackBarTheme: SnackBarThemeData(
-        backgroundColor: colorScheme.inverseSurface,
-        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
-        actionTextColor: colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        behavior: SnackBarBehavior.floating,
-      ),
-
-      // Enhanced dialog theme
-      dialogTheme: DialogThemeData(
-        backgroundColor: colorScheme.surface,
-        surfaceTintColor: colorScheme.surfaceTint,
-        elevation: 6,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.15),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        titleTextStyle: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: colorScheme.onSurface,
-        ),
-        contentTextStyle: TextStyle(
-          fontSize: 16,
-          color: colorScheme.onSurfaceVariant,
-        ),
-      ),
-
-      // Custom extensions for financial app
-      extensions: const [
-        FinancialColors(
-          success: _successColor,
-          warning: _warningColor,
-          info: _infoColor,
-          income: _incomeColor,
-          expense: _expenseColor,
-          investment: _investmentColor,
-          savings: _savingsColor,
-        ),
-      ],
+      brightness: Brightness.light,
     );
   }
 
-  /// Enhanced dark theme configuration
+  /// Enhanced dark theme configuration with dynamic color support
   static ThemeData dark([ColorScheme? darkColorScheme]) {
     final colorScheme =
-        darkColorScheme ??
-        ColorScheme.fromSeed(
-          seedColor: _primarySeedColor,
-          secondary: _secondarySeedColor,
-          tertiary: _tertiarySeedColor,
-          error: _errorSeedColor,
-          brightness: Brightness.dark,
-        );
+        darkColorScheme ?? DynamicColors.generateDarkColorScheme();
+
+    return _buildThemeData(
+      colorScheme: colorScheme,
+      brightness: Brightness.dark,
+    );
+  }
+
+  /// Build theme data with comprehensive configuration
+  static ThemeData _buildThemeData({
+    required ColorScheme colorScheme,
+    required Brightness brightness,
+    ThemeConfig? config,
+  }) {
+    // Use default config if none provided
+    config ??= const ThemeConfig();
+
+    // Get configuration values
+    final borderRadius = config.borderRadiusConfig;
+    final elevation = config.elevationConfig;
+    final typography = config.typographyConfig;
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      brightness: brightness,
 
-      // Enhanced typography with better hierarchy
-      textTheme: _buildTextTheme(colorScheme, Brightness.dark),
+      // Enhanced typography with responsive scaling
+      textTheme: _buildTextTheme(colorScheme, typography, brightness),
 
       // Enhanced app bar with better elevation handling
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        elevation: 0,
-        scrolledUnderElevation: 2,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
+        elevation: elevation.appBar,
+        scrolledUnderElevation: elevation.level1,
+        shadowColor: colorScheme.shadow.withValues(
+          alpha: brightness == Brightness.light ? 0.1 : 0.3,
+        ),
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         titleTextStyle: TextStyle(
-          fontSize: 20,
+          fontSize: typography.titleLarge,
           fontWeight: FontWeight.w600,
           color: colorScheme.onSurface,
         ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        systemOverlayStyle: brightness == Brightness.light
+            ? SystemUiOverlayStyle.dark
+            : SystemUiOverlayStyle.light,
       ),
 
-      // Enhanced card theme with better shadows
+      // Enhanced card theme with responsive design
       cardTheme: CardThemeData(
-        elevation: 4,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: elevation.card,
+        shadowColor: colorScheme.shadow.withValues(
+          alpha: brightness == Brightness.light ? 0.08 : 0.2,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius.card),
+        ),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
 
       // Enhanced input decoration with better states
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+        fillColor: colorScheme.surfaceContainerHighest.withValues(
+          alpha: brightness == Brightness.light ? 0.4 : 0.6,
+        ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(borderRadius.textField),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(borderRadius.textField),
           borderSide: BorderSide(
-            color: colorScheme.outline.withValues(alpha: 0.5),
+            color: colorScheme.outline.withValues(
+              alpha: brightness == Brightness.light ? 0.3 : 0.5,
+            ),
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(borderRadius.textField),
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(borderRadius.textField),
           borderSide: BorderSide(color: colorScheme.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(borderRadius.textField),
           borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
         labelStyle: TextStyle(
@@ -398,14 +185,16 @@ class AppTheme {
         ),
       ),
 
-      // Enhanced button themes
+      // Enhanced button themes with responsive design
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          elevation: 4,
-          shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
+          elevation: elevation.level1,
+          shadowColor: colorScheme.shadow.withValues(
+            alpha: brightness == Brightness.light ? 0.1 : 0.2,
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(borderRadius.button),
           ),
         ),
       ),
@@ -414,7 +203,7 @@ class AppTheme {
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(borderRadius.button),
           ),
         ),
       ),
@@ -423,7 +212,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(borderRadius.button),
           ),
           side: BorderSide(color: colorScheme.outline),
         ),
@@ -431,11 +220,13 @@ class AppTheme {
 
       // Enhanced FAB theme
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        elevation: 8,
-        focusElevation: 10,
-        hoverElevation: 10,
-        highlightElevation: 12,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: elevation.fab,
+        focusElevation: elevation.fab + 2,
+        hoverElevation: elevation.fab + 2,
+        highlightElevation: elevation.fab + 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius.large),
+        ),
       ),
 
       // Enhanced navigation themes
@@ -444,41 +235,45 @@ class AppTheme {
         backgroundColor: colorScheme.surface,
         selectedItemColor: colorScheme.primary,
         unselectedItemColor: colorScheme.onSurfaceVariant,
-        elevation: 8,
-        selectedLabelStyle: const TextStyle(
+        elevation: elevation.navigationBar,
+        selectedLabelStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontSize: typography.labelMedium,
         ),
-        unselectedLabelStyle: const TextStyle(
+        unselectedLabelStyle: TextStyle(
           fontWeight: FontWeight.w500,
-          fontSize: 12,
+          fontSize: typography.labelMedium,
         ),
       ),
 
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.surface,
-        elevation: 3,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
+        elevation: elevation.navigationBar,
+        shadowColor: colorScheme.shadow.withValues(
+          alpha: brightness == Brightness.light ? 0.1 : 0.2,
+        ),
         indicatorColor: colorScheme.secondaryContainer,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return TextStyle(
               color: colorScheme.onSecondaryContainer,
               fontWeight: FontWeight.w600,
-              fontSize: 12,
+              fontSize: typography.labelMedium,
             );
           }
           return TextStyle(
             color: colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w500,
-            fontSize: 12,
+            fontSize: typography.labelMedium,
           );
         }),
       ),
 
       // Enhanced list tile theme
       listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius.medium),
+        ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
 
@@ -489,9 +284,12 @@ class AppTheme {
         labelStyle: TextStyle(
           color: colorScheme.onSurfaceVariant,
           fontWeight: FontWeight.w500,
+          fontSize: typography.labelMedium,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius.chip),
+        ),
       ),
 
       // Enhanced divider theme
@@ -511,9 +309,14 @@ class AppTheme {
       // Enhanced snackbar theme
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
-        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
+        contentTextStyle: TextStyle(
+          color: colorScheme.onInverseSurface,
+          fontSize: typography.bodyMedium,
+        ),
         actionTextColor: colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius.medium),
+        ),
         behavior: SnackBarBehavior.floating,
       ),
 
@@ -521,67 +324,57 @@ class AppTheme {
       dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         surfaceTintColor: colorScheme.surfaceTint,
-        elevation: 8,
-        shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: elevation.dialog,
+        shadowColor: colorScheme.shadow.withValues(
+          alpha: brightness == Brightness.light ? 0.15 : 0.3,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius.dialog),
+        ),
         titleTextStyle: TextStyle(
-          fontSize: 20,
+          fontSize: typography.titleLarge,
           fontWeight: FontWeight.w600,
           color: colorScheme.onSurface,
         ),
         contentTextStyle: TextStyle(
-          fontSize: 16,
+          fontSize: typography.bodyLarge,
           color: colorScheme.onSurfaceVariant,
         ),
       ),
 
       // Custom extensions for financial app
-      extensions: const [
-        FinancialColors(
-          success: _successColor,
-          warning: _warningColor,
-          info: _infoColor,
-          income: _incomeColor,
-          expense: _expenseColor,
-          investment: _investmentColor,
-          savings: _savingsColor,
-        ),
-      ],
+      extensions: [DynamicColors.generateFinancialColors(colorScheme)],
     );
   }
 
   /// Enhanced text theme optimized for financial data display
   static TextTheme _buildTextTheme(
     ColorScheme colorScheme,
+    TypographyConfig typography,
     Brightness brightness,
   ) {
     // Base text color with better contrast
-    final baseTextColor = brightness == Brightness.light
-        ? colorScheme.onSurface
-        : colorScheme.onSurface;
-
-    final secondaryTextColor = brightness == Brightness.light
-        ? colorScheme.onSurfaceVariant
-        : colorScheme.onSurfaceVariant;
+    final baseTextColor = colorScheme.onSurface;
+    final secondaryTextColor = colorScheme.onSurfaceVariant;
 
     return TextTheme(
       // Display styles for large monetary amounts
       displayLarge: TextStyle(
-        fontSize: 57,
+        fontSize: typography.displayLarge,
         fontWeight: FontWeight.w800,
         color: baseTextColor,
         letterSpacing: -0.25,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
       displayMedium: TextStyle(
-        fontSize: 45,
+        fontSize: typography.displayMedium,
         fontWeight: FontWeight.w700,
         color: baseTextColor,
         letterSpacing: 0,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
       displaySmall: TextStyle(
-        fontSize: 36,
+        fontSize: typography.displaySmall,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0,
@@ -590,21 +383,21 @@ class AppTheme {
 
       // Headline styles for transaction amounts
       headlineLarge: TextStyle(
-        fontSize: 32,
+        fontSize: typography.headlineLarge,
         fontWeight: FontWeight.w700,
         color: baseTextColor,
         letterSpacing: 0,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
       headlineMedium: TextStyle(
-        fontSize: 28,
+        fontSize: typography.headlineMedium,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
       headlineSmall: TextStyle(
-        fontSize: 24,
+        fontSize: typography.headlineSmall,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0,
@@ -613,19 +406,19 @@ class AppTheme {
 
       // Title styles
       titleLarge: TextStyle(
-        fontSize: 22,
+        fontSize: typography.titleLarge,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0,
       ),
       titleMedium: TextStyle(
-        fontSize: 16,
+        fontSize: typography.titleMedium,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0.15,
       ),
       titleSmall: TextStyle(
-        fontSize: 14,
+        fontSize: typography.titleSmall,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0.1,
@@ -633,19 +426,19 @@ class AppTheme {
 
       // Body styles
       bodyLarge: TextStyle(
-        fontSize: 16,
+        fontSize: typography.bodyLarge,
         fontWeight: FontWeight.w400,
         color: baseTextColor,
         letterSpacing: 0.5,
       ),
       bodyMedium: TextStyle(
-        fontSize: 14,
+        fontSize: typography.bodyMedium,
         fontWeight: FontWeight.w400,
         color: baseTextColor,
         letterSpacing: 0.25,
       ),
       bodySmall: TextStyle(
-        fontSize: 12,
+        fontSize: typography.bodySmall,
         fontWeight: FontWeight.w400,
         color: secondaryTextColor,
         letterSpacing: 0.4,
@@ -653,82 +446,23 @@ class AppTheme {
 
       // Label styles
       labelLarge: TextStyle(
-        fontSize: 14,
+        fontSize: typography.labelLarge,
         fontWeight: FontWeight.w600,
         color: baseTextColor,
         letterSpacing: 0.1,
       ),
       labelMedium: TextStyle(
-        fontSize: 12,
+        fontSize: typography.labelMedium,
         fontWeight: FontWeight.w600,
         color: secondaryTextColor,
         letterSpacing: 0.5,
       ),
       labelSmall: TextStyle(
-        fontSize: 11,
+        fontSize: typography.labelSmall,
         fontWeight: FontWeight.w600,
         color: secondaryTextColor,
         letterSpacing: 0.5,
       ),
-    );
-  }
-}
-
-/// Enhanced custom colors for financial applications
-@immutable
-class FinancialColors extends ThemeExtension<FinancialColors> {
-  const FinancialColors({
-    required this.success,
-    required this.warning,
-    required this.info,
-    required this.income,
-    required this.expense,
-    required this.investment,
-    required this.savings,
-  });
-
-  final Color success;
-  final Color warning;
-  final Color info;
-  final Color income;
-  final Color expense;
-  final Color investment;
-  final Color savings;
-
-  @override
-  FinancialColors copyWith({
-    Color? success,
-    Color? warning,
-    Color? info,
-    Color? income,
-    Color? expense,
-    Color? investment,
-    Color? savings,
-  }) {
-    return FinancialColors(
-      success: success ?? this.success,
-      warning: warning ?? this.warning,
-      info: info ?? this.info,
-      income: income ?? this.income,
-      expense: expense ?? this.expense,
-      investment: investment ?? this.investment,
-      savings: savings ?? this.savings,
-    );
-  }
-
-  @override
-  FinancialColors lerp(FinancialColors? other, double t) {
-    if (other is! FinancialColors) {
-      return this;
-    }
-    return FinancialColors(
-      success: Color.lerp(success, other.success, t)!,
-      warning: Color.lerp(warning, other.warning, t)!,
-      info: Color.lerp(info, other.info, t)!,
-      income: Color.lerp(income, other.income, t)!,
-      expense: Color.lerp(expense, other.expense, t)!,
-      investment: Color.lerp(investment, other.investment, t)!,
-      savings: Color.lerp(savings, other.savings, t)!,
     );
   }
 }
@@ -776,52 +510,4 @@ class ThemeConstants {
     horizontal: 12,
     vertical: 8,
   );
-}
-
-/// Example usage in your main app
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
-
-    return MaterialApp(
-      title: 'Cashense',
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      themeMode: themeMode,
-      home: const HomePage(),
-    );
-  }
-}
-
-/// Example home page to demonstrate theme usage
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final financialColors = theme.financialColors;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cashense'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.brightness_6, color: financialColors.investment),
-            onPressed: () {
-              // Toggle theme
-            },
-          ),
-        ],
-      ),
-      body: const Center(child: Text('Your financial app content here')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
 }

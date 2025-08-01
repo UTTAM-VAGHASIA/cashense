@@ -13,6 +13,13 @@ export 'features/settings/settings_viewmodel.dart'
 
 // App-level Providers
 export '../app/theme/app_theme.dart' show themeModeProvider, ThemeModeNotifier;
+export '../app/theme/theme_service.dart'
+    show
+        themeConfigProvider,
+        themeServiceProvider,
+        lightThemeProvider,
+        darkThemeProvider,
+        dynamicColorSchemesProvider;
 export '../app/router/app_router.dart' show appRouterProvider, RouteNames;
 
 // Utility exports

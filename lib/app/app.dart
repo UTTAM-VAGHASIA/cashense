@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:go_router/go_router.dart';
 
-import 'theme/app_theme.dart';
+import 'theme/theme_config.dart';
 import '../l10n/app_localizations.dart';
 import '../viewmodels/providers.dart';
 import '../services/crashlytics_service.dart';
@@ -18,64 +18,85 @@ class CashenseApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch providers with error handling
     final router = ref.watch(appRouterProvider);
-    final themeMode = ref.watch(themeModeProvider);
+    final themeConfig = ref.watch(themeConfigProvider);
 
-    return DynamicColorBuilder(
-      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-        return MaterialApp.router(
-          title: 'Cashense',
-          debugShowCheckedModeBanner: false,
+    // Watch dynamic colors
+    final dynamicColorsAsync = ref.watch(dynamicColorSchemesProvider);
 
-          // Routing with error boundary
-          routerConfig: router,
+    return dynamicColorsAsync.when(
+      loading: () => const MaterialApp(
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      ),
+      error: (_, _) => _buildApp(ref, router, themeConfig, null, null),
+      data: (dynamicColors) => _buildApp(
+        ref,
+        router,
+        themeConfig,
+        null, // Dynamic colors handled in theme providers
+        null, // Dynamic colors handled in theme providers
+      ),
+    );
+  }
 
-          // Enhanced theming with dynamic colors
-          theme: AppTheme.light(lightDynamic),
-          darkTheme: AppTheme.dark(darkDynamic),
-          themeMode: themeMode,
+  Widget _buildApp(
+    WidgetRef ref,
+    GoRouter router,
+    ThemeConfig themeConfig,
+    ColorScheme? lightDynamic,
+    ColorScheme? darkDynamic,
+  ) {
+    return MaterialApp.router(
+      title: 'Cashense',
+      debugShowCheckedModeBanner: false,
 
-          // Comprehensive localization support
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
+      // Routing with error boundary
+      routerConfig: router,
 
-          // Locale resolution with fallback
-          localeResolutionCallback: (locale, supportedLocales) {
-            // Try to match exact locale
-            for (final supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale?.languageCode &&
-                  supportedLocale.countryCode == locale?.countryCode) {
-                return supportedLocale;
-              }
-            }
+      // Enhanced theming with dynamic colors and comprehensive configuration
+      theme: ref.watch(lightThemeProvider),
+      darkTheme: ref.watch(darkThemeProvider),
+      themeMode: themeConfig.themeMode,
 
-            // Try to match language code only
-            for (final supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale?.languageCode) {
-                return supportedLocale;
-              }
-            }
+      // Comprehensive localization support
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
 
-            // Fallback to English
-            return const Locale('en', 'US');
-          },
+      // Locale resolution with fallback
+      localeResolutionCallback: (locale, supportedLocales) {
+        // Try to match exact locale
+        for (final supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode &&
+              supportedLocale.countryCode == locale?.countryCode) {
+            return supportedLocale;
+          }
+        }
 
-          // Enhanced performance optimizations and accessibility
-          builder: (context, child) {
-            // Log app lifecycle events
-            _logAppEvent('App built with theme: ${themeMode.name}');
+        // Try to match language code only
+        for (final supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
 
-            return _AppWrapper(child: child!);
-          },
-
-          // Scroll behavior optimization
-          scrollBehavior: const _CashenseScrollBehavior(),
-        );
+        // Fallback to English
+        return const Locale('en', 'US');
       },
+
+      // Enhanced performance optimizations and accessibility
+      builder: (context, child) {
+        // Log app lifecycle events
+        _logAppEvent('App built with theme: ${themeConfig.themeMode.name}');
+
+        return _AppWrapper(themeConfig: themeConfig, child: child!);
+      },
+
+      // Scroll behavior optimization
+      scrollBehavior: const _CashenseScrollBehavior(),
     );
   }
 
@@ -87,30 +108,38 @@ class CashenseApp extends ConsumerWidget {
 
 /// Wrapper widget for additional app-level configurations
 class _AppWrapper extends StatelessWidget {
-  const _AppWrapper({required this.child});
+  const _AppWrapper({required this.child, required this.themeConfig});
 
   final Widget child;
+  final ThemeConfig themeConfig;
 
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      // Prevent font scaling beyond reasonable limits for financial data
+      // Apply font scaling from theme configuration
       data: MediaQuery.of(context).copyWith(
         textScaler: TextScaler.linear(
-          MediaQuery.of(context).textScaler.scale(1.0).clamp(0.8, 1.3),
+          (MediaQuery.of(context).textScaler.scale(1.0) * themeConfig.fontScale)
+              .clamp(0.8, 2.0),
         ),
       ),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         // Dynamic system UI overlay based on theme
-        value: _getSystemUiOverlayStyle(context),
-        child: _ErrorBoundary(child: child),
+        value: _getSystemUiOverlayStyle(context, themeConfig),
+        child: _ErrorBoundary(
+          reducedMotion: themeConfig.reducedMotion,
+          child: child,
+        ),
       ),
     );
   }
 
   /// Get system UI overlay style based on current theme
-  SystemUiOverlayStyle _getSystemUiOverlayStyle(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
+  SystemUiOverlayStyle _getSystemUiOverlayStyle(
+    BuildContext context,
+    ThemeConfig themeConfig,
+  ) {
+    final brightness = themeConfig.getBrightness(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return SystemUiOverlayStyle(
@@ -132,9 +161,10 @@ class _AppWrapper extends StatelessWidget {
 
 /// Error boundary widget to catch and handle widget errors gracefully
 class _ErrorBoundary extends StatefulWidget {
-  const _ErrorBoundary({required this.child});
+  const _ErrorBoundary({required this.reducedMotion, required this.child});
 
   final Widget child;
+  final bool reducedMotion;
 
   @override
   State<_ErrorBoundary> createState() => _ErrorBoundaryState();

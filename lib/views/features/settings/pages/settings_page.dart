@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../viewmodels/providers.dart';
 import '../../../../services/crashlytics_service.dart';
@@ -91,6 +92,14 @@ class SettingsPage extends ConsumerWidget {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () =>
                         _showThemeDialog(context, ref, settings.themeMode),
+                  ),
+                  ListTile(
+                    title: const Text('Advanced Theme Settings'),
+                    subtitle: const Text(
+                      'Customize colors, typography, and more',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.pushNamed('themeSettings'),
                   ),
                 ],
               ),
