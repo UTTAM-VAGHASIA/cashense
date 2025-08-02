@@ -21,6 +21,15 @@ export '../app/theme/theme_service.dart'
         darkThemeProvider,
         dynamicColorSchemesProvider;
 export '../app/router/app_router.dart' show appRouterProvider, RouteNames;
+export '../app/localization/locale_provider.dart'
+    show
+        localeProvider,
+        LocaleNotifier,
+        isRTLProvider,
+        textDirectionProvider,
+        currentLanguageDisplayNameProvider,
+        supportedLocalesWithNamesProvider,
+        LocaleInfo;
 
 // Utility exports
 export '../utils/result.dart';

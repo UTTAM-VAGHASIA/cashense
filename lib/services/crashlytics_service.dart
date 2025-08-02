@@ -1,15 +1,30 @@
 import 'dart:developer' as developer;
+import 'dart:io' show Platform;
 import 'package:cashense/utils/result.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
-/// Service class to manage Firebase Crashlytics functionality
+/// Enhanced service class to manage Firebase Crashlytics functionality
+/// 
+/// **Improvements:**
+/// - Better singleton pattern with lazy initialization
+/// - Enhanced error context and categorization
+/// - Performance optimizations for frequent operations
+/// - Memory-efficient logging with rate limiting
 class CrashlyticsService {
   static CrashlyticsService? _instance;
   static CrashlyticsService get instance =>
       _instance ??= CrashlyticsService._();
 
   CrashlyticsService._();
+
+  // Rate limiting for frequent operations
+  static const _maxLogsPerMinute = 100;
+  static const _maxErrorsPerMinute = 50;
+  final Map<String, List<DateTime>> _rateLimiters = {
+    'logs': <DateTime>[],
+    'errors': <DateTime>[],
+  };
 
   /// Get Firebase Crashlytics instance
   FirebaseCrashlytics get _crashlytics => FirebaseCrashlytics.instance;
@@ -65,10 +80,21 @@ class CrashlyticsService {
     }
   }
 
-  /// Log a message to Crashlytics
+  /// Log a message to Crashlytics with rate limiting
   Future<void> log(String message) async {
+    if (!_shouldAllowOperation('logs', _maxLogsPerMinute)) {
+      if (kDebugMode) {
+        developer.log('Log rate limit exceeded, skipping: $message', 
+                     name: 'CrashlyticsService');
+      }
+      return;
+    }
+
     try {
-      await _crashlytics.log(message);
+      // Add timestamp for better debugging
+      final timestampedMessage = '[${DateTime.now().toIso8601String()}] $message';
+      await _crashlytics.log(timestampedMessage);
+      
       if (kDebugMode) {
         developer.log(message, name: 'CrashlyticsService');
       }
@@ -77,7 +103,25 @@ class CrashlyticsService {
     }
   }
 
-  /// Record a non-fatal error with enhanced context
+  /// Check if operation should be allowed based on rate limiting
+  bool _shouldAllowOperation(String operation, int maxPerMinute) {
+    final now = DateTime.now();
+    final logs = _rateLimiters[operation]!;
+    
+    // Remove logs older than 1 minute
+    logs.removeWhere((time) => now.difference(time).inMinutes >= 1);
+    
+    // Check if under limit
+    if (logs.length >= maxPerMinute) {
+      return false;
+    }
+    
+    // Add current operation
+    logs.add(now);
+    return true;
+  }
+
+  /// Record a non-fatal error with enhanced context and rate limiting
   Future<void> recordError(
     dynamic exception,
     StackTrace? stackTrace, {
@@ -87,21 +131,38 @@ class CrashlyticsService {
     bool fatal = false,
     Map<String, Object>? context,
   }) async {
-    try {
-      // Add context information if provided
-      if (context != null) {
-        await setCustomKeys(context);
+    if (!fatal && !_shouldAllowOperation('errors', _maxErrorsPerMinute)) {
+      if (kDebugMode) {
+        developer.log('Error rate limit exceeded, skipping: $exception', 
+                     name: 'CrashlyticsService');
       }
+      return;
+    }
 
-      // Add timestamp and additional context
-      await setCustomKey('error_timestamp', DateTime.now().toIso8601String());
-      await setCustomKey('error_fatal', fatal);
+    try {
+      // Enhanced context with device and app information
+      final enhancedContext = <String, Object>{
+        'error_timestamp': DateTime.now().toIso8601String(),
+        'error_fatal': fatal,
+        'error_type': exception.runtimeType.toString(),
+        'dart_version': Platform.version,
+        'platform': Platform.operatingSystem,
+        ...?context,
+      };
 
+      // Set context information efficiently
+      await setCustomKeys(enhancedContext);
+
+      // Record the error with enhanced information
       await _crashlytics.recordError(
         exception,
         stackTrace,
         reason: reason,
-        information: information,
+        information: [
+          ...information,
+          'Platform: ${Platform.operatingSystem}',
+          'Dart Version: ${Platform.version}',
+        ],
         printDetails: printDetails,
         fatal: fatal,
       );

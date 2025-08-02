@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../models/features/settings/app_settings_model.dart';
 import '../../../../viewmodels/providers.dart';
 import '../../../../services/crashlytics_service.dart';
 
@@ -88,7 +89,7 @@ class SettingsPage extends ConsumerWidget {
                 children: [
                   ListTile(
                     title: const Text('Theme'),
-                    subtitle: Text(_getThemeDisplayName(settings.themeMode)),
+                    subtitle: Text(settings.themeMode.displayName),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () =>
                         _showThemeDialog(context, ref, settings.themeMode),
@@ -196,22 +197,10 @@ class SettingsPage extends ConsumerWidget {
     );
   }
 
-  String _getThemeDisplayName(String themeMode) {
-    switch (themeMode) {
-      case 'light':
-        return 'Light';
-      case 'dark':
-        return 'Dark';
-      case 'system':
-      default:
-        return 'System';
-    }
-  }
-
   Future<void> _showThemeDialog(
     BuildContext context,
     WidgetRef ref,
-    String currentTheme,
+    AppThemeMode currentTheme,
   ) async => await showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -219,9 +208,9 @@ class SettingsPage extends ConsumerWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          RadioListTile<String>(
+          RadioListTile<AppThemeMode>(
             title: const Text('Light'),
-            value: 'light',
+            value: AppThemeMode.light,
             groupValue: currentTheme,
             onChanged: (value) {
               if (value != null) {
@@ -232,9 +221,9 @@ class SettingsPage extends ConsumerWidget {
               }
             },
           ),
-          RadioListTile<String>(
+          RadioListTile<AppThemeMode>(
             title: const Text('Dark'),
-            value: 'dark',
+            value: AppThemeMode.dark,
             groupValue: currentTheme,
             onChanged: (value) {
               if (value != null) {
@@ -245,9 +234,9 @@ class SettingsPage extends ConsumerWidget {
               }
             },
           ),
-          RadioListTile<String>(
+          RadioListTile<AppThemeMode>(
             title: const Text('System'),
-            value: 'system',
+            value: AppThemeMode.system,
             groupValue: currentTheme,
             onChanged: (value) {
               if (value != null) {

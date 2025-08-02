@@ -1,231 +1,231 @@
 {
-    "@@locale": "en",
+    "@@locale": "es",
     "@@last_modified": "2025-01-08T00:00:00.000Z",
     "appTitle": "Cashense",
     "@appTitle": {
         "description": "The title of the application"
     },
-    "welcome": "Welcome to Cashense",
+    "welcome": "Bienvenido a Cashense",
     "@welcome": {
         "description": "Welcome message"
     },
-    "tagline": "Your AI-powered financial companion",
+    "tagline": "Tu compañero financiero con inteligencia artificial",
     "@tagline": {
         "description": "App tagline"
     },
-    "signIn": "Sign In",
+    "signIn": "Iniciar Sesión",
     "@signIn": {
         "description": "Sign in button text"
     },
-    "signUp": "Sign Up",
+    "signUp": "Registrarse",
     "@signUp": {
         "description": "Sign up button text"
     },
-    "signOut": "Sign Out",
+    "signOut": "Cerrar Sesión",
     "@signOut": {
         "description": "Sign out button text"
     },
-    "email": "Email",
+    "email": "Correo Electrónico",
     "@email": {
         "description": "Email field label"
     },
-    "password": "Password",
+    "password": "Contraseña",
     "@password": {
         "description": "Password field label"
     },
-    "confirmPassword": "Confirm Password",
+    "confirmPassword": "Confirmar Contraseña",
     "@confirmPassword": {
         "description": "Confirm password field label"
     },
-    "forgotPassword": "Forgot Password?",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
     "@forgotPassword": {
         "description": "Forgot password link text"
     },
-    "resetPassword": "Reset Password",
+    "resetPassword": "Restablecer Contraseña",
     "@resetPassword": {
         "description": "Reset password button text"
     },
-    "firstName": "First Name",
+    "firstName": "Nombre",
     "@firstName": {
         "description": "First name field label"
     },
-    "lastName": "Last Name",
+    "lastName": "Apellido",
     "@lastName": {
         "description": "Last name field label"
     },
-    "phoneNumber": "Phone Number",
+    "phoneNumber": "Número de Teléfono",
     "@phoneNumber": {
         "description": "Phone number field label"
     },
-    "save": "Save",
+    "save": "Guardar",
     "@save": {
         "description": "Save button text"
     },
-    "cancel": "Cancel",
+    "cancel": "Cancelar",
     "@cancel": {
         "description": "Cancel button text"
     },
-    "delete": "Delete",
+    "delete": "Eliminar",
     "@delete": {
         "description": "Delete button text"
     },
-    "edit": "Edit",
+    "edit": "Editar",
     "@edit": {
         "description": "Edit button text"
     },
-    "add": "Add",
+    "add": "Agregar",
     "@add": {
         "description": "Add button text"
     },
-    "search": "Search",
+    "search": "Buscar",
     "@search": {
         "description": "Search placeholder text"
     },
-    "filter": "Filter",
+    "filter": "Filtrar",
     "@filter": {
         "description": "Filter button text"
     },
-    "sort": "Sort",
+    "sort": "Ordenar",
     "@sort": {
         "description": "Sort button text"
     },
-    "settings": "Settings",
+    "settings": "Configuración",
     "@settings": {
         "description": "Settings menu item"
     },
-    "profile": "Profile",
+    "profile": "Perfil",
     "@profile": {
         "description": "Profile menu item"
     },
-    "dashboard": "Dashboard",
+    "dashboard": "Panel",
     "@dashboard": {
         "description": "Dashboard navigation item"
     },
-    "accounts": "Accounts",
+    "accounts": "Cuentas",
     "@accounts": {
         "description": "Accounts navigation item"
     },
-    "transactions": "Transactions",
+    "transactions": "Transacciones",
     "@transactions": {
         "description": "Transactions navigation item"
     },
-    "budgets": "Budgets",
+    "budgets": "Presupuestos",
     "@budgets": {
         "description": "Budgets navigation item"
     },
-    "analytics": "Analytics",
+    "analytics": "Análisis",
     "@analytics": {
         "description": "Analytics navigation item"
     },
-    "goals": "Goals",
+    "goals": "Metas",
     "@goals": {
         "description": "Goals navigation item"
     },
-    "cashbooks": "Cashbooks",
+    "cashbooks": "Libros de Caja",
     "@cashbooks": {
         "description": "Cashbooks navigation item"
     },
-    "amount": "Amount",
+    "amount": "Cantidad",
     "@amount": {
         "description": "Amount field label"
     },
-    "description": "Description",
+    "description": "Descripción",
     "@description": {
         "description": "Description field label"
     },
-    "category": "Category",
+    "category": "Categoría",
     "@category": {
         "description": "Category field label"
     },
-    "date": "Date",
+    "date": "Fecha",
     "@date": {
         "description": "Date field label"
     },
-    "time": "Time",
+    "time": "Hora",
     "@time": {
         "description": "Time field label"
     },
-    "currency": "Currency",
+    "currency": "Moneda",
     "@currency": {
         "description": "Currency field label"
     },
-    "balance": "Balance",
+    "balance": "Saldo",
     "@balance": {
         "description": "Balance label"
     },
-    "income": "Income",
+    "income": "Ingreso",
     "@income": {
         "description": "Income label"
     },
-    "expense": "Expense",
+    "expense": "Gasto",
     "@expense": {
         "description": "Expense label"
     },
-    "transfer": "Transfer",
+    "transfer": "Transferencia",
     "@transfer": {
         "description": "Transfer label"
     },
-    "today": "Today",
+    "today": "Hoy",
     "@today": {
         "description": "Today label"
     },
-    "yesterday": "Yesterday",
+    "yesterday": "Ayer",
     "@yesterday": {
         "description": "Yesterday label"
     },
-    "thisWeek": "This Week",
+    "thisWeek": "Esta Semana",
     "@thisWeek": {
         "description": "This week label"
     },
-    "thisMonth": "This Month",
+    "thisMonth": "Este Mes",
     "@thisMonth": {
         "description": "This month label"
     },
-    "thisYear": "This Year",
+    "thisYear": "Este Año",
     "@thisYear": {
         "description": "This year label"
     },
-    "language": "Language",
+    "language": "Idioma",
     "@language": {
         "description": "Language setting label"
     },
-    "theme": "Theme",
+    "theme": "Tema",
     "@theme": {
         "description": "Theme setting label"
     },
-    "lightTheme": "Light",
+    "lightTheme": "Claro",
     "@lightTheme": {
         "description": "Light theme option"
     },
-    "darkTheme": "Dark",
+    "darkTheme": "Oscuro",
     "@darkTheme": {
         "description": "Dark theme option"
     },
-    "systemTheme": "System",
+    "systemTheme": "Sistema",
     "@systemTheme": {
         "description": "System theme option"
     },
-    "notifications": "Notifications",
+    "notifications": "Notificaciones",
     "@notifications": {
         "description": "Notifications setting label"
     },
-    "security": "Security",
+    "security": "Seguridad",
     "@security": {
         "description": "Security setting label"
     },
-    "privacy": "Privacy",
+    "privacy": "Privacidad",
     "@privacy": {
         "description": "Privacy setting label"
     },
-    "about": "About",
+    "about": "Acerca de",
     "@about": {
         "description": "About menu item"
     },
-    "version": "Version",
+    "version": "Versión",
     "@version": {
         "description": "Version label"
     },
-    "loading": "Loading...",
+    "loading": "Cargando...",
     "@loading": {
         "description": "Loading indicator text"
     },
@@ -233,23 +233,23 @@
     "@error": {
         "description": "Error label"
     },
-    "success": "Success",
+    "success": "Éxito",
     "@success": {
         "description": "Success label"
     },
-    "warning": "Warning",
+    "warning": "Advertencia",
     "@warning": {
         "description": "Warning label"
     },
-    "info": "Information",
+    "info": "Información",
     "@info": {
         "description": "Information label"
     },
-    "ok": "OK",
+    "ok": "Aceptar",
     "@ok": {
         "description": "OK button text"
     },
-    "yes": "Yes",
+    "yes": "Sí",
     "@yes": {
         "description": "Yes button text"
     },
@@ -257,147 +257,147 @@
     "@no": {
         "description": "No button text"
     },
-    "retry": "Retry",
+    "retry": "Reintentar",
     "@retry": {
         "description": "Retry button text"
     },
-    "close": "Close",
+    "close": "Cerrar",
     "@close": {
         "description": "Close button text"
     },
-    "done": "Done",
+    "done": "Hecho",
     "@done": {
         "description": "Done button text"
     },
-    "next": "Next",
+    "next": "Siguiente",
     "@next": {
         "description": "Next button text"
     },
-    "previous": "Previous",
+    "previous": "Anterior",
     "@previous": {
         "description": "Previous button text"
     },
-    "skip": "Skip",
+    "skip": "Omitir",
     "@skip": {
         "description": "Skip button text"
     },
-    "continueButton": "Continue",
+    "continueButton": "Continuar",
     "@continueButton": {
         "description": "Continue button text"
     },
-    "back": "Back",
+    "back": "Atrás",
     "@back": {
         "description": "Back button text"
     },
-    "home": "Home",
+    "home": "Inicio",
     "@home": {
         "description": "Home navigation item"
     },
-    "menu": "Menu",
+    "menu": "Menú",
     "@menu": {
         "description": "Menu button text"
     },
-    "more": "More",
+    "more": "Más",
     "@more": {
         "description": "More button text"
     },
-    "less": "Less",
+    "less": "Menos",
     "@less": {
         "description": "Less button text"
     },
-    "all": "All",
+    "all": "Todo",
     "@all": {
         "description": "All option text"
     },
-    "none": "None",
+    "none": "Ninguno",
     "@none": {
         "description": "None option text"
     },
-    "select": "Select",
+    "select": "Seleccionar",
     "@select": {
         "description": "Select button text"
     },
-    "clear": "Clear",
+    "clear": "Limpiar",
     "@clear": {
         "description": "Clear button text"
     },
-    "reset": "Reset",
+    "reset": "Restablecer",
     "@reset": {
         "description": "Reset button text"
     },
-    "refresh": "Refresh",
+    "refresh": "Actualizar",
     "@refresh": {
         "description": "Refresh button text"
     },
-    "sync": "Sync",
+    "sync": "Sincronizar",
     "@sync": {
         "description": "Sync button text"
     },
-    "backup": "Backup",
+    "backup": "Respaldo",
     "@backup": {
         "description": "Backup button text"
     },
-    "restore": "Restore",
+    "restore": "Restaurar",
     "@restore": {
         "description": "Restore button text"
     },
-    "import": "Import",
+    "import": "Importar",
     "@import": {
         "description": "Import button text"
     },
-    "export": "Export",
+    "export": "Exportar",
     "@export": {
         "description": "Export button text"
     },
-    "share": "Share",
+    "share": "Compartir",
     "@share": {
         "description": "Share button text"
     },
-    "copy": "Copy",
+    "copy": "Copiar",
     "@copy": {
         "description": "Copy button text"
     },
-    "paste": "Paste",
+    "paste": "Pegar",
     "@paste": {
         "description": "Paste button text"
     },
-    "cut": "Cut",
+    "cut": "Cortar",
     "@cut": {
         "description": "Cut button text"
     },
-    "undo": "Undo",
+    "undo": "Deshacer",
     "@undo": {
         "description": "Undo button text"
     },
-    "redo": "Redo",
+    "redo": "Rehacer",
     "@redo": {
         "description": "Redo button text"
     },
-    "help": "Help",
+    "help": "Ayuda",
     "@help": {
         "description": "Help menu item"
     },
-    "support": "Support",
+    "support": "Soporte",
     "@support": {
         "description": "Support menu item"
     },
-    "feedback": "Feedback",
+    "feedback": "Comentarios",
     "@feedback": {
         "description": "Feedback menu item"
     },
-    "contactUs": "Contact Us",
+    "contactUs": "Contáctanos",
     "@contactUs": {
         "description": "Contact us menu item"
     },
-    "termsOfService": "Terms of Service",
+    "termsOfService": "Términos de Servicio",
     "@termsOfService": {
         "description": "Terms of service link"
     },
-    "privacyPolicy": "Privacy Policy",
+    "privacyPolicy": "Política de Privacidad",
     "@privacyPolicy": {
         "description": "Privacy policy link"
     },
-    "licenses": "Licenses",
+    "licenses": "Licencias",
     "@licenses": {
         "description": "Licenses menu item"
     },
@@ -431,7 +431,7 @@
             }
         }
     },
-    "welcomeUser": "Welcome, {name}!",
+    "welcomeUser": "¡Bienvenido, {name}!",
     "@welcomeUser": {
         "description": "Welcome message with user name",
         "placeholders": {
@@ -441,7 +441,7 @@
             }
         }
     },
-    "transactionCount": "{count, plural, =0{No transactions} =1{1 transaction} other{{count} transactions}}",
+    "transactionCount": "{count, plural, =0{Sin transacciones} =1{1 transacción} other{{count} transacciones}}",
     "@transactionCount": {
         "description": "Transaction count with pluralization",
         "placeholders": {
@@ -451,7 +451,7 @@
             }
         }
     },
-    "accountBalance": "Balance: {amount}",
+    "accountBalance": "Saldo: {amount}",
     "@accountBalance": {
         "description": "Account balance display",
         "placeholders": {
@@ -461,7 +461,7 @@
             }
         }
     },
-    "budgetProgress": "{spent} of {budget} spent",
+    "budgetProgress": "{spent} de {budget} gastado",
     "@budgetProgress": {
         "description": "Budget progress display",
         "placeholders": {
@@ -475,7 +475,7 @@
             }
         }
     },
-    "lastUpdated": "Last updated: {date}",
+    "lastUpdated": "Última actualización: {date}",
     "@lastUpdated": {
         "description": "Last updated timestamp",
         "placeholders": {

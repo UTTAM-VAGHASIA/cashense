@@ -16,10 +16,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _isLoading = false;
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
-  bool _acceptTerms = false;
+
+  // Use ValueNotifiers for better performance - only rebuild specific widgets
+  final _isLoadingNotifier = ValueNotifier<bool>(false);
+  final _obscurePasswordNotifier = ValueNotifier<bool>(true);
+  final _obscureConfirmPasswordNotifier = ValueNotifier<bool>(true);
+  final _acceptTermsNotifier = ValueNotifier<bool>(false);
 
   @override
   void dispose() {
@@ -27,6 +29,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _isLoadingNotifier.dispose();
+    _obscurePasswordNotifier.dispose();
+    _obscureConfirmPasswordNotifier.dispose();
+    _acceptTermsNotifier.dispose();
     super.dispose();
   }
 
@@ -39,8 +45,15 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         title: const Text('Create Account'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/sign-in'),
+          onPressed: () => context.go('/'),
+          tooltip: 'Back to Navigator',
         ),
+        actions: [
+          TextButton(
+            onPressed: () => context.go('/sign-in'),
+            child: const Text('Sign In'),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -118,129 +131,151 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Password field
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Create a strong password',
-                        prefixIcon: const Icon(Icons.lock_outlined),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
+                    // Password field with optimized state management
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _obscurePasswordNotifier,
+                      builder: (context, obscurePassword, child) {
+                        return TextFormField(
+                          controller: _passwordController,
+                          obscureText: obscurePassword,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            hintText: 'Create a strong password',
+                            prefixIcon: const Icon(Icons.lock_outlined),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onPressed: () {
+                                _obscurePasswordNotifier.value =
+                                    !obscurePassword;
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value.length < 8) {
+                              return 'Password must be at least 8 characters';
+                            }
+                            if (!RegExp(
+                              r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)',
+                            ).hasMatch(value)) {
+                              return 'Password must contain uppercase, lowercase, and number';
+                            }
+                            return null;
                           },
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        if (value.length < 8) {
-                          return 'Password must be at least 8 characters';
-                        }
-                        if (!RegExp(
-                          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)',
-                        ).hasMatch(value)) {
-                          return 'Password must contain uppercase, lowercase, and number';
-                        }
-                        return null;
+                        );
                       },
                     ),
                     const SizedBox(height: 16),
 
-                    // Confirm password field
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      obscureText: _obscureConfirmPassword,
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                        labelText: 'Confirm Password',
-                        hintText: 'Re-enter your password',
-                        prefixIcon: const Icon(Icons.lock_outlined),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureConfirmPassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
+                    // Confirm password field with optimized state management
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _obscureConfirmPasswordNotifier,
+                      builder: (context, obscureConfirmPassword, child) {
+                        return TextFormField(
+                          controller: _confirmPasswordController,
+                          obscureText: obscureConfirmPassword,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            labelText: 'Confirm Password',
+                            hintText: 'Re-enter your password',
+                            prefixIcon: const Icon(Icons.lock_outlined),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscureConfirmPassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onPressed: () {
+                                _obscureConfirmPasswordNotifier.value =
+                                    !obscureConfirmPassword;
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureConfirmPassword =
-                                  !_obscureConfirmPassword;
-                            });
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please confirm your password';
+                            }
+                            if (value != _passwordController.text) {
+                              return 'Passwords do not match';
+                            }
+                            return null;
                           },
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please confirm your password';
-                        }
-                        if (value != _passwordController.text) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
+                          onFieldSubmitted: (_) => _handleSignUp(),
+                        );
                       },
-                      onFieldSubmitted: (_) => _handleSignUp(),
                     ),
                     const SizedBox(height: 24),
 
-                    // Terms and conditions checkbox
-                    CheckboxListTile(
-                      value: _acceptTerms,
-                      onChanged: (value) {
-                        setState(() {
-                          _acceptTerms = value ?? false;
-                        });
+                    // Terms and conditions checkbox with optimized state management
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _acceptTermsNotifier,
+                      builder: (context, acceptTerms, child) {
+                        return CheckboxListTile(
+                          value: acceptTerms,
+                          onChanged: (value) {
+                            _acceptTermsNotifier.value = value ?? false;
+                          },
+                          title: Text.rich(
+                            TextSpan(
+                              text: 'I agree to the ',
+                              children: [
+                                TextSpan(
+                                  text: 'Terms of Service',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                const TextSpan(text: ' and '),
+                                TextSpan(
+                                  text: 'Privacy Policy',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          contentPadding: EdgeInsets.zero,
+                        );
                       },
-                      title: Text.rich(
-                        TextSpan(
-                          text: 'I agree to the ',
-                          children: [
-                            TextSpan(
-                              text: 'Terms of Service',
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                            const TextSpan(text: ' and '),
-                            TextSpan(
-                              text: 'Privacy Policy',
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ],
-                        ),
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
                     ),
                     const SizedBox(height: 24),
 
-                    // Sign up button
-                    FilledButton(
-                      onPressed: (_isLoading || !_acceptTerms)
-                          ? null
-                          : _handleSignUp,
-                      child: _isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Text('Create Account'),
+                    // Sign up button with optimized state management
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _isLoadingNotifier,
+                      builder: (context, isLoading, child) {
+                        return ValueListenableBuilder<bool>(
+                          valueListenable: _acceptTermsNotifier,
+                          builder: (context, acceptTerms, child) {
+                            return FilledButton(
+                              onPressed: (isLoading || !acceptTerms)
+                                  ? null
+                                  : _handleSignUp,
+                              child: isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text('Create Account'),
+                            );
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(height: 16),
 
@@ -262,7 +297,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) return;
 
-    if (!_acceptTerms) {
+    if (!_acceptTermsNotifier.value) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -273,15 +308,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    _isLoadingNotifier.value = true;
 
     try {
       // TODO: Implement actual registration logic
-      await Future.delayed(
+      await Future<void>.delayed(
         const Duration(seconds: 2),
-        () {},
       ); // Simulate API call
 
       if (mounted) {
@@ -304,9 +336,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       }
     } finally {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoadingNotifier.value = false;
       }
     }
   }

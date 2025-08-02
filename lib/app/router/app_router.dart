@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../views/shared/splash_screen.dart';
+import '../../views/shared/simple_navigation.dart';
+import '../../views/shared/demo_screens/theme_switcher_demo.dart';
+import '../../views/shared/demo_screens/language_selector_demo.dart';
 import '../../views/features/index.dart';
 
 /// Provider for the app router configuration with enhanced error handling
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/splash',
+    initialLocation: '/',
     debugLogDiagnostics: true,
 
     // Enhanced redirect logic with authentication state
@@ -25,6 +28,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     },
 
     routes: [
+      // Main navigation screen (entry point for testing)
+      GoRoute(
+        path: '/',
+        name: RouteNames.mainNavigation,
+        builder: (context, state) => const SimpleNavigationScreen(),
+      ),
+
       // Splash screen with loading state
       GoRoute(
         path: '/splash',
@@ -47,6 +57,55 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             _buildPageWithTransition(context, state, const SignUpPage()),
       ),
 
+      // Settings and configuration routes
+      GoRoute(
+        path: '/settings',
+        name: RouteNames.settings,
+        pageBuilder: (context, state) =>
+            _buildPageWithTransition(context, state, const SettingsPage()),
+      ),
+
+      GoRoute(
+        path: '/settings/theme',
+        name: RouteNames.themeSettings,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context,
+          state,
+          const ThemeSettingsPage(),
+        ),
+      ),
+
+      GoRoute(
+        path: '/localization-demo',
+        name: RouteNames.localizationDemo,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context,
+          state,
+          const LocalizationDemoPage(),
+        ),
+      ),
+
+      // Demo screens for shared components
+      GoRoute(
+        path: '/theme-switcher-demo',
+        name: RouteNames.themeSwitcherDemo,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context,
+          state,
+          const ThemeSwitcherDemoScreen(),
+        ),
+      ),
+
+      GoRoute(
+        path: '/language-selector-demo',
+        name: RouteNames.languageSelectorDemo,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context,
+          state,
+          const LanguageSelectorDemoScreen(),
+        ),
+      ),
+
       // Main app routes with nested navigation
       ShellRoute(
         builder: (context, state, child) => _MainShell(child: child),
@@ -56,24 +115,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: RouteNames.home,
             pageBuilder: (context, state) =>
                 _buildPageWithTransition(context, state, const _HomePage()),
-          ),
-
-          GoRoute(
-            path: '/settings',
-            name: RouteNames.settings,
-            pageBuilder: (context, state) =>
-                _buildPageWithTransition(context, state, const SettingsPage()),
-            routes: [
-              GoRoute(
-                path: '/theme',
-                name: RouteNames.themeSettings,
-                pageBuilder: (context, state) => _buildPageWithTransition(
-                  context,
-                  state,
-                  const ThemeSettingsPage(),
-                ),
-              ),
-            ],
           ),
         ],
       ),
@@ -99,12 +140,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 class RouteNames {
   RouteNames._(); // Private constructor
 
+  static const String mainNavigation = 'mainNavigation';
   static const String splash = 'splash';
   static const String signIn = 'signIn';
   static const String signUp = 'signUp';
   static const String home = 'home';
   static const String settings = 'settings';
   static const String themeSettings = 'themeSettings';
+  static const String localizationDemo = 'localizationDemo';
+  static const String themeSwitcherDemo = 'themeSwitcherDemo';
+  static const String languageSelectorDemo = 'languageSelectorDemo';
 }
 
 /// Helper function to build pages with consistent transitions
@@ -132,8 +177,18 @@ Page<void> _buildPageWithTransition(
 
 /// Check if route is public (doesn't require authentication)
 bool _isPublicRoute(String location) {
-  const publicRoutes = ['/splash', '/sign-in', '/sign-up'];
-  return publicRoutes.contains(location);
+  const publicRoutes = [
+    '/',
+    '/splash',
+    '/sign-in',
+    '/sign-up',
+    '/settings',
+    '/settings/theme',
+    '/localization-demo',
+    '/theme-switcher-demo',
+    '/language-selector-demo',
+  ];
+  return publicRoutes.any((route) => location.startsWith(route));
 }
 
 /// Main shell for authenticated routes with navigation
@@ -146,7 +201,12 @@ class _MainShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      // TODO: Add bottom navigation bar or drawer here
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.go('/'),
+        icon: const Icon(Icons.home),
+        label: const Text('Navigator'),
+        tooltip: 'Go to main navigation',
+      ),
     );
   }
 }
@@ -271,30 +331,74 @@ class _HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cashense'),
+        title: const Text('Cashense Home'),
+        backgroundColor: theme.colorScheme.primaryContainer,
+        foregroundColor: theme.colorScheme.onPrimaryContainer,
         actions: [
           IconButton(
+            icon: const Icon(Icons.apps),
+            onPressed: () => context.go('/'),
+            tooltip: 'All Screens',
+          ),
+          IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => context.pushNamed(RouteNames.settings),
+            onPressed: () => context.push('/settings'),
             tooltip: 'Settings',
           ),
         ],
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.account_balance_wallet, size: 80),
-            SizedBox(height: 16),
-            Text(
-              'Welcome to Cashense',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text('Your financial companion is coming soon!'),
-          ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  Icons.account_balance_wallet,
+                  size: 80,
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Welcome to Cashense',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Your AI-powered financial companion',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: () => context.go('/'),
+                icon: const Icon(Icons.explore),
+                label: const Text('Explore All Screens'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

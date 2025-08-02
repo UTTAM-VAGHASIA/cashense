@@ -75,15 +75,15 @@ fvm use
 fvm flutter pub get
 
 # Code generation (required after model changes)
-fvm flutter packages pub run build_runner build
+fvm dart run build_runner build
 
 # Watch mode for continuous generation
-fvm flutter packages pub run build_runner watch
+fvm dart run build_runner watch
 
 # Clean and rebuild
 fvm flutter clean
 fvm flutter pub get
-fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+fvm dart run build_runner build --delete-conflicting-outputs
 ```
 
 ### Testing
@@ -121,7 +121,7 @@ fvm flutter build windows --release # Windows
 fvm flutter analyze
 
 # Format code
-fvm flutter format .
+fvm dart format .
 
 # Generate documentation
 dart doc

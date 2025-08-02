@@ -1,0 +1,159 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter gen-l10n
+
+## exception
+
+ProcessException: ProcessException: `dart format` failed with exit code 65
+
+stdout:
+Formatted no files in 0.22 seconds.
+
+
+stderr:
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_ar.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'Ù…ØªØ§Ø¨Ø¹Ø©';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_de.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'Fortfahren';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_en.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'Continue';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_es.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'Continuar';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_fr.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'Continuer';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_hi.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'à¤œà¤¾à¤°à¥€ à¤°à¤–à¥‡à¤‚';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 222, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations_zh.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+222 â”‚   String get continue => 'ç»§ç»­';
+    â”‚              ^^^^^^^^
+    â•µ
+Could not format because the source could not be parsed:
+
+line 532, column 14 of c:/Users/uttam/Flutter/projects/cashense/lib/l10n/app_localizations.dart: 'continue' can't be used as an identifier because it's a keyword.
+    â•·
+532 â”‚   String get continue;
+    â”‚              ^^^^^^^^
+    â•µ
+
+  Command: C:\Users\uttam\fvm\versions\3.32.7\bin\cache\dart-sdk\bin\dart.exe C:\Users\uttam\fvm\versions\3.32.7\bin\cache\dart-sdk\bin\dart.exe format C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_ar.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_de.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_en.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_es.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_fr.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_hi.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations_zh.dart C:\Users\uttam\Flutter\projects\cashense\lib/l10n\app_localizations.dart
+
+```
+#0      generateLocalizations (package:flutter_tools/src/localizations/gen_l10n.dart:97:7)
+<asynchronous suspension>
+#1      GenerateLocalizationsCommand.runCommand (package:flutter_tools/src/commands/generate_localizations.dart:277:5)
+<asynchronous suspension>
+#2      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1563:27)
+<asynchronous suspension>
+#3      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#4      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#5      FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:494:9)
+<asynchronous suspension>
+#6      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#7      FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+<asynchronous suspension>
+#8      run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:98:11)
+<asynchronous suspension>
+#9      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#10     main (package:flutter_tools/executable.dart:102:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[32m[✓][39m Flutter (Channel stable, 3.32.7, on Microsoft Windows [Version
+    10.0.26100.4770], locale en-IN) [369ms]
+    [32m•[39m Flutter version 3.32.7 on channel stable at
+      C:\Users\uttam\fvm\versions\3.32.7
+    [32m•[39m Upstream repository https://github.com/flutter/flutter.git
+    [32m•[39m Framework revision d7b523b356 (2 weeks ago), 2025-07-15 17:03:46 -0700
+    [32m•[39m Engine revision 39d6d6e699
+    [32m•[39m Dart version 3.8.1
+    [32m•[39m DevTools version 2.45.1
+
+[32m[✓][39m Windows Version (11 Pro 64-bit, 24H2, 2009) [4.0s]
+
+[33m[!][39m Android toolchain - develop for Android devices (Android SDK version 35.0.1)
+    [3.1s]
+    [32m•[39m Android SDK at C:\Users\uttam\AppData\Local\Android\sdk
+    [32m•[39m Platform android-35, build-tools 35.0.1
+    [32m•[39m Java binary at: C:\Program Files\Android\Android Studio\jbr\bin\java
+      This is the JDK bundled with the latest Android Studio installation on this
+      machine.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    [32m•[39m Java version OpenJDK Runtime Environment (build 21.0.5+-13047016-b750.29)
+    [33m![39m Some Android licenses not accepted. To resolve this, run: flutter doctor
+      --android-licenses
+
+[32m[✓][39m Chrome - develop for the web [78ms]
+    [32m•[39m Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[32m[✓][39m Visual Studio - develop Windows apps (Visual Studio Community 2022 17.14.4)
+    [77ms]
+    [32m•[39m Visual Studio at C:\Program Files\Microsoft Visual Studio\2022\Community
+    [32m•[39m Visual Studio Community 2022 version 17.14.36202.13
+    [32m•[39m Windows 10 SDK version 10.0.26100.0
+
+[32m[✓][39m Android Studio (version 2024.3) [11ms]
+    [32m•[39m Android Studio at C:\Program Files\Android\Android Studio
+    [32m•[39m Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    [32m•[39m Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    [32m•[39m Java version OpenJDK Runtime Environment (build 21.0.5+-13047016-b750.29)
+
+[32m[✓][39m VS Code (version 1.102.1) [9ms]
+    [32m•[39m VS Code at C:\Users\uttam\AppData\Local\Programs\Microsoft VS Code
+    [32m•[39m Flutter extension version 3.114.0
+
+[32m[✓][39m Connected device (3 available) [127ms]
+    [32m•[39m Windows (desktop) • windows • windows-x64    • Microsoft Windows [Version
+      10.0.26100.4770]
+    [32m•[39m Chrome (web)      • chrome  • web-javascript • Google Chrome 138.0.7204.169
+    [32m•[39m Edge (web)        • edge    • web-javascript • Microsoft Edge 138.0.3351.109
+
+[32m[✓][39m Network resources [451ms]
+    [32m•[39m All expected network resources are available.
+
+[33m![39m Doctor found issues in 1 category.
+```

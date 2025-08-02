@@ -14,13 +14,17 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false;
-  bool _obscurePassword = true;
+  
+  // Use ValueNotifiers for better performance - only rebuild specific widgets
+  final _isLoadingNotifier = ValueNotifier<bool>(false);
+  final _obscurePasswordNotifier = ValueNotifier<bool>(true);
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _isLoadingNotifier.dispose();
+    _obscurePasswordNotifier.dispose();
     super.dispose();
   }
 
@@ -29,6 +33,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign In'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+          tooltip: 'Back to Navigator',
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -90,51 +104,59 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Password field
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                        prefixIcon: const Icon(Icons.lock_outlined),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
+                    // Password field with optimized state management
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _obscurePasswordNotifier,
+                      builder: (context, obscurePassword, child) {
+                        return TextFormField(
+                          controller: _passwordController,
+                          obscureText: obscurePassword,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            hintText: 'Enter your password',
+                            prefixIcon: const Icon(Icons.lock_outlined),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onPressed: () {
+                                _obscurePasswordNotifier.value = !obscurePassword;
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
                           },
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
+                          onFieldSubmitted: (_) => _handleSignIn(),
+                        );
                       },
-                      onFieldSubmitted: (_) => _handleSignIn(),
                     ),
                     const SizedBox(height: 24),
 
-                    // Sign in button
-                    FilledButton(
-                      onPressed: _isLoading ? null : _handleSignIn,
-                      child: _isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Text('Sign In'),
+                    // Sign in button with optimized loading state
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _isLoadingNotifier,
+                      builder: (context, isLoading, child) {
+                        return FilledButton(
+                          onPressed: isLoading ? null : _handleSignIn,
+                          child: isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : const Text('Sign In'),
+                        );
+                      },
                     ),
                     const SizedBox(height: 16),
 
@@ -163,15 +185,12 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   Future<void> _handleSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    _isLoadingNotifier.value = true;
 
     try {
       // TODO: Implement actual authentication logic
-      await Future.delayed(
+      await Future<void>.delayed(
         const Duration(seconds: 2),
-        () {},
       ); // Simulate API call
 
       if (mounted) {
@@ -188,9 +207,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       }
     } finally {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoadingNotifier.value = false;
       }
     }
   }

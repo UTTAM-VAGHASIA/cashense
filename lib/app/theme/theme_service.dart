@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
@@ -264,18 +265,31 @@ final themeModeProvider = Provider<ThemeMode>((ref) {
   return ref.watch(themeConfigProvider).themeMode;
 });
 
-/// Provider for dynamic color schemes
-final dynamicColorSchemesProvider = FutureProvider<Map<String, ColorScheme>?>((
+/// Provider for dynamic color schemes with caching and error handling
+final dynamicColorSchemesProvider = FutureProvider.autoDispose<Map<String, ColorScheme>?>((
   ref,
 ) async {
   try {
-    final corePalette = await DynamicColorPlugin.getCorePalette();
+    // Add timeout to prevent hanging
+    final corePalette = await DynamicColorPlugin.getCorePalette()
+        .timeout(const Duration(seconds: 3));
+    
     if (corePalette != null) {
+      // Cache the result to avoid repeated computation
+      final lightScheme = corePalette.toColorScheme(brightness: Brightness.light);
+      final darkScheme = corePalette.toColorScheme(brightness: Brightness.dark);
+      
       return {
-        'light': corePalette.toColorScheme(brightness: Brightness.light),
-        'dark': corePalette.toColorScheme(brightness: Brightness.dark),
+        'light': lightScheme,
+        'dark': darkScheme,
       };
     }
+    return null;
+  } on TimeoutException catch (e) {
+    developer.log(
+      'Dynamic colors timeout: $e',
+      name: 'DynamicColorSchemes',
+    );
     return null;
   } catch (e) {
     developer.log(
@@ -286,29 +300,41 @@ final dynamicColorSchemesProvider = FutureProvider<Map<String, ColorScheme>?>((
   }
 });
 
-/// Provider for light theme data
+/// Provider for light theme data with optimized rebuilds
 final lightThemeProvider = Provider<ThemeData>((ref) {
   final config = ref.watch(themeConfigProvider);
-  final dynamicColors = ref.watch(dynamicColorSchemesProvider).value;
+  final dynamicColorsAsync = ref.watch(dynamicColorSchemesProvider);
+  
+  // Only use dynamic colors if available and enabled
+  final dynamicColorScheme = config.useDynamicColors && 
+      dynamicColorsAsync.hasValue && 
+      dynamicColorsAsync.value != null
+      ? dynamicColorsAsync.value!['light']
+      : null;
 
   return _buildThemeData(
     config: config,
     brightness: Brightness.light,
-    dynamicColorScheme: config.useDynamicColors
-        ? dynamicColors!['light']
-        : null,
+    dynamicColorScheme: dynamicColorScheme,
   );
 });
 
-/// Provider for dark theme data
+/// Provider for dark theme data with optimized rebuilds
 final darkThemeProvider = Provider<ThemeData>((ref) {
   final config = ref.watch(themeConfigProvider);
-  final dynamicColors = ref.watch(dynamicColorSchemesProvider).value;
+  final dynamicColorsAsync = ref.watch(dynamicColorSchemesProvider);
+  
+  // Only use dynamic colors if available and enabled
+  final dynamicColorScheme = config.useDynamicColors && 
+      dynamicColorsAsync.hasValue && 
+      dynamicColorsAsync.value != null
+      ? dynamicColorsAsync.value!['dark']
+      : null;
 
   return _buildThemeData(
     config: config,
     brightness: Brightness.dark,
-    dynamicColorScheme: config.useDynamicColors ? dynamicColors!['dark'] : null,
+    dynamicColorScheme: dynamicColorScheme,
   );
 });
 

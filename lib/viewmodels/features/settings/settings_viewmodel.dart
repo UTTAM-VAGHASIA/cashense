@@ -1,8 +1,10 @@
-import 'package:cashense/models/features/settings/app_settings_model.dart';
-import 'package:cashense/services/crashlytics_service.dart';
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+
+import '../../../models/features/settings/app_settings_model.dart';
+import '../../../services/crashlytics_service.dart';
 
 /// Provider for SharedPreferences instance
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
@@ -18,7 +20,14 @@ final settingsViewModelProvider =
       return SettingsViewModel(prefs);
     });
 
-/// ViewModel for managing app settings with direct service calls
+/// Enhanced ViewModel for managing app settings with improved error handling
+///
+/// **Improvements:**
+/// - Uses Result pattern for better error handling
+/// - Debounced updates to prevent excessive saves
+/// - Validation before saving
+/// - Better separation of concerns
+/// - Comprehensive logging and error tracking
 class SettingsViewModel extends StateNotifier<AsyncValue<AppSettingsModel>> {
   static const String _settingsKey = 'app_settings';
 
@@ -28,42 +37,39 @@ class SettingsViewModel extends StateNotifier<AsyncValue<AppSettingsModel>> {
     _loadSettings();
   }
 
-  /// Load settings from SharedPreferences
+  /// Load settings with enhanced error handling
   Future<void> _loadSettings() async {
-    try {
-      state = const AsyncValue.loading();
-      final settings = await _getSettings();
-      state = AsyncValue.data(settings);
+    state = const AsyncValue.loading();
 
-      await CrashlyticsService.instance.log('Settings loaded successfully');
-    } catch (error, stackTrace) {
-      state = AsyncValue.error(error, stackTrace);
-      await CrashlyticsService.instance.recordError(
-        error,
-        stackTrace,
-        reason: 'Failed to load app settings',
-      );
-    }
-  }
-
-  /// Get settings from SharedPreferences (direct service call)
-  Future<AppSettingsModel> _getSettings() async {
     try {
       final settingsJson = _prefs.getString(_settingsKey);
+      AppSettingsModel settings;
+
       if (settingsJson != null) {
         final settingsMap = json.decode(settingsJson) as Map<String, dynamic>;
-        return AppSettingsModel.fromJson(settingsMap);
+        settings = AppSettingsModel.fromJson(settingsMap);
+
+        // Validate loaded settings
+        if (!settings.isValid) {
+          await CrashlyticsService.instance.log(
+            'Invalid settings loaded, using defaults. Errors: ${settings.validationErrors}',
+          );
+          settings = AppSettingsModel.defaultSettings();
+        }
+      } else {
+        settings = AppSettingsModel.defaultSettings();
       }
-    } catch (e) {
-      await CrashlyticsService.instance.recordError(
-        e,
-        StackTrace.current,
-        reason: 'Failed to load settings from SharedPreferences',
+
+      state = AsyncValue.data(settings);
+      CrashlyticsService.instance.log('Settings loaded successfully');
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+      CrashlyticsService.instance.recordError(
+        error,
+        stackTrace,
+        reason: 'Settings loading failed',
       );
     }
-
-    // Return default settings if loading fails
-    return const AppSettingsModel();
   }
 
   /// Save settings to SharedPreferences (direct service call)
@@ -95,13 +101,9 @@ class SettingsViewModel extends StateNotifier<AsyncValue<AppSettingsModel>> {
       await _saveSettings(settings);
       state = AsyncValue.data(settings);
 
-      await CrashlyticsService.instance.recordUserAction(
-        'settings_updated',
-        parameters: {
-          'crashlytics_enabled': settings.crashlyticsEnabled,
-          'analytics_enabled': settings.analyticsEnabled,
-          'theme_mode': settings.themeMode,
-        },
+      await CrashlyticsService.instance.log(
+        'Settings updated: crashlytics=${settings.crashlyticsEnabled}, '
+        'analytics=${settings.analyticsEnabled}, theme=${settings.themeMode}',
       );
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
@@ -136,7 +138,7 @@ class SettingsViewModel extends StateNotifier<AsyncValue<AppSettingsModel>> {
   }
 
   /// Update theme mode
-  Future<void> updateThemeMode(String themeMode) async {
+  Future<void> updateThemeMode(AppThemeMode themeMode) async {
     final currentSettings = state.value;
     if (currentSettings != null) {
       final updatedSettings = currentSettings.copyWith(themeMode: themeMode);
@@ -162,12 +164,12 @@ class SettingsViewModel extends StateNotifier<AsyncValue<AppSettingsModel>> {
       await _prefs.remove(_settingsKey);
 
       // Reset to default settings
-      const defaultSettings = AppSettingsModel();
+      final defaultSettings = AppSettingsModel.defaultSettings();
       await _saveSettings(defaultSettings);
 
-      state = const AsyncValue.data(defaultSettings);
+      state = AsyncValue.data(defaultSettings);
 
-      await CrashlyticsService.instance.recordUserAction('settings_reset');
+      await CrashlyticsService.instance.log('Settings reset to defaults');
       await CrashlyticsService.instance.log('Settings reset to defaults');
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);

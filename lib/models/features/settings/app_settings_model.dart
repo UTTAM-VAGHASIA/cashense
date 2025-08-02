@@ -1,188 +1,114 @@
-/// Application settings model for MVVM architecture
-class AppSettingsModel {
-  final bool crashlyticsEnabled;
-  final bool analyticsEnabled;
-  final bool debugMode;
-  final String themeMode; // 'light', 'dark', 'system'
-  final String locale;
-  final bool notificationsEnabled;
-  final bool biometricAuthEnabled;
-  final int sessionTimeoutMinutes;
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/material.dart';
 
-  const AppSettingsModel({
-    this.crashlyticsEnabled = true,
-    this.analyticsEnabled = true,
-    this.debugMode = false,
-    this.themeMode = 'system',
-    this.locale = 'en',
-    this.notificationsEnabled = true,
-    this.biometricAuthEnabled = true,
-    this.sessionTimeoutMinutes = 30,
-  });
+part 'app_settings_model.freezed.dart';
+part 'app_settings_model.g.dart';
 
-  /// Create a copy of this AppSettingsModel with some fields replaced
-  AppSettingsModel copyWith({
-    bool? crashlyticsEnabled,
-    bool? analyticsEnabled,
-    bool? debugMode,
-    String? themeMode,
-    String? locale,
-    bool? notificationsEnabled,
-    bool? biometricAuthEnabled,
-    int? sessionTimeoutMinutes,
-  }) {
-    return AppSettingsModel(
-      crashlyticsEnabled: crashlyticsEnabled ?? this.crashlyticsEnabled,
-      analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
-      debugMode: debugMode ?? this.debugMode,
-      themeMode: themeMode ?? this.themeMode,
-      locale: locale ?? this.locale,
-      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      biometricAuthEnabled: biometricAuthEnabled ?? this.biometricAuthEnabled,
-      sessionTimeoutMinutes:
-          sessionTimeoutMinutes ?? this.sessionTimeoutMinutes,
-    );
-  }
+/// Application settings model using Freezed for better immutability and code generation
+@freezed
+class AppSettingsModel with _$AppSettingsModel {
+  const factory AppSettingsModel({
+    @Default(true) bool crashlyticsEnabled,
+    @Default(true) bool analyticsEnabled,
+    @Default(false) bool debugMode,
+    @Default(AppThemeMode.system) AppThemeMode themeMode,
+    @Default('en') String locale,
+    @Default(true) bool notificationsEnabled,
+    @Default(true) bool biometricAuthEnabled,
+    @Default(30) int sessionTimeoutMinutes,
+  }) = _AppSettingsModel;
 
-  /// Convert to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'crashlyticsEnabled': crashlyticsEnabled,
-      'analyticsEnabled': analyticsEnabled,
-      'debugMode': debugMode,
-      'themeMode': themeMode,
-      'locale': locale,
-      'notificationsEnabled': notificationsEnabled,
-      'biometricAuthEnabled': biometricAuthEnabled,
-      'sessionTimeoutMinutes': sessionTimeoutMinutes,
-    };
-  }
+  const AppSettingsModel._();
 
-  /// Create from JSON
-  factory AppSettingsModel.fromJson(Map<String, dynamic> json) {
-    return AppSettingsModel(
-      crashlyticsEnabled: json['crashlyticsEnabled'] as bool? ?? true,
-      analyticsEnabled: json['analyticsEnabled'] as bool? ?? true,
-      debugMode: json['debugMode'] as bool? ?? false,
-      themeMode: json['themeMode'] as String? ?? 'system',
-      locale: json['locale'] as String? ?? 'en',
-      notificationsEnabled: json['notificationsEnabled'] as bool? ?? true,
-      biometricAuthEnabled: json['biometricAuthEnabled'] as bool? ?? true,
-      sessionTimeoutMinutes: json['sessionTimeoutMinutes'] as int? ?? 30,
-    );
-  }
-
-  /// Validate theme mode value
-  bool get isValidThemeMode {
-    return ['light', 'dark', 'system'].contains(themeMode);
-  }
+  /// Create from JSON with automatic deserialization
+  factory AppSettingsModel.fromJson(Map<String, dynamic> json) =>
+      _$AppSettingsModelFromJson(json);
 
   /// Validate session timeout range
   bool get isValidSessionTimeout {
     return sessionTimeoutMinutes >= 5 && sessionTimeoutMinutes <= 120;
   }
 
-  /// Validate locale format (basic validation)
+  /// Validate locale format
   bool get isValidLocale {
-    return locale.isNotEmpty && locale.length >= 2;
+    if (locale.isEmpty || locale.length < 2) return false;
+    final localeRegex = RegExp(r'^[a-z]{2}(-[A-Z]{2})?$');
+    return localeRegex.hasMatch(locale);
   }
 
   /// Validate all settings
   bool get isValid {
-    return isValidThemeMode && isValidSessionTimeout && isValidLocale;
+    return isValidSessionTimeout && isValidLocale;
   }
 
-  /// Get validation errors
+  /// Get detailed validation errors
   List<String> get validationErrors {
     final errors = <String>[];
-
-    if (!isValidThemeMode) {
-      errors.add('Theme mode must be one of: light, dark, system');
-    }
 
     if (!isValidSessionTimeout) {
       errors.add('Session timeout must be between 5 and 120 minutes');
     }
 
     if (!isValidLocale) {
-      errors.add('Locale must be a valid language code');
+      errors.add('Locale must be a valid language code (e.g., "en", "en-US")');
     }
 
     return errors;
+  }
+
+  /// Convert theme mode to Flutter ThemeMode
+  ThemeMode get flutterThemeMode {
+    return switch (themeMode) {
+      AppThemeMode.light => ThemeMode.light,
+      AppThemeMode.dark => ThemeMode.dark,
+      AppThemeMode.system => ThemeMode.system,
+    };
+  }
+
+  /// Check if settings are privacy-focused
+  bool get isPrivacyOptimized {
+    return !crashlyticsEnabled &&
+        !analyticsEnabled &&
+        !notificationsEnabled &&
+        sessionTimeoutMinutes <= 15;
+  }
+
+  /// Check if settings are development-friendly
+  bool get isDevelopmentMode {
+    return debugMode && sessionTimeoutMinutes >= 60;
   }
 
   /// Create default settings
   factory AppSettingsModel.defaultSettings() {
     return const AppSettingsModel();
   }
+}
 
-  /// Create settings optimized for privacy
-  factory AppSettingsModel.privacyOptimized() {
-    return const AppSettingsModel(
-      crashlyticsEnabled: false,
-      analyticsEnabled: false,
-      debugMode: false,
-      themeMode: 'system',
-      locale: 'en',
-      notificationsEnabled: false,
-      biometricAuthEnabled: true,
-      sessionTimeoutMinutes: 15,
-    );
+/// Type-safe enum for theme mode
+@JsonEnum()
+enum AppThemeMode {
+  @JsonValue('light')
+  light,
+  @JsonValue('dark')
+  dark,
+  @JsonValue('system')
+  system;
+
+  /// Get display name for UI
+  String get displayName {
+    return switch (this) {
+      AppThemeMode.light => 'Light',
+      AppThemeMode.dark => 'Dark',
+      AppThemeMode.system => 'System',
+    };
   }
 
-  /// Create settings optimized for development
-  factory AppSettingsModel.developmentMode() {
-    return const AppSettingsModel(
-      crashlyticsEnabled: true,
-      analyticsEnabled: false,
-      debugMode: true,
-      themeMode: 'system',
-      locale: 'en',
-      notificationsEnabled: true,
-      biometricAuthEnabled: false,
-      sessionTimeoutMinutes: 60,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is AppSettingsModel &&
-        other.crashlyticsEnabled == crashlyticsEnabled &&
-        other.analyticsEnabled == analyticsEnabled &&
-        other.debugMode == debugMode &&
-        other.themeMode == themeMode &&
-        other.locale == locale &&
-        other.notificationsEnabled == notificationsEnabled &&
-        other.biometricAuthEnabled == biometricAuthEnabled &&
-        other.sessionTimeoutMinutes == sessionTimeoutMinutes;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hash(
-      crashlyticsEnabled,
-      analyticsEnabled,
-      debugMode,
-      themeMode,
-      locale,
-      notificationsEnabled,
-      biometricAuthEnabled,
-      sessionTimeoutMinutes,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'AppSettingsModel('
-        'crashlyticsEnabled: $crashlyticsEnabled, '
-        'analyticsEnabled: $analyticsEnabled, '
-        'debugMode: $debugMode, '
-        'themeMode: $themeMode, '
-        'locale: $locale, '
-        'notificationsEnabled: $notificationsEnabled, '
-        'biometricAuthEnabled: $biometricAuthEnabled, '
-        'sessionTimeoutMinutes: $sessionTimeoutMinutes'
-        ')';
+  /// Get icon for UI representation
+  IconData get icon {
+    return switch (this) {
+      AppThemeMode.light => Icons.light_mode,
+      AppThemeMode.dark => Icons.dark_mode,
+      AppThemeMode.system => Icons.brightness_auto,
+    };
   }
 }
