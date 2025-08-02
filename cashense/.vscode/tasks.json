@@ -1,0 +1,149 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "FVM: Get Dependencies",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "pub", "get"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Clean",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "clean"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Build APK (Development)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "build", "apk", "--flavor", "dev"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Build APK (Staging)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "build", "apk", "--flavor", "staging"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Build APK (Production)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "build", "apk", "--flavor", "prod", "--release"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Build App Bundle (Production)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "build", "appbundle", "--flavor", "prod", "--release"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Run (Development)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "run", "--flavor", "dev", "--target", "lib/flavors/main_development.dart"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Run (Staging)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "run", "--flavor", "staging", "--target", "lib/flavors/main_staging.dart"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "FVM: Run (Production)",
+            "type": "shell",
+            "command": "fvm",
+            "args": ["flutter", "run", "--flavor", "prod", "--target", "lib/flavors/main_production.dart"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+} 

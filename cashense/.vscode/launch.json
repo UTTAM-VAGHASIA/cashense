@@ -1,0 +1,68 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Development",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/flavors/main_development.dart",
+            "args": ["--flavor", "dev"],
+            "toolArgs": ["--flavor", "dev"],
+            "flutterMode": "debug",
+            "flutterSdkPath": ".fvm/flutter_sdk"
+        },
+        {
+            "name": "Launch Staging",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/flavors/main_staging.dart",
+            "args": ["--flavor", "staging"],
+            "toolArgs": ["--flavor", "staging"],
+            "flutterMode": "debug",
+            "flutterSdkPath": ".fvm/flutter_sdk"
+        },
+        {
+            "name": "Launch Production",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/flavors/main_production.dart",
+            "args": ["--flavor", "prod"],
+            "toolArgs": ["--flavor", "prod"],
+            "flutterMode": "debug",
+            "flutterSdkPath": ".fvm/flutter_sdk"
+        },
+        {
+            "name": "Launch Development (Profile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/flavors/main_development.dart",
+            "args": ["--flavor", "dev"],
+            "toolArgs": ["--flavor", "dev"],
+            "flutterMode": "profile",
+            "flutterSdkPath": ".fvm/flutter_sdk"
+        },
+        {
+            "name": "Launch Staging (Profile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/flavors/main_staging.dart",
+            "args": ["--flavor", "staging"],
+            "toolArgs": ["--flavor", "staging"],
+            "flutterMode": "profile",
+            "flutterSdkPath": ".fvm/flutter_sdk"
+        },
+        {
+            "name": "Launch Production (Release)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/flavors/main_production.dart",
+            "args": ["--flavor", "prod"],
+            "toolArgs": ["--flavor", "prod"],
+            "flutterMode": "release",
+            "flutterSdkPath": ".fvm/flutter_sdk"
+        }
+    ]
+}
