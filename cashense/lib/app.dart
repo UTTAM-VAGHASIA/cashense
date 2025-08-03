@@ -1,6 +1,7 @@
 import 'package:cashense/common/widgets/common_banner.dart';
 import 'package:cashense/features/authentication/views/biometrics_page.dart';
 import 'package:cashense/flavors/flavor_config.dart';
+import 'package:cashense/utils/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -14,11 +15,8 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       themeMode: ThemeMode.system,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
-        useMaterial3: true
-      ),
-      darkTheme: ThemeData(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
 
       title: FlavorConfig.instance.appName,
       home: (debugConfig.showDebugBanner)

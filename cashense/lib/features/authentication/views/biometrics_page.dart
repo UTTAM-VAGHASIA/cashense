@@ -7,7 +7,6 @@ class BiometricsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
       body: Center(child: Text(FlavorConfig.instance.name)),
     );
   }

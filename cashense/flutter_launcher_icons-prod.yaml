@@ -15,7 +15,7 @@ flutter_launcher_icons:
     generate: true
     image_path: "assets/logos/windows-macos-icon-1024x1024.png"
     background_color: "#FFFFFF"
-    theme_color: "#FFFFFF"
+    theme_color: "#5f85c2"
   windows:
     generate: true
     image_path: "assets/logos/windows-macos-icon-1024x1024.png"
