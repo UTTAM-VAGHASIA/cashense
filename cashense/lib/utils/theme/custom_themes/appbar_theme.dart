@@ -11,9 +11,12 @@ class AppbarTheme {
     surfaceTintColor: Colors.transparent,
     iconTheme: IconThemeData(color: Colors.black, size: 24),
     actionsIconTheme: IconThemeData(color: Colors.black, size: 24),
-    titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black)
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
   );
-
 
   static const darkAppBarTheme = AppBarTheme(
     elevation: 0,
@@ -23,6 +26,10 @@ class AppbarTheme {
     surfaceTintColor: Colors.transparent,
     iconTheme: IconThemeData(color: Colors.white, size: 24),
     actionsIconTheme: IconThemeData(color: Colors.white, size: 24),
-    titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white)
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
   );
 }

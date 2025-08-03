@@ -12,11 +12,14 @@ class AppElevatedButtonTheme {
       disabledBackgroundColor: Colors.grey,
       side: BorderSide(color: Colors.blue),
       padding: EdgeInsets.symmetric(vertical: 18),
-      textStyle: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    )
+    ),
   );
-
 
   static final darkElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -27,9 +30,12 @@ class AppElevatedButtonTheme {
       disabledBackgroundColor: Colors.grey,
       side: BorderSide(color: Colors.blue),
       padding: EdgeInsets.symmetric(vertical: 18),
-      textStyle: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    )
+    ),
   );
-
 }

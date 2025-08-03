@@ -13,7 +13,6 @@ class AppBottomSheetTheme {
     ),
   );
 
-
   static BottomSheetThemeData darkBottomSheetTheme = BottomSheetThemeData(
     showDragHandle: true,
     backgroundColor: Colors.black,
