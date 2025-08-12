@@ -17,6 +17,9 @@ class FlavorSettings {
   final String googleWebClientId;
   final String googleWebClientSecret;
   final String googleWebRedirectUri;
+  // iOS/macOS Google Sign-In specific (client ID for iOS, reversed scheme for URL type)
+  final String googleIOSClientId;
+  final String googleIOSReversedClientId;
 
   const FlavorSettings({
     required this.baseUrl,
@@ -34,6 +37,8 @@ class FlavorSettings {
     required this.googleWebClientId,
     required this.googleWebClientSecret,
     required this.googleWebRedirectUri,
+    required this.googleIOSClientId,
+    required this.googleIOSReversedClientId,
   });
 }
 
@@ -71,8 +76,12 @@ class FlavorConstants {
       shouldPreviewDevice: true,
       googleWebClientId:
           '380247139382-fr227jiq8gcv1rb6ssaiuf6difjtb4o5.apps.googleusercontent.com',
-      googleWebClientSecret: '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', 
-      googleWebRedirectUri: 'https://cashense-dev.firebaseapp.com/__/auth/handler',
+      googleWebClientSecret: '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',
+      googleWebRedirectUri:
+          'https://cashense-dev.firebaseapp.com/__/auth/handler',
+      // TODO: Fill with your iOS OAuth client from Google Cloud (CLIENT_ID) and reversed scheme (REVERSED_CLIENT_ID)
+      googleIOSClientId: '',
+      googleIOSReversedClientId: '',
       debugConfig: FlavorDebugConfig(
         debugMode: true,
         showPerformanceOverlay: true,
@@ -96,8 +105,12 @@ class FlavorConstants {
       shouldPreviewDevice: false,
       googleWebClientId:
           '788140990788-ikuf589ciurklkoucdulqc105326p8mb.apps.googleusercontent.com',
-      googleWebClientSecret: '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', 
-      googleWebRedirectUri: 'https://cashense-staging.firebaseapp.com/__/auth/handler',
+      googleWebClientSecret: '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',
+      googleWebRedirectUri:
+          'https://cashense-staging.firebaseapp.com/__/auth/handler',
+      // TODO: Fill with your iOS OAuth client from Google Cloud (CLIENT_ID) and reversed scheme (REVERSED_CLIENT_ID)
+      googleIOSClientId: '',
+      googleIOSReversedClientId: '',
       debugConfig: FlavorDebugConfig(
         debugMode: false,
         showPerformanceOverlay: false,
@@ -123,6 +136,9 @@ class FlavorConstants {
           '1030695688169-925gdk2ras9gj5aouakuvi2t9no4hpcv.apps.googleusercontent.com',
       googleWebClientSecret: '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',
       googleWebRedirectUri: 'https://cashense.firebaseapp.com/__/auth/handler',
+      // TODO: Fill with your iOS OAuth client from Google Cloud (CLIENT_ID) and reversed scheme (REVERSED_CLIENT_ID)
+      googleIOSClientId: '',
+      googleIOSReversedClientId: '',
       debugConfig: FlavorDebugConfig(
         debugMode: false,
         showPerformanceOverlay: false,
@@ -151,9 +167,13 @@ class FlavorConstants {
       crashlyticsKey: '',
       enablePerformanceMonitoring: false,
       shouldPreviewDevice: false,
-      googleWebClientId: '380247139382-fr227jiq8gcv1rb6ssaiuf6difjtb4o5.apps.googleusercontent.com',
+      googleWebClientId:
+          '380247139382-fr227jiq8gcv1rb6ssaiuf6difjtb4o5.apps.googleusercontent.com',
       googleWebClientSecret: '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',
-      googleWebRedirectUri: 'https://cashense-dev.firebaseapp.com/__/auth/handler',
+      googleWebRedirectUri:
+          'https://cashense-dev.firebaseapp.com/__/auth/handler',
+      googleIOSClientId: '',
+      googleIOSReversedClientId: '',
       debugConfig: FlavorDebugConfig(
         debugMode: true,
         showPerformanceOverlay: false,

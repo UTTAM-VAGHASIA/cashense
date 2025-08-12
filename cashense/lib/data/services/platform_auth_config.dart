@@ -13,7 +13,7 @@ class PlatformAuthConfig {
     if (Platform.isWindows) return true;
     if (Platform.isLinux) return true;
     if (Platform.isMacOS) return true;
-    if (Platform.isIOS) return false; // Not yet implemented
+    if (Platform.isIOS) return true; // Enabled iOS support
     return false;
   }
 
@@ -79,6 +79,7 @@ class PlatformAuthConfig {
           'Uses web-based OAuth flow',
           'Configure web OAuth client ID in Google Cloud Console',
           'Add localhost redirect URLs for development',
+          'For desktop_webview_auth on macOS, allow com.apple.security.network.server in Release entitlements',
         ],
       });
     } else if (Platform.isIOS) {
@@ -88,10 +89,9 @@ class PlatformAuthConfig {
         'requiresAuthorizedDomains': false,
         'configurationFiles': ['GoogleService-Info.plist'],
         'notes': [
-          'iOS support is pending implementation',
-          'Will require GoogleService-Info.plist in ios/Runner/',
-          'Will need iOS-specific Google Sign-In configuration',
-          'Apple Developer account setup required',
+          'Add GIDClientID to ios/Runner/Info.plist',
+          'Add CFBundleURLTypes with REVERSED_CLIENT_ID to ios/Runner/Info.plist',
+          'Ensure Firebase iOS options match bundle id',
         ],
       });
     }
@@ -107,20 +107,7 @@ class PlatformAuthConfig {
 
       AppLogger.auth('Validating configuration for platform: $platform');
 
-      // For now, we'll assume configuration is valid
-      // In a real implementation, you would check for:
-      // - Required configuration files
-      // - Environment variables
-      // - Network connectivity
-      // - Platform-specific requirements
-
-      if (platform == 'ios') {
-        AppLogger.auth(
-          'iOS platform detected - authentication not yet supported',
-        );
-        return false;
-      }
-
+      // Assume configuration is valid in this utility. Real checks can be added as needed.
       AppLogger.auth('Platform configuration validation passed for: $platform');
       return true;
     } catch (e) {
@@ -141,7 +128,7 @@ class PlatformAuthConfig {
       case 'network_error':
         return 'Network error occurred. Please check your internet connection.';
       case 'user_cancelled':
-        return ''; // No message for user cancellation
+        return '';
       case 'service_unavailable':
         return 'Google Sign-In service is temporarily unavailable.';
       default:

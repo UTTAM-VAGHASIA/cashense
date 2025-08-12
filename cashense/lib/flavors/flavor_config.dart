@@ -39,6 +39,9 @@ class FlavorConfig {
   String get googleWebClientId => settings.googleWebClientId;
   String get googleWebClientSecret => settings.googleWebClientSecret;
   String get googleWebRedirectUri => settings.googleWebRedirectUri;
+  // iOS/macOS specific
+  String get googleIOSClientId => settings.googleIOSClientId;
+  String get googleIOSReversedClientId => settings.googleIOSReversedClientId;
   FlavorDebugConfig get debugConfig => settings.debugConfig;
 
   // Static helper methods
