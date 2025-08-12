@@ -164,8 +164,8 @@ class PlatformAuthConfig {
   static void logPlatformConfiguration() {
     final requirements = getPlatformRequirements();
     final platform = requirements['platform'] as String;
-    final configFiles = requirements['configurationFiles'] as List<String>;
-    final notes = requirements['notes'] as List<String>;
+    final configFiles = requirements['configurationFiles'] as List<dynamic>;
+    final notes = requirements['notes'] as List<dynamic>;
 
     AppLogger.auth('Platform Configuration Details:');
     AppLogger.auth('Platform: $platform');

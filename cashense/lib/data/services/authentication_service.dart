@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in_all_platforms/google_sign_in_all_platforms.dart';
+import 'package:desktop_webview_auth/desktop_webview_auth.dart';
+import 'package:desktop_webview_auth/google.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cashense/features/authentication/models/app_user.dart';
 import 'package:cashense/utils/logging/logger.dart';
@@ -37,6 +39,8 @@ class AuthenticationService {
         return;
       }
 
+      // Desktop platforms will use webview auth, no additional validation needed
+
       // Platform-specific configuration
       if (kIsWeb) {
         // Web configuration
@@ -54,12 +58,9 @@ class AuthenticationService {
           ),
         );
       } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        // Desktop platforms use web-based OAuth
-        _googleSignIn = GoogleSignIn(
-          params: GoogleSignInParams(
-            clientId: _getWebClientId(),
-            scopes: ['email', 'profile'],
-          ),
+        // Desktop platforms use desktop webview auth - no GoogleSignIn initialization needed
+        AppLogger.auth(
+          'Desktop platform detected - will use webview authentication',
         );
       } else if (Platform.isIOS) {
         // iOS placeholder - will be implemented later
@@ -80,10 +81,12 @@ class AuthenticationService {
     return FlavorConfig.instance.googleWebClientId;
   }
 
-  /// Sign in with Google
+  /// Sign in with Google using platform-specific implementation
   Future<AppUser?> signInWithGoogle() async {
     try {
-      _initializeGoogleSignIn();
+      AppLogger.auth(
+        'Starting Google Sign-In flow for ${PlatformAuthConfig.getCurrentPlatformName()}',
+      );
 
       // Check if platform is supported
       if (!PlatformAuthConfig.isGoogleSignInSupported()) {
@@ -92,11 +95,87 @@ class AuthenticationService {
         );
       }
 
+      // Use platform-specific authentication method
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        return await _signInWithDesktopWebview();
+      } else {
+        return await _signInWithGoogleSignIn();
+      }
+    } on FirebaseAuthException catch (e) {
+      AppLogger.error(
+        'Firebase Auth error during Google Sign-In: ${e.code} - ${e.message}',
+      );
+      rethrow;
+    } catch (e) {
+      AppLogger.error('Error during Google Sign-In: $e');
+      rethrow;
+    }
+  }
+
+  /// Sign in with Google using desktop webview (for Windows, macOS, Linux)
+  Future<AppUser?> _signInWithDesktopWebview() async {
+    try {
+      AppLogger.auth('Using desktop webview authentication');
+
+      final clientId = _getWebClientId();
+
+      // Create Google Sign-In arguments for desktop webview auth
+      final googleSignInArgs = GoogleSignInArgs(
+        clientId: clientId,
+        redirectUri: FlavorConfig.instance.googleWebRedirectUri,
+        scope: 'email profile',
+      );
+
+      AppLogger.auth('Opening desktop webview for Google authentication');
+
+      // Use desktop webview auth with Google provider
+      final result = await DesktopWebviewAuth.signIn(googleSignInArgs);
+
+      if (result == null) {
+        AppLogger.auth('User cancelled desktop authentication');
+        return null;
+      }
+
+      AppLogger.auth('Desktop webview authentication completed');
+      AppLogger.auth('Access token received: ${result.accessToken != null}');
+      AppLogger.auth('ID token received: ${result.idToken != null}');
+
+      // Create Firebase credential with the tokens from desktop auth
+      final credential = GoogleAuthProvider.credential(
+        accessToken: result.accessToken,
+        idToken: result.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithCredential(credential);
+
+      if (userCredential.user == null) {
+        throw Exception('Firebase authentication failed');
+      }
+
+      final appUser = AppUser.fromFirebaseUser(userCredential.user!);
+      AppLogger.auth(
+        'Desktop Firebase authentication successful for: ${appUser.email}',
+      );
+
+      return appUser;
+    } catch (e) {
+      AppLogger.error('Error during desktop webview authentication: $e');
+      rethrow;
+    }
+  }
+
+  /// Sign in with Google using mobile/web implementation
+  Future<AppUser?> _signInWithGoogleSignIn() async {
+    try {
+      _initializeGoogleSignIn();
+
       if (_googleSignIn == null) {
         throw Exception('Google Sign-In not properly initialized');
       }
 
-      AppLogger.auth('Starting Google Sign-In flow');
+      AppLogger.auth('Using mobile/web Google Sign-In');
 
       // Trigger the authentication flow
       final GoogleSignInCredentials? googleUser = await _googleSignIn!.signIn();
@@ -108,7 +187,7 @@ class AuthenticationService {
       }
 
       AppLogger.auth(
-        'Google Sign-In successful for: ${googleUser.scopes.first}',
+        'Mobile/Web Google Sign-In successful',
       );
 
       // Create a new credential
@@ -127,17 +206,12 @@ class AuthenticationService {
 
       final appUser = AppUser.fromFirebaseUser(userCredential.user!);
       AppLogger.auth(
-        'Firebase authentication successful for: ${appUser.email}',
+        'Mobile/Web Firebase authentication successful for: ${appUser.email}',
       );
 
       return appUser;
-    } on FirebaseAuthException catch (e) {
-      AppLogger.error(
-        'Firebase Auth error during Google Sign-In: ${e.code} - ${e.message}',
-      );
-      rethrow;
     } catch (e) {
-      AppLogger.error('Error during Google Sign-In: $e');
+      AppLogger.error('Error during mobile/web Google Sign-In: $e');
       rethrow;
     }
   }
@@ -147,8 +221,8 @@ class AuthenticationService {
     try {
       AppLogger.auth('Starting sign out process');
 
-      // Sign out from Google if initialized
-      if (_googleSignIn != null) {
+      // Sign out from Google if initialized (mobile/web platforms)
+      if (_googleSignIn != null && !_isDesktopPlatform()) {
         await _googleSignIn!.signOut();
         AppLogger.auth('Google Sign-In sign out successful');
       }
@@ -160,6 +234,11 @@ class AuthenticationService {
       AppLogger.error('Error during sign out: $e');
       rethrow;
     }
+  }
+
+  /// Check if current platform is desktop
+  bool _isDesktopPlatform() {
+    return Platform.isWindows || Platform.isLinux || Platform.isMacOS;
   }
 
   /// Get current Firebase user

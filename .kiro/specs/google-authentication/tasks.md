@@ -58,7 +58,12 @@
   - Ensure proper initialization order
   - _Requirements: 1.3, 1.4_
 
-- [ ] 6. Update app routing and navigation
+- [x] 6. Update app routing and navigation
+
+
+
+
+
   - Modify app.dart to use authentication-aware routing
   - Implement initial route determination based on auth state
   - Set up navigation between LoginScreen and WelcomeScreen

@@ -1,12 +1,12 @@
-import 'dart:developer' as developer;
+// ignore_for_file: avoid_print
+
+// import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:cashense/flavors/flavor_config.dart';
 
 /// Custom logger for the application
 class AppLogger {
   AppLogger._();
-
-  static const String _name = 'Cashense';
 
   /// Log debug message
   static void debug(
@@ -18,15 +18,13 @@ class AppLogger {
     if (!_shouldLog()) return;
 
     final logMessage = _formatMessage(message, tag);
+    print('🐛 DEBUG: $logMessage');
 
-    if (kDebugMode) {
-      developer.log(
-        logMessage,
-        name: _name,
-        level: 500, // Debug level
-        error: error,
-        stackTrace: stackTrace,
-      );
+    if (error != null) {
+      print('   Error: $error');
+    }
+    if (stackTrace != null) {
+      print('   StackTrace: $stackTrace');
     }
   }
 
@@ -40,14 +38,14 @@ class AppLogger {
     if (!_shouldLog()) return;
 
     final logMessage = _formatMessage(message, tag);
+    print('ℹ️ INFO: $logMessage');
 
-    developer.log(
-      logMessage,
-      name: _name,
-      level: 800, // Info level
-      error: error,
-      stackTrace: stackTrace,
-    );
+    if (error != null) {
+      print('   Error: $error');
+    }
+    if (stackTrace != null) {
+      print('   StackTrace: $stackTrace');
+    }
   }
 
   /// Log warning message
@@ -60,14 +58,14 @@ class AppLogger {
     if (!_shouldLog()) return;
 
     final logMessage = _formatMessage(message, tag);
+    print('⚠️ WARNING: $logMessage');
 
-    developer.log(
-      logMessage,
-      name: _name,
-      level: 900, // Warning level
-      error: error,
-      stackTrace: stackTrace,
-    );
+    if (error != null) {
+      print('   Error: $error');
+    }
+    if (stackTrace != null) {
+      print('   StackTrace: $stackTrace');
+    }
   }
 
   /// Log error message
@@ -80,14 +78,14 @@ class AppLogger {
     if (!_shouldLog()) return;
 
     final logMessage = _formatMessage(message, tag);
+    print('❌ ERROR: $logMessage');
 
-    developer.log(
-      logMessage,
-      name: _name,
-      level: 1000, // Error level
-      error: error,
-      stackTrace: stackTrace,
-    );
+    if (error != null) {
+      print('   Error: $error');
+    }
+    if (stackTrace != null) {
+      print('   StackTrace: $stackTrace');
+    }
   }
 
   /// Log network request
@@ -101,28 +99,19 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🌐 Network Request:');
-    buffer.writeln('Method: $method');
-    buffer.writeln('URL: $url');
-
+    print('🌐 NETWORK: $method $url');
     if (headers != null && headers.isNotEmpty) {
-      buffer.writeln('Headers: $headers');
+      print('   Headers: $headers');
     }
-
     if (body != null && body.isNotEmpty) {
-      buffer.writeln('Body: $body');
+      print('   Body: $body');
     }
-
     if (statusCode != null) {
-      buffer.writeln('Status Code: $statusCode');
+      print('   Status Code: $statusCode');
     }
-
     if (response != null) {
-      buffer.writeln('Response: $response');
+      print('   Response: $response');
     }
-
-    info(buffer.toString(), tag: 'Network');
   }
 
   /// Log navigation
@@ -133,31 +122,20 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🧭 Navigation:');
-    buffer.writeln('From: $from');
-    buffer.writeln('To: $to');
-
+    print('🧭 NAVIGATION: $from → $to');
     if (arguments != null && arguments.isNotEmpty) {
-      buffer.writeln('Arguments: $arguments');
+      print('   Arguments: $arguments');
     }
-
-    info(buffer.toString(), tag: 'Navigation');
   }
 
   /// Log user action
   static void userAction(String action, {Map<String, dynamic>? data}) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('👤 User Action:');
-    buffer.writeln('Action: $action');
-
+    print('👤 USER ACTION: $action');
     if (data != null && data.isNotEmpty) {
-      buffer.writeln('Data: $data');
+      print('   Data: $data');
     }
-
-    info(buffer.toString(), tag: 'UserAction');
   }
 
   /// Log performance metrics
@@ -168,16 +146,10 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('⚡ Performance:');
-    buffer.writeln('Operation: $operation');
-    buffer.writeln('Duration: ${duration.inMilliseconds}ms');
-
+    print('⚡ PERFORMANCE: $operation (${duration.inMilliseconds}ms)');
     if (metrics != null && metrics.isNotEmpty) {
-      buffer.writeln('Metrics: $metrics');
+      print('   Metrics: $metrics');
     }
-
-    info(buffer.toString(), tag: 'Performance');
   }
 
   /// Log database operation
@@ -190,58 +162,39 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🗄️ Database:');
-    buffer.writeln('Operation: $operation');
-    buffer.writeln('Table: $table');
-
+    print('🗄️ DATABASE: $operation on $table');
     if (query != null) {
-      buffer.writeln('Query: $query');
+      print('   Query: $query');
     }
-
     if (data != null && data.isNotEmpty) {
-      buffer.writeln('Data: $data');
+      print('   Data: $data');
     }
-
     if (duration != null) {
-      buffer.writeln('Duration: ${duration.inMilliseconds}ms');
+      print('   Duration: ${duration.inMilliseconds}ms');
     }
-
-    info(buffer.toString(), tag: 'Database');
   }
 
   /// Log authentication events
   static void auth(String event, {String? userId, Map<String, dynamic>? data}) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🔐 Authentication:');
-    buffer.writeln('Event: $event');
-
+    print('🔐 AUTH: $event');
     if (userId != null) {
-      buffer.writeln('User ID: $userId');
+      print('   User ID: $userId');
     }
-
     if (data != null && data.isNotEmpty) {
-      buffer.writeln('Data: $data');
+      print('   Data: $data');
     }
-
-    info(buffer.toString(), tag: 'Auth');
   }
 
   /// Log Firebase events
   static void firebase(String event, {Map<String, dynamic>? data}) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🔥 Firebase:');
-    buffer.writeln('Event: $event');
-
+    print('🔥 FIREBASE: $event');
     if (data != null && data.isNotEmpty) {
-      buffer.writeln('Data: $data');
+      print('   Data: $data');
     }
-
-    info(buffer.toString(), tag: 'Firebase');
   }
 
   /// Log GetX state changes
@@ -253,14 +206,7 @@ class AppLogger {
   ) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🔄 State Change:');
-    buffer.writeln('Controller: $controller');
-    buffer.writeln('Property: $property');
-    buffer.writeln('Old Value: $oldValue');
-    buffer.writeln('New Value: $newValue');
-
-    debug(buffer.toString(), tag: 'State');
+    print('🔄 STATE: $controller.$property: $oldValue → $newValue');
   }
 
   /// Log lifecycle events
@@ -271,16 +217,10 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('🔄 Lifecycle:');
-    buffer.writeln('Event: $event');
-    buffer.writeln('Screen: $screen');
-
+    print('🔄 LIFECYCLE: $event on $screen');
     if (data != null && data.isNotEmpty) {
-      buffer.writeln('Data: $data');
+      print('   Data: $data');
     }
-
-    debug(buffer.toString(), tag: 'Lifecycle');
   }
 
   /// Format log message with timestamp and tag
@@ -308,16 +248,10 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('➡️ Method Entry:');
-    buffer.writeln('Class: $className');
-    buffer.writeln('Method: $methodName');
-
+    print('➡️ METHOD ENTRY: $className.$methodName');
     if (parameters != null && parameters.isNotEmpty) {
-      buffer.writeln('Parameters: $parameters');
+      print('   Parameters: $parameters');
     }
-
-    debug(buffer.toString(), tag: 'Method');
   }
 
   /// Log method exit
@@ -329,20 +263,13 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('⬅️ Method Exit:');
-    buffer.writeln('Class: $className');
-    buffer.writeln('Method: $methodName');
-
+    print('⬅️ METHOD EXIT: $className.$methodName');
     if (result != null) {
-      buffer.writeln('Result: $result');
+      print('   Result: $result');
     }
-
     if (duration != null) {
-      buffer.writeln('Duration: ${duration.inMilliseconds}ms');
+      print('   Duration: ${duration.inMilliseconds}ms');
     }
-
-    debug(buffer.toString(), tag: 'Method');
   }
 
   /// Log exception with context
@@ -354,24 +281,14 @@ class AppLogger {
   }) {
     if (!_shouldLog()) return;
 
-    final buffer = StringBuffer();
-    buffer.writeln('💥 Exception:');
-    buffer.writeln('Type: ${exception.runtimeType}');
-    buffer.writeln('Message: $exception');
-
+    print('💥 EXCEPTION: ${exception.runtimeType}');
+    print('   Message: $exception');
     if (context != null) {
-      buffer.writeln('Context: $context');
+      print('   Context: $context');
     }
-
     if (additionalData != null && additionalData.isNotEmpty) {
-      buffer.writeln('Additional Data: $additionalData');
+      print('   Additional Data: $additionalData');
     }
-
-    error(
-      buffer.toString(),
-      error: exception,
-      stackTrace: stackTrace,
-      tag: 'Exception',
-    );
+    print('   StackTrace: $stackTrace');
   }
 }

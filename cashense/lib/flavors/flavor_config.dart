@@ -37,6 +37,8 @@ class FlavorConfig {
   bool get enablePerformanceMonitoring => settings.enablePerformanceMonitoring;
   bool get shouldPreviewDevice => settings.shouldPreviewDevice;
   String get googleWebClientId => settings.googleWebClientId;
+  String get googleWebClientSecret => settings.googleWebClientSecret;
+  String get googleWebRedirectUri => settings.googleWebRedirectUri;
   FlavorDebugConfig get debugConfig => settings.debugConfig;
 
   // Static helper methods
