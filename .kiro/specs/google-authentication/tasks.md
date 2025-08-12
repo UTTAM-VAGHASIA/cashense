@@ -35,7 +35,12 @@
   - Ensure dark mode compatibility
   - _Requirements: 1.1, 1.2, 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 4. Create WelcomeScreen for authenticated users
+- [x] 4. Create WelcomeScreen for authenticated users
+
+
+
+
+
   - Implement WelcomeScreen widget showing user's name
   - Add welcome message with user greeting
   - Include sign out functionality in app bar
