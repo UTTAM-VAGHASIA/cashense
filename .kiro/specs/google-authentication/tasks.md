@@ -22,7 +22,12 @@
   - Implement proper error handling and logging
   - _Requirements: 1.3, 1.4, 1.5, 5.1, 5.2, 5.3, 6.1, 6.4, 6.5_
 
-- [ ] 3. Create Material You-compliant LoginScreen
+- [x] 3. Create Material You-compliant LoginScreen
+
+
+
+
+
   - Design and implement LoginScreen widget with Material You components
   - Add Cashense branding and responsive layout
   - Implement "Sign in with Google" button with proper styling
