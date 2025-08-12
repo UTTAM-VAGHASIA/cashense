@@ -38,10 +38,10 @@ class AuthenticationController extends GetxController {
   void _initializeAuthState() {
     try {
       AppLogger.auth('Initializing authentication state');
-      
+
       // Check current authentication state
       checkAuthState();
-      
+
       // Listen to authentication state changes
       _authService.userChanges.listen(
         (AppUser? user) {
@@ -52,7 +52,7 @@ class AuthenticationController extends GetxController {
           _handleError(error);
         },
       );
-      
+
       AppLogger.auth('Authentication state initialized');
     } catch (e) {
       AppLogger.error('Failed to initialize authentication state: $e');
@@ -64,7 +64,7 @@ class AuthenticationController extends GetxController {
   void _updateUserState(AppUser? user) {
     _user.value = user;
     _isAuthenticated.value = user != null;
-    
+
     if (user != null) {
       AppLogger.auth('User authenticated: ${user.email}');
       _clearError();
@@ -78,11 +78,11 @@ class AuthenticationController extends GetxController {
     try {
       _setLoading(true);
       _clearError();
-      
+
       AppLogger.auth('Starting Google Sign-In process');
-      
+
       final AppUser? user = await _authService.signInWithGoogle();
-      
+
       if (user != null) {
         _updateUserState(user);
         AppLogger.auth('Google Sign-In successful for: ${user.email}');
@@ -93,7 +93,9 @@ class AuthenticationController extends GetxController {
         return false;
       }
     } on FirebaseAuthException catch (e) {
-      AppLogger.error('Firebase Auth error during sign-in: ${e.code} - ${e.message}');
+      AppLogger.error(
+        'Firebase Auth error during sign-in: ${e.code} - ${e.message}',
+      );
       _handleFirebaseAuthError(e);
       return false;
     } catch (e) {
@@ -110,14 +112,14 @@ class AuthenticationController extends GetxController {
     try {
       _setLoading(true);
       _clearError();
-      
+
       AppLogger.auth('Starting sign out process');
-      
+
       await _authService.signOut();
-      
+
       // Clear user state
       _updateUserState(null);
-      
+
       AppLogger.auth('Sign out successful');
     } catch (e) {
       AppLogger.error('Error during sign out: $e');
@@ -131,10 +133,10 @@ class AuthenticationController extends GetxController {
   void checkAuthState() {
     try {
       AppLogger.auth('Checking authentication state');
-      
+
       final AppUser? currentUser = _authService.getCurrentUser();
       _updateUserState(currentUser);
-      
+
       if (currentUser != null) {
         AppLogger.auth('User is authenticated: ${currentUser.email}');
       } else {
@@ -156,11 +158,11 @@ class AuthenticationController extends GetxController {
     try {
       AppLogger.auth('Reloading user data');
       await _authService.reloadUser();
-      
+
       // Update user state with fresh data
       final AppUser? refreshedUser = _authService.getCurrentUser();
       _updateUserState(refreshedUser);
-      
+
       AppLogger.auth('User data reloaded successfully');
     } catch (e) {
       AppLogger.error('Error reloading user data: $e');
@@ -188,10 +190,11 @@ class AuthenticationController extends GetxController {
   /// Handle Firebase Auth specific errors
   void _handleFirebaseAuthError(FirebaseAuthException error) {
     String userFriendlyMessage;
-    
+
     switch (error.code) {
       case 'account-exists-with-different-credential':
-        userFriendlyMessage = 'An account already exists with a different sign-in method.';
+        userFriendlyMessage =
+            'An account already exists with a different sign-in method.';
         break;
       case 'invalid-credential':
         userFriendlyMessage = 'The credential is invalid or has expired.';
@@ -206,7 +209,8 @@ class AuthenticationController extends GetxController {
         userFriendlyMessage = 'No user found with this credential.';
         break;
       case 'network-request-failed':
-        userFriendlyMessage = 'Please check your internet connection and try again.';
+        userFriendlyMessage =
+            'Please check your internet connection and try again.';
         break;
       case 'too-many-requests':
         userFriendlyMessage = 'Too many attempts. Please try again later.';
@@ -214,7 +218,7 @@ class AuthenticationController extends GetxController {
       default:
         userFriendlyMessage = 'Authentication failed. Please try again.';
     }
-    
+
     _errorMessage.value = userFriendlyMessage;
     AppLogger.error('Firebase Auth error: ${error.code} - ${error.message}');
   }

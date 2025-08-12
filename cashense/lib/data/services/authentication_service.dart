@@ -71,10 +71,6 @@ class AuthenticationService {
     }
   }
 
-  String _getWebClientId() {
-    return FlavorConfig.instance.googleWebClientId;
-  }
-
   Future<AppUser?> signInWithGoogle() async {
     try {
       AppLogger.auth(

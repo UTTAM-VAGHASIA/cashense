@@ -12,7 +12,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationController authController = Get.find<AuthenticationController>();
+    final AuthenticationController authController =
+        Get.find<AuthenticationController>();
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -24,8 +25,10 @@ class LoginScreen extends StatelessWidget {
           builder: (context, constraints) {
             final isDesktop = AppDeviceUtils.isDesktopScreen(context);
             final isTablet = AppDeviceUtils.isTabletScreen(context);
-            final maxWidth = isDesktop ? 400.0 : (isTablet ? 500.0 : double.infinity);
-            
+            final maxWidth = isDesktop
+                ? 400.0
+                : (isTablet ? 500.0 : double.infinity);
+
             return Center(
               child: SingleChildScrollView(
                 child: ConstrainedBox(
@@ -42,22 +45,40 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Top spacing
-                          SizedBox(height: isDesktop ? AppSizes.xl * 2 : AppSizes.xl * 1.5),
-                          
+                          SizedBox(
+                            height: isDesktop
+                                ? AppSizes.xl * 2
+                                : AppSizes.xl * 1.5,
+                          ),
+
                           // Cashense Logo and Branding
-                          _buildBrandingSection(colorScheme, textTheme, isDesktop),
-                          
+                          _buildBrandingSection(
+                            colorScheme,
+                            textTheme,
+                            isDesktop,
+                          ),
+
                           // Spacer to push content to center
                           const Spacer(),
-                          
+
                           // Welcome Text
-                          _buildWelcomeSection(textTheme, colorScheme, isDesktop),
-                          
-                          SizedBox(height: isDesktop ? AppSizes.xl * 1.5 : AppSizes.xl),
-                          
+                          _buildWelcomeSection(
+                            textTheme,
+                            colorScheme,
+                            isDesktop,
+                          ),
+
+                          SizedBox(
+                            height: isDesktop ? AppSizes.xl * 1.5 : AppSizes.xl,
+                          ),
+
                           // Google Sign-In Button with loading and error states
-                          _buildSignInSection(authController, colorScheme, textTheme),
-                          
+                          _buildSignInSection(
+                            authController,
+                            colorScheme,
+                            textTheme,
+                          ),
+
                           // Bottom spacing
                           const Spacer(),
                           SizedBox(height: AppSizes.xl),
@@ -75,7 +96,11 @@ class LoginScreen extends StatelessWidget {
   }
 
   /// Build the branding section with Cashense logo
-  Widget _buildBrandingSection(ColorScheme colorScheme, TextTheme textTheme, bool isDesktop) {
+  Widget _buildBrandingSection(
+    ColorScheme colorScheme,
+    TextTheme textTheme,
+    bool isDesktop,
+  ) {
     return Column(
       children: [
         // App Logo
@@ -98,9 +123,9 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
         ),
-        
+
         SizedBox(height: AppSizes.lg),
-        
+
         // App Name
         Text(
           'Cashense',
@@ -109,9 +134,9 @@ class LoginScreen extends StatelessWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-        
+
         SizedBox(height: AppSizes.sm),
-        
+
         // Tagline
         Text(
           'Smart money management made simple',
@@ -125,7 +150,11 @@ class LoginScreen extends StatelessWidget {
   }
 
   /// Build the welcome section with greeting text
-  Widget _buildWelcomeSection(TextTheme textTheme, ColorScheme colorScheme, bool isDesktop) {
+  Widget _buildWelcomeSection(
+    TextTheme textTheme,
+    ColorScheme colorScheme,
+    bool isDesktop,
+  ) {
     return Column(
       children: [
         Text(
@@ -136,9 +165,9 @@ class LoginScreen extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        
+
         SizedBox(height: AppSizes.md),
-        
+
         Text(
           'Sign in with your Google account to get started with intelligent personal finance management.',
           style: textTheme.bodyMedium?.copyWith(
@@ -207,16 +236,16 @@ class LoginScreen extends StatelessWidget {
           }
           return const SizedBox.shrink();
         }),
-        
+
         // Google Sign-In Button
         Obx(() {
           return SizedBox(
             width: double.infinity,
             height: 56,
             child: ElevatedButton.icon(
-              onPressed: authController.isLoading 
-                ? null 
-                : () => _handleGoogleSignIn(authController),
+              onPressed: authController.isLoading
+                  ? null
+                  : () => _handleGoogleSignIn(authController),
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorScheme.primary,
                 foregroundColor: colorScheme.onPrimary,
@@ -229,34 +258,34 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               icon: authController.isLoading
-                ? SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        colorScheme.onPrimary,
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          colorScheme.onPrimary,
+                        ),
                       ),
-                    ),
-                  )
-                : _buildGoogleIcon(),
+                    )
+                  : _buildGoogleIcon(),
               label: Text(
-                authController.isLoading 
-                  ? 'Signing in...' 
-                  : 'Sign in with Google',
+                authController.isLoading
+                    ? 'Signing in...'
+                    : 'Sign in with Google',
                 style: textTheme.titleMedium?.copyWith(
-                  color: authController.isLoading 
-                    ? colorScheme.onSurfaceVariant 
-                    : colorScheme.onPrimary,
+                  color: authController.isLoading
+                      ? colorScheme.onSurfaceVariant
+                      : colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           );
         }),
-        
+
         SizedBox(height: AppSizes.lg),
-        
+
         // Platform availability note
         if (!Get.find<AuthenticationController>().isGoogleSignInAvailable())
           Container(
@@ -311,13 +340,15 @@ class LoginScreen extends StatelessWidget {
   }
 
   /// Handle Google Sign-In with haptic feedback
-  Future<void> _handleGoogleSignIn(AuthenticationController authController) async {
+  Future<void> _handleGoogleSignIn(
+    AuthenticationController authController,
+  ) async {
     // Provide haptic feedback
     HapticFeedback.lightImpact();
-    
+
     try {
       final success = await authController.signInWithGoogle();
-      
+
       if (success) {
         // Provide success haptic feedback
         HapticFeedback.mediumImpact();
