@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cashense/flavors/flavor_config.dart';
 import 'package:cashense/utils/constants/enums.dart';
+import 'package:cashense/utils/logging/logger.dart';
 
 // Import the generated options
 import 'package:cashense/flavors/firebase/firebase_options_dev.dart' as dev;
@@ -30,11 +31,11 @@ class FirebaseService {
 
     // Optional: Add flavor-specific Firebase configuration
     if (FlavorConfig.isDev()) {
-      print('🔥 Firebase initialized for DEV environment');
+      AppLogger.firebase('Firebase initialized for DEV environment');
     } else if (FlavorConfig.isStaging()) {
-      print('🔥 Firebase initialized for STAGING environment');
+      AppLogger.firebase('Firebase initialized for STAGING environment');
     } else {
-      print('🔥 Firebase initialized for PRODUCTION environment');
+      AppLogger.firebase('Firebase initialized for PRODUCTION environment');
     }
   }
 

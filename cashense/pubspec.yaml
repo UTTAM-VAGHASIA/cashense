@@ -60,6 +60,7 @@ dependencies:
   haptic_feedback: ^0.5.1+1
   google_sign_in_all_platforms: ^1.2.1
   url_launcher: ^6.3.2
+  intl: ^0.20.2 
 
 dev_dependencies:
   flutter_test:

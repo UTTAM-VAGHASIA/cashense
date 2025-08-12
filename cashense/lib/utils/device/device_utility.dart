@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cashense/utils/constants/sizes.dart';
+import 'package:cashense/utils/helpers/snackbar_helper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,10 @@ class AppDeviceUtils {
     if (can) {
       await Haptics.vibrate(type);
     } else {
-      // TODO: Snackbar Implementation
+      SnackbarHelper.showWarning(
+        title: 'Haptic Feedback',
+        message: 'Haptic feedback is not available on this device',
+      );
     }
   }
 
