@@ -6,7 +6,7 @@ import 'package:cashense/utils/logging/logger.dart';
 
 /// Authentication controller managing authentication state and business logic using GetX
 class AuthenticationController extends GetxController {
-  final AuthenticationService _authService = AuthenticationService();
+  late final AuthenticationService _authService;
 
   // Reactive state variables
   final RxBool _isLoading = false.obs;
@@ -29,6 +29,8 @@ class AuthenticationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Inject AuthenticationService dependency
+    _authService = Get.find<AuthenticationService>();
     _initializeAuthState();
   }
 
