@@ -10,7 +10,7 @@ class UrlHelper {
   static Future<bool> launchUrl(String url) async {
     try {
       final uri = Uri.parse(url);
-      
+
       if (await launcher.canLaunchUrl(uri)) {
         AppLogger.info('Launching URL: $url');
         return await launcher.launchUrl(uri);
@@ -36,7 +36,7 @@ class UrlHelper {
   static Future<bool> launchInBrowser(String url) async {
     try {
       final uri = Uri.parse(url);
-      
+
       if (await launcher.canLaunchUrl(uri)) {
         AppLogger.info('Launching URL in browser: $url');
         return await launcher.launchUrl(
@@ -65,7 +65,7 @@ class UrlHelper {
   static Future<bool> launchInApp(String url) async {
     try {
       final uri = Uri.parse(url);
-      
+
       if (await launcher.canLaunchUrl(uri)) {
         AppLogger.info('Launching URL in app: $url');
         return await launcher.launchUrl(
@@ -198,7 +198,7 @@ class UrlHelper {
     try {
       // Remove any non-digit characters from phone number
       final cleanNumber = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
-      
+
       final uri = Uri.parse(
         'https://wa.me/$cleanNumber${message != null ? '?text=${Uri.encodeComponent(message)}' : ''}',
       );
@@ -232,11 +232,13 @@ class UrlHelper {
   }) async {
     try {
       String url;
-      
+
       if (latitude != null && longitude != null) {
-        url = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+        url =
+            'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
       } else if (address != null) {
-        url = 'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(address)}';
+        url =
+            'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(address)}';
       } else {
         SnackbarHelper.showError(
           title: 'Error',
@@ -275,7 +277,7 @@ class UrlHelper {
   }) async {
     try {
       String url;
-      
+
       if (isAndroid) {
         url = 'https://play.google.com/store/apps/details?id=$appId';
       } else {
@@ -312,7 +314,7 @@ class UrlHelper {
   }) async {
     try {
       String url;
-      
+
       switch (platform.toLowerCase()) {
         case 'twitter':
         case 'x':
@@ -373,7 +375,8 @@ class UrlHelper {
   /// Validate phone number format
   static bool isValidPhoneNumber(String phoneNumber) {
     final phoneRegex = RegExp(r'^\+?[\d\s\-\(\)]+$');
-    return phoneRegex.hasMatch(phoneNumber) && phoneNumber.replaceAll(RegExp(r'[^\d]'), '').length >= 10;
+    return phoneRegex.hasMatch(phoneNumber) &&
+        phoneNumber.replaceAll(RegExp(r'[^\d]'), '').length >= 10;
   }
 
   /// Build email query string
@@ -384,23 +387,23 @@ class UrlHelper {
     List<String>? bcc,
   }) {
     final params = <String>[];
-    
+
     if (subject != null) {
       params.add('subject=${Uri.encodeComponent(subject)}');
     }
-    
+
     if (body != null) {
       params.add('body=${Uri.encodeComponent(body)}');
     }
-    
+
     if (cc != null && cc.isNotEmpty) {
       params.add('cc=${cc.map((e) => Uri.encodeComponent(e)).join(',')}');
     }
-    
+
     if (bcc != null && bcc.isNotEmpty) {
       params.add('bcc=${bcc.map((e) => Uri.encodeComponent(e)).join(',')}');
     }
-    
+
     return params.isNotEmpty ? params.join('&') : null;
   }
 

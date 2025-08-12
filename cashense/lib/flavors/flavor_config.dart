@@ -36,6 +36,7 @@ class FlavorConfig {
   String get crashlyticsKey => settings.crashlyticsKey;
   bool get enablePerformanceMonitoring => settings.enablePerformanceMonitoring;
   bool get shouldPreviewDevice => settings.shouldPreviewDevice;
+  String get googleWebClientId => settings.googleWebClientId;
   FlavorDebugConfig get debugConfig => settings.debugConfig;
 
   // Static helper methods

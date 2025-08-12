@@ -1,4 +1,3 @@
-
 import 'package:cashense/app.dart';
 import 'package:cashense/flavors/flavor_config.dart';
 import 'package:cashense/main.dart';

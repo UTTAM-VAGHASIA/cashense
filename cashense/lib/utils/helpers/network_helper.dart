@@ -13,16 +13,17 @@ class NetworkHelper {
   static Future<bool> hasInternetConnection() async {
     try {
       final connectivityResults = await _connectivity.checkConnectivity();
-      
+
       // Check if any connection type is available
       if (connectivityResults.contains(ConnectivityResult.none)) {
         return false;
       }
 
       // Verify actual internet connectivity by pinging Google DNS
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(const Duration(seconds: 5));
-      
+      final result = await InternetAddress.lookup(
+        'google.com',
+      ).timeout(const Duration(seconds: 5));
+
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (e) {
       return false;
@@ -119,7 +120,7 @@ class NetworkHelper {
   /// Get network type as string
   static Future<String> getNetworkType() async {
     final connectivityResults = await _connectivity.checkConnectivity();
-    
+
     if (connectivityResults.contains(ConnectivityResult.wifi)) {
       return 'WiFi';
     } else if (connectivityResults.contains(ConnectivityResult.mobile)) {

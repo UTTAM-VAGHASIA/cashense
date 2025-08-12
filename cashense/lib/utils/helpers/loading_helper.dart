@@ -15,7 +15,7 @@ class LoadingHelper {
     bool barrierDismissible = false,
   }) {
     if (_isLoading) return;
-    
+
     _isLoading = true;
     DialogHelper.showLoading(
       message: message,
@@ -26,7 +26,7 @@ class LoadingHelper {
   /// Hide loading overlay
   static void hide() {
     if (!_isLoading) return;
-    
+
     _isLoading = false;
     if (Get.isDialogOpen!) {
       Get.back();
@@ -45,7 +45,7 @@ class LoadingHelper {
   }) async {
     try {
       show(message: message, barrierDismissible: barrierDismissible);
-      
+
       if (timeout != null) {
         return await function().timeout(timeout);
       } else {
@@ -65,7 +65,7 @@ class LoadingHelper {
     bool barrierDismissible = false,
   }) {
     if (_isLoading) return;
-    
+
     _isLoading = true;
     Get.dialog(
       AlertDialog(
@@ -94,7 +94,7 @@ class LoadingHelper {
   /// Update progress
   static void updateProgress(double progress, {String? message}) {
     if (!_isLoading) return;
-    
+
     // This would require a more complex implementation with a custom dialog
     // For now, we'll hide and show with new progress
     hide();
@@ -111,7 +111,7 @@ class LoadingHelper {
     Color? backgroundColor,
   }) {
     if (_isLoading) return;
-    
+
     _isLoading = true;
     Get.dialog(
       AlertDialog(
@@ -132,7 +132,7 @@ class LoadingHelper {
     Duration animationDuration = const Duration(milliseconds: 300),
   }) {
     if (_isLoading) return;
-    
+
     _isLoading = true;
     Get.dialog(
       AnimatedContainer(
@@ -184,13 +184,16 @@ class _LoadingAnimationState extends State<LoadingAnimation>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _animation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _animation =
+        Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: Curves.easeInOut,
+          ),
+        );
     _controller.repeat();
   }
 
@@ -314,13 +317,16 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
       duration: widget.duration,
       vsync: this,
     );
-    _animation = Tween<double>(
-      begin: -1.0,
-      end: 2.0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _animation =
+        Tween<double>(
+          begin: -1.0,
+          end: 2.0,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: Curves.easeInOut,
+          ),
+        );
     _controller.repeat();
   }
 

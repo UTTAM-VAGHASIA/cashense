@@ -8,8 +8,12 @@ class DateFormatters {
   static final DateFormat _dayMonthYear = DateFormat('dd/MM/yyyy');
   static final DateFormat _monthDayYear = DateFormat('MM/dd/yyyy');
   static final DateFormat _yearMonthDay = DateFormat('yyyy-MM-dd');
-  static final DateFormat _dayMonthYearWithTime = DateFormat('dd/MM/yyyy HH:mm');
-  static final DateFormat _monthDayYearWithTime = DateFormat('MM/dd/yyyy hh:mm a');
+  static final DateFormat _dayMonthYearWithTime = DateFormat(
+    'dd/MM/yyyy HH:mm',
+  );
+  static final DateFormat _monthDayYearWithTime = DateFormat(
+    'MM/dd/yyyy hh:mm a',
+  );
   static final DateFormat _time12Hour = DateFormat('hh:mm a');
   static final DateFormat _time24Hour = DateFormat('HH:mm');
   static final DateFormat _dayName = DateFormat('EEEE');
@@ -19,7 +23,9 @@ class DateFormatters {
   static final DateFormat _dayMonthShort = DateFormat('dd MMM');
   static final DateFormat _dayMonthYearShort = DateFormat('dd MMM yyyy');
   static final DateFormat _monthYear = DateFormat('MMM yyyy');
-  static final DateFormat _fullDateTime = DateFormat('EEEE, dd MMMM yyyy HH:mm');
+  static final DateFormat _fullDateTime = DateFormat(
+    'EEEE, dd MMMM yyyy HH:mm',
+  );
   static final DateFormat _iso8601 = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
   /// Format date as dd/MM/yyyy
@@ -196,25 +202,25 @@ class DateFormatters {
   /// Check if date is today
   static bool isToday(DateTime date) {
     final now = DateTime.now();
-    return date.year == now.year && 
-           date.month == now.month && 
-           date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   /// Check if date is yesterday
   static bool isYesterday(DateTime date) {
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
-    return date.year == yesterday.year && 
-           date.month == yesterday.month && 
-           date.day == yesterday.day;
+    return date.year == yesterday.year &&
+        date.month == yesterday.month &&
+        date.day == yesterday.day;
   }
 
   /// Check if date is tomorrow
   static bool isTomorrow(DateTime date) {
     final tomorrow = DateTime.now().add(const Duration(days: 1));
-    return date.year == tomorrow.year && 
-           date.month == tomorrow.month && 
-           date.day == tomorrow.day;
+    return date.year == tomorrow.year &&
+        date.month == tomorrow.month &&
+        date.day == tomorrow.day;
   }
 
   /// Check if date is this week
@@ -222,9 +228,9 @@ class DateFormatters {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
     final endOfWeek = startOfWeek.add(const Duration(days: 6));
-    
+
     return date.isAfter(startOfWeek.subtract(const Duration(days: 1))) &&
-           date.isBefore(endOfWeek.add(const Duration(days: 1)));
+        date.isBefore(endOfWeek.add(const Duration(days: 1)));
   }
 
   /// Check if date is this month

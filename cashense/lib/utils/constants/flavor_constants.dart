@@ -14,6 +14,7 @@ class FlavorSettings {
   final bool enablePerformanceMonitoring;
   final bool shouldPreviewDevice;
   final FlavorDebugConfig debugConfig;
+  final String googleWebClientId;
 
   const FlavorSettings({
     required this.baseUrl,
@@ -28,6 +29,7 @@ class FlavorSettings {
     required this.enablePerformanceMonitoring,
     required this.shouldPreviewDevice,
     required this.debugConfig,
+    required this.googleWebClientId,
   });
 }
 
@@ -63,6 +65,8 @@ class FlavorConstants {
       crashlyticsKey: '',
       enablePerformanceMonitoring: false,
       shouldPreviewDevice: true,
+      googleWebClientId:
+          '380247139382-fr227jiq8gcv1rb6ssaiuf6difjtb4o5.apps.googleusercontent.com',
       debugConfig: FlavorDebugConfig(
         debugMode: true,
         showPerformanceOverlay: true,
@@ -84,6 +88,8 @@ class FlavorConstants {
       crashlyticsKey: 'staging_crashlytics_key',
       enablePerformanceMonitoring: true,
       shouldPreviewDevice: false,
+      googleWebClientId:
+          '788140990788-ikuf589ciurklkoucdulqc105326p8mb.apps.googleusercontent.com',
       debugConfig: FlavorDebugConfig(
         debugMode: false,
         showPerformanceOverlay: false,
@@ -105,6 +111,8 @@ class FlavorConstants {
       crashlyticsKey: 'production_crashlytics_key',
       enablePerformanceMonitoring: true,
       shouldPreviewDevice: false,
+      googleWebClientId:
+          '1030695688169-925gdk2ras9gj5aouakuvi2t9no4hpcv.apps.googleusercontent.com',
       debugConfig: FlavorDebugConfig(
         debugMode: false,
         showPerformanceOverlay: false,
@@ -133,6 +141,7 @@ class FlavorConstants {
       crashlyticsKey: '',
       enablePerformanceMonitoring: false,
       shouldPreviewDevice: false,
+      googleWebClientId: 'your-default-web-client-id.googleusercontent.com',
       debugConfig: FlavorDebugConfig(
         debugMode: true,
         showPerformanceOverlay: false,

@@ -9,7 +9,7 @@ class StorageHelper {
 
   // SharedPreferences instance
   static SharedPreferences? _prefs;
-  
+
   // FlutterSecureStorage instance
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
     aOptions: AndroidOptions(
@@ -162,7 +162,10 @@ class StorageHelper {
   }
 
   /// Save secure object as JSON
-  static Future<void> setSecureObject(String key, Map<String, dynamic> value) async {
+  static Future<void> setSecureObject(
+    String key,
+    Map<String, dynamic> value,
+  ) async {
     try {
       final jsonString = jsonEncode(value);
       await _secureStorage.write(key: key, value: jsonString);
@@ -235,14 +238,14 @@ class StorageHelper {
       final prefs = await _preferences;
       final keys = prefs.getKeys();
       int totalSize = 0;
-      
+
       for (final key in keys) {
         final value = prefs.get(key);
         if (value != null) {
           totalSize += key.length + value.toString().length;
         }
       }
-      
+
       return totalSize;
     } catch (e) {
       Get.printError(info: 'Error calculating storage size: $e');
@@ -256,11 +259,11 @@ class StorageHelper {
       final prefs = await _preferences;
       final keys = prefs.getKeys();
       final Map<String, dynamic> data = {};
-      
+
       for (final key in keys) {
         data[key] = prefs.get(key);
       }
-      
+
       return data;
     } catch (e) {
       Get.printError(info: 'Error exporting data: $e');
@@ -272,11 +275,11 @@ class StorageHelper {
   static Future<bool> importData(Map<String, dynamic> data) async {
     try {
       final prefs = await _preferences;
-      
+
       for (final entry in data.entries) {
         final key = entry.key;
         final value = entry.value;
-        
+
         if (value is String) {
           await prefs.setString(key, value);
         } else if (value is int) {
@@ -289,7 +292,7 @@ class StorageHelper {
           await prefs.setStringList(key, value);
         }
       }
-      
+
       return true;
     } catch (e) {
       Get.printError(info: 'Error importing data: $e');

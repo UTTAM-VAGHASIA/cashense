@@ -91,10 +91,10 @@ class CurrencyInputFormatter extends TextInputFormatter {
     required this.decimalPlaces,
     required String locale,
   }) : _formatter = NumberFormat.currency(
-          symbol: symbol,
-          decimalDigits: decimalPlaces,
-          locale: locale,
-        );
+         symbol: symbol,
+         decimalDigits: decimalPlaces,
+         locale: locale,
+       );
 
   @override
   TextEditingValue formatEditUpdate(
@@ -107,7 +107,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     // Remove all non-digit characters
     final digitsOnly = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
-    
+
     if (digitsOnly.isEmpty) {
       return const TextEditingValue();
     }
@@ -132,14 +132,14 @@ class CreditCardInputFormatter extends TextInputFormatter {
   ) {
     final text = newValue.text.replaceAll(RegExp(r'\D'), '');
     final buffer = StringBuffer();
-    
+
     for (int i = 0; i < text.length; i++) {
       if (i > 0 && i % 4 == 0) {
         buffer.write(' ');
       }
       buffer.write(text[i]);
     }
-    
+
     final formatted = buffer.toString();
     return TextEditingValue(
       text: formatted,
@@ -156,18 +156,20 @@ class ExpiryDateInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     final text = newValue.text.replaceAll(RegExp(r'\D'), '');
-    
+
     if (text.length >= 2) {
       final month = text.substring(0, 2);
-      final year = text.length > 2 ? text.substring(2, text.length > 4 ? 4 : text.length) : '';
+      final year = text.length > 2
+          ? text.substring(2, text.length > 4 ? 4 : text.length)
+          : '';
       final formatted = year.isEmpty ? month : '$month/$year';
-      
+
       return TextEditingValue(
         text: formatted,
         selection: TextSelection.collapsed(offset: formatted.length),
       );
     }
-    
+
     return TextEditingValue(
       text: text,
       selection: TextSelection.collapsed(offset: text.length),
@@ -213,13 +215,15 @@ class CapitalizeTextFormatter extends TextInputFormatter {
     if (newValue.text.isEmpty) {
       return newValue;
     }
-    
+
     final words = newValue.text.split(' ');
-    final capitalizedWords = words.map((word) {
-      if (word.isEmpty) return word;
-      return word[0].toUpperCase() + word.substring(1).toLowerCase();
-    }).join(' ');
-    
+    final capitalizedWords = words
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
+
     return TextEditingValue(
       text: capitalizedWords,
       selection: newValue.selection,

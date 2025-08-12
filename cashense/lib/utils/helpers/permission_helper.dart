@@ -13,13 +13,13 @@ class PermissionHelper {
     try {
       // Note: You'll need to add permission_handler package to pubspec.yaml
       // and import it here for actual permission handling
-      
+
       AppLogger.info('Requesting camera permission');
-      
+
       // Placeholder implementation - replace with actual permission logic
       // final status = await Permission.camera.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting camera permission', error: e);
@@ -31,11 +31,11 @@ class PermissionHelper {
   static Future<bool> requestPhotos() async {
     try {
       AppLogger.info('Requesting photos permission');
-      
+
       // Placeholder implementation
       // final status = await Permission.photos.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting photos permission', error: e);
@@ -47,11 +47,11 @@ class PermissionHelper {
   static Future<bool> requestMicrophone() async {
     try {
       AppLogger.info('Requesting microphone permission');
-      
+
       // Placeholder implementation
       // final status = await Permission.microphone.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting microphone permission', error: e);
@@ -63,11 +63,11 @@ class PermissionHelper {
   static Future<bool> requestLocation() async {
     try {
       AppLogger.info('Requesting location permission');
-      
+
       // Placeholder implementation
       // final status = await Permission.location.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting location permission', error: e);
@@ -79,11 +79,11 @@ class PermissionHelper {
   static Future<bool> requestNotification() async {
     try {
       AppLogger.info('Requesting notification permission');
-      
+
       // Placeholder implementation
       // final status = await Permission.notification.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting notification permission', error: e);
@@ -95,11 +95,11 @@ class PermissionHelper {
   static Future<bool> requestStorage() async {
     try {
       AppLogger.info('Requesting storage permission');
-      
+
       // Placeholder implementation
       // final status = await Permission.storage.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting storage permission', error: e);
@@ -111,11 +111,11 @@ class PermissionHelper {
   static Future<bool> requestContacts() async {
     try {
       AppLogger.info('Requesting contacts permission');
-      
+
       // Placeholder implementation
       // final status = await Permission.contacts.request();
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error requesting contacts permission', error: e);
@@ -129,7 +129,7 @@ class PermissionHelper {
       // Placeholder implementation
       // final status = await Permission.camera.status;
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error checking camera permission', error: e);
@@ -143,7 +143,7 @@ class PermissionHelper {
       // Placeholder implementation
       // final status = await Permission.photos.status;
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error checking photos permission', error: e);
@@ -157,7 +157,7 @@ class PermissionHelper {
       // Placeholder implementation
       // final status = await Permission.location.status;
       // return status.isGranted;
-      
+
       return true; // Placeholder
     } catch (e) {
       AppLogger.error('Error checking location permission', error: e);
@@ -205,10 +205,10 @@ class PermissionHelper {
   static Future<void> openAppSettings() async {
     try {
       AppLogger.info('Opening app settings');
-      
+
       // Placeholder implementation
       // await openAppSettings();
-      
+
       SnackbarHelper.showInfo(
         title: 'Settings',
         message: 'Please enable permissions in app settings',
@@ -231,7 +231,7 @@ class PermissionHelper {
   }) async {
     // First, try to request the permission
     final granted = await requestPermission();
-    
+
     if (granted) {
       return true;
     }
@@ -248,16 +248,17 @@ class PermissionHelper {
     if (shouldShowRationale == true) {
       // Try requesting again
       final secondAttempt = await requestPermission();
-      
+
       if (!secondAttempt) {
         // Show settings dialog if still denied
         await showPermissionDeniedDialog(
           title: 'Permission Required',
-          message: 'This permission is required for the app to function properly. Please enable it in settings.',
+          message:
+              'This permission is required for the app to function properly. Please enable it in settings.',
           permissionName: permissionName,
         );
       }
-      
+
       return secondAttempt;
     }
 
@@ -269,7 +270,7 @@ class PermissionHelper {
     List<Future<bool> Function()> permissions,
   ) async {
     final results = <String, bool>{};
-    
+
     for (int i = 0; i < permissions.length; i++) {
       try {
         final granted = await permissions[i]();
@@ -279,7 +280,7 @@ class PermissionHelper {
         results['permission_$i'] = false;
       }
     }
-    
+
     return results;
   }
 
@@ -298,7 +299,7 @@ class PermissionHelper {
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -326,16 +327,18 @@ class PermissionHelper {
               style: Get.textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            ...features.map((feature) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  const Icon(Icons.check, color: Colors.green, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(feature)),
-                ],
+            ...features.map(
+              (feature) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    const Icon(Icons.check, color: Colors.green, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(feature)),
+                  ],
+                ),
               ),
-            )),
+            ),
             const SizedBox(height: 24),
             Row(
               children: [
