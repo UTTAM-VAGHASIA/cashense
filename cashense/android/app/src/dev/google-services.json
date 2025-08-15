@@ -12,7 +12,20 @@
           "package_name": "com.cashense.app.dev"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "380247139382-30seen5jopg20kll1ftal296f54el6bq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cashense.app.dev",
+            "certificate_hash": "371cdfc7dd316ed87fdb14d1f9c34d5d52a9d9a1"
+          }
+        },
+        {
+          "client_id": "380247139382-fr227jiq8gcv1rb6ssaiuf6difjtb4o5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAIzNRFcVcWG3-A8NldTz7LQGm-uoKK81A"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380247139382-fr227jiq8gcv1rb6ssaiuf6difjtb4o5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "380247139382-bpiul4uj7jrsbs3dtl3gn2q706808rah.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cashense.app.dev"
+              }
+            }
+          ]
         }
       }
     }
