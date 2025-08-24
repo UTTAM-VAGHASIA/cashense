@@ -17,14 +17,12 @@ dependencies:
 
 
   # State management
-  get: ^4.7.2  
+  flutter_bloc: ^9.1.1
   
   
   # Firebase suite
   firebase_core: ^4.0.0 
-  firebase_auth: ^6.0.0 
-  cloud_firestore: ^6.0.0
-  firebase_analytics: ^12.0.0
+  firebase_auth: ^6.0.1 
   
   # Local storage
   flutter_secure_storage: ^10.0.0-beta.4
@@ -33,7 +31,6 @@ dependencies:
 
   # Authentication
   google_sign_in: ^6.3.0 
-  google_sign_in_dartio: ^0.3.0 
   
   # Navigation & UI
   go_router: ^16.0.0  

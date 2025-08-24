@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1030695688169",
+    "project_id": "cashense-prod",
+    "storage_bucket": "cashense-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030695688169:android:4290204c82244253badd78",
+        "android_client_info": {
+          "package_name": "app.uttam.cashense"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030695688169-925gdk2ras9gj5aouakuvi2t9no4hpcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtt_ATaOqyXrVPxbJWZCJQwTfrNQ_sVlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030695688169-925gdk2ras9gj5aouakuvi2t9no4hpcv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1030695688169-pi49boee7vcm4geusdqso1jifvg5m0l8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cashense.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
