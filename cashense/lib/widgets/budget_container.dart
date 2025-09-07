@@ -53,9 +53,6 @@ class BudgetContainer extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
-          height: 10,
-        ),
         BudgetTimeline(
           startDate: "Sept 1",
           endDate: "Oct 1",
@@ -146,7 +143,7 @@ class AnimatedGooBackground extends StatelessWidget {
   }
 }
 
-class BudgetTimeline extends StatelessWidget {
+class BudgetTimeline extends StatefulWidget {
   final String startDate;
   final String endDate;
   final double percent;
@@ -161,20 +158,29 @@ class BudgetTimeline extends StatelessWidget {
   });
 
   @override
+  State<BudgetTimeline> createState() => _BudgetTimelineState();
+}
+
+class _BudgetTimelineState extends State<BudgetTimeline> {
+  double todayPercent = 20;
+
+  @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         TextFont(
-          text: startDate,
+          text: widget.startDate,
           fontSize: 12,
         ),
         Expanded(
           child: BudgetProgress(
-            color: color,
-            percent: percent,
+            color: widget.color,
+            percent: widget.percent,
+            todayPercent: todayPercent,
           ),
         ),
-        TextFont(text: endDate, fontSize: 12),
+        TextFont(text: widget.endDate, fontSize: 12),
       ],
     );
   }
@@ -183,23 +189,30 @@ class BudgetTimeline extends StatelessWidget {
 class BudgetProgress extends StatelessWidget {
   final double percent;
   final Color color;
+  final double todayPercent;
 
-  const BudgetProgress({super.key, required this.percent, required this.color});
+  const BudgetProgress({
+    super.key,
+    required this.percent,
+    required this.color,
+    required this.todayPercent,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.bottomLeft,
       children: [
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: darken(color, 0.5),
           ),
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 8),
           height: 20,
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 8),
           height: 20,
           child: FractionallySizedBox(
             heightFactor: 1,
@@ -222,18 +235,77 @@ class BudgetProgress extends StatelessWidget {
             ),
           ),
         ),
+        TodayIndicator(percent: todayPercent),
         SizedBox(
           height: 22,
           child: Center(
-            child: TextFont(
-              text: "${percent.toInt()}%",
-              fontSize: 14,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.bold,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4.3),
+              child: TextFont(
+                text: "${percent.toInt()}%",
+                fontSize: 14,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class TodayIndicator extends StatelessWidget {
+  final double percent;
+
+  const TodayIndicator({super.key, required this.percent});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: FractionalOffset(percent / 100, 0),
+      child: Container(
+        width: 20,
+        height: 39,
+        child: OverflowBox(
+          maxWidth: 500,
+          child: SizedBox(
+            width: 38,
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Theme.of(context).colorScheme.black,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: 4,
+                      left: 5,
+                      right: 5,
+                      bottom: 3,
+                    ),
+                    child: TextFont(
+                      text: "Today",
+                      textAlign: TextAlign.center,
+                      fontSize: 9,
+                      textColor: Theme.of(context).colorScheme.white,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 3,
+                  height: 21,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+                    color: Theme.of(context).colorScheme.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

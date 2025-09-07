@@ -19,8 +19,8 @@ class TextFont extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var finalTextColor;
-    if (this.textColor == null) {
+    Color? finalTextColor;
+    if (textColor == null) {
       finalTextColor = Theme.of(context).colorScheme.black;
     } else {
       finalTextColor = textColor;

@@ -14,16 +14,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFont(text: "test"),
-        BudgetContainer(
-          title: "Budget Name",
-          color: Color(0x4FECA4A),
-          total: 500,
-          spent: 49.1,
-        ),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextFont(text: "test"),
+          BudgetContainer(
+            title: "Budget Name",
+            color: Color(0x4F6ECA4A),
+            total: 500,
+            spent: 49.1,
+          ),
+        ],
+      ),
     );
   }
 }
