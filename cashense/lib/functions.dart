@@ -1,5 +1,6 @@
 import 'package:cashense/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'widgets/text_widgets.dart';
 
@@ -31,7 +32,23 @@ extension CapExtension on String {
   ).split(' ').map((str) => str.capitalizeFirst).join(" ");
 }
 
-String getMonth(currentMonth) {
+String convertToMoney(double amount) {
+  String currencyType = "\$";
+  final currency = NumberFormat("#,##0.00", "en_US");
+  String formatOutput = currency.format(amount);
+  if (formatOutput.substring(formatOutput.length - 2) == "00") {
+    return currencyType +
+        formatOutput.replaceRange(
+          formatOutput.length - 3,
+          formatOutput.length,
+          '',
+        );
+  }
+
+  return currencyType + currency.format(amount);
+}
+
+String getMonth(int currentMonth) {
   var months = [
     'January',
     'February',
@@ -50,7 +67,7 @@ String getMonth(currentMonth) {
   return months[currentMonth];
 }
 
-String getMonthShort(currentMonth) {
+String getMonthShort(int currentMonth) {
   var months = [
     'Jan',
     'Feb',
@@ -81,7 +98,6 @@ String getWeekDay(int currentWeekDay) {
   ];
   return weekDays[currentWeekDay];
 }
-
 
 String getWeekDayShort(int currentWeekDay) {
   var weekDays = [

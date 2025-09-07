@@ -62,7 +62,7 @@ dependencies:
   url_launcher: ^6.3.2
   intl: ^0.20.2 
   flutter_svg: ^2.2.0
-  simple_animations: ^5.2.0
+  sa3_liquid: ^1.0.1
 
 dev_dependencies:
   flutter_test:
