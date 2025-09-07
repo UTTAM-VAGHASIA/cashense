@@ -40,13 +40,14 @@ class BudgetContainer extends StatelessWidget {
           children: [
             TextFont(
               text: convertToMoney(spent),
-              fontSize: 20,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
               textAlign: TextAlign.left,
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 3.0),
               child: TextFont(
-                text: " spent of ${convertToMoney(total)}",
+                text: " leftt of ${convertToMoney(total)}",
                 fontSize: 13,
                 textAlign: TextAlign.left,
               ),
@@ -66,8 +67,7 @@ class BudgetContainer extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: TextFont(
-              text:
-                  "You can keep spending 15\$ each day for the rest of the period.",
+              text: "You can keep spending 15\$ each day.",
               fontSize: 15,
               textAlign: TextAlign.center,
             ),
@@ -200,6 +200,19 @@ class BudgetProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var percentText = SizedBox(
+      height: 22,
+      child: Padding(
+        padding: EdgeInsetsGeometry.only(top: 4.3),
+        child: TextFont(
+          text: "${percent.toInt().toString()} %",
+          fontSize: 14,
+          textAlign: TextAlign.center,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
@@ -231,25 +244,13 @@ class BudgetProgress extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
+                percent > 40 ? percentText : Container(),
               ],
             ),
           ),
         ),
         TodayIndicator(percent: todayPercent),
-        SizedBox(
-          height: 22,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4.3),
-              child: TextFont(
-                text: "${percent.toInt()}%",
-                fontSize: 14,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        percent <= 40 ? percentText : Container(),
       ],
     );
   }
@@ -264,7 +265,7 @@ class TodayIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: FractionalOffset(percent / 100, 0),
-      child: Container(
+      child: SizedBox(
         width: 20,
         height: 39,
         child: OverflowBox(
@@ -297,8 +298,12 @@ class TodayIndicator extends StatelessWidget {
                   width: 3,
                   height: 21,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
-                    color: Theme.of(context).colorScheme.black,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(5),
+                    ),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.black.withValues(alpha: 0.4),
                   ),
                 ),
               ],

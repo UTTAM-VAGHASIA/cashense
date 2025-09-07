@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
             title: "Budget Name",
             color: Color(0x4F6ECA4A),
             total: 500,
-            spent: 49.1,
+            spent: 210,
           ),
         ],
       ),
