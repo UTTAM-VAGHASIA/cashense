@@ -1,12 +1,11 @@
-import 'package:cashense/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cashense/widgets/fab.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/home_page.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const Cashense());
 }
@@ -18,10 +17,13 @@ class Cashense extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: Scaffold(
+        body: HomePage(
+          title: "Cashense",
+        ),
+        floatingActionButton: FAB(openPage: OpenTestPage()),
       ),
-      home: HomePage(title: "Cashense",),
     );
   }
 }

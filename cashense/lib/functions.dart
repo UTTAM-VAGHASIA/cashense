@@ -2,6 +2,7 @@ import 'package:cashense/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'struct/transaction_category.dart';
 import 'widgets/text_widgets.dart';
 
 void showSnackbar(
@@ -46,6 +47,16 @@ String convertToMoney(double amount) {
   }
 
   return currencyType + currency.format(amount);
+}
+
+// TODO
+TransactionCategory findCategory(String id) {
+  return TransactionCategory(
+    title: "Food and Drink",
+    icon: "cutlery.png",
+    id: "id",
+    color: Colors.orange,
+  );
 }
 
 String getMonth(int currentMonth) {

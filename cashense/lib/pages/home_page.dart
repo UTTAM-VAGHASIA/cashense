@@ -1,4 +1,5 @@
 import 'package:cashense/struct/budget.dart';
+import 'package:cashense/struct/transaction.dart';
 import 'package:cashense/widgets/budget_container.dart';
 import 'package:cashense/widgets/fab.dart';
 import 'package:cashense/widgets/text_widgets.dart';
@@ -17,8 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -35,10 +35,30 @@ class _HomePageState extends State<HomePage> {
                 spent: 210,
               ),
             ),
-            TransactionEntry(openPage: OpenTestPage()),
+            TransactionEntry(
+              openPage: OpenTestPage(),
+              transaction: Transaction(
+                title: "Uber",
+                date: DateTime.now(),
+                amount: 50,
+                categoryID: "id",
+                note: "this is a transaction",
+                tagIDs: ["id1", "id2"],
+              ),
+            ),
+            TransactionEntry(
+              openPage: OpenTestPage(),
+              transaction: Transaction(
+                title: "",
+                date: DateTime.now(),
+                amount: 50,
+                categoryID: "id",
+                note: "this is a transaction",
+                tagIDs: ["id1", "id2"],
+              ),
+            ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
