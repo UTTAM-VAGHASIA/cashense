@@ -29,3 +29,6 @@ linter:
 
 formatter:
   trailing_commas: preserve
+analyzer:
+  errors:
+    avoid_print: ignore

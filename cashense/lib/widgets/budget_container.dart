@@ -1,4 +1,5 @@
 import 'package:cashense/colors.dart';
+import 'package:cashense/widgets/fade_in.dart';
 import 'package:cashense/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:sa3_liquid/liquid/plasma/plasma.dart';
@@ -234,7 +235,7 @@ class BudgetProgress extends StatelessWidget {
             ),
           ),
         ),
-        TodayIndicator(percent: todayPercent),
+        FadeIn(child: TodayIndicator(percent: todayPercent)),
         percent <= 40 ? percentText : Container(),
       ],
     );
