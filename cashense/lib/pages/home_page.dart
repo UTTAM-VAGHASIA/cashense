@@ -1,3 +1,4 @@
+import 'package:cashense/struct/budget.dart';
 import 'package:cashense/widgets/budget_container.dart';
 import 'package:cashense/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,16 @@ class _HomePageState extends State<HomePage> {
         children: [
           TextFont(text: "test"),
           BudgetContainer(
-            title: "Budget Name",
-            color: Color(0x4F6ECA4A),
-            total: 500,
-            spent: 210,
+            budget: Budget(
+              title: "Budget Name",
+              startDate: DateTime.now(),
+              endDate: DateTime.now(),
+              period: "month",
+              periodLength: 10,
+              color: Color(0x4F6ECA4A),
+              total: 500,
+              spent: 210,
+            ),
           ),
         ],
       ),

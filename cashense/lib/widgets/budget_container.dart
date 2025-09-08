@@ -4,19 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:sa3_liquid/liquid/plasma/plasma.dart';
 
 import '../functions.dart';
+import '../struct/budget.dart';
 
 class BudgetContainer extends StatelessWidget {
-  final String title;
-  final Color color;
-  final double total;
-  final double spent;
+  final Budget budget;
 
   const BudgetContainer({
     super.key,
-    required this.title,
-    required this.color,
-    required this.total,
-    required this.spent,
+    required this.budget,
   });
 
   @override
@@ -26,7 +21,7 @@ class BudgetContainer extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: TextFont(
-            text: title,
+            text: budget.title,
             fontWeight: FontWeight.bold,
             fontSize: 25,
             textAlign: TextAlign.left,
@@ -39,7 +34,7 @@ class BudgetContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             TextFont(
-              text: convertToMoney(spent),
+              text: convertToMoney(budget.spent),
               fontSize: 18,
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.left,
@@ -47,19 +42,14 @@ class BudgetContainer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 3.0),
               child: TextFont(
-                text: " leftt of ${convertToMoney(total)}",
+                text: " left of ${convertToMoney(budget.total)}",
                 fontSize: 13,
                 textAlign: TextAlign.left,
               ),
             ),
           ],
         ),
-        BudgetTimeline(
-          startDate: "Sept 1",
-          endDate: "Oct 1",
-          percent: spent / total * 100,
-          color: color,
-        ),
+        BudgetTimeline(budget: budget),
         SizedBox(
           height: 14,
         ),
@@ -83,7 +73,7 @@ class BudgetContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: color,
+            color: budget.color,
             offset: Offset(0, 4),
             blurRadius: 10,
             spreadRadius: -5,
@@ -95,7 +85,7 @@ class BudgetContainer extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: AnimatedGooBackground(color: color),
+              child: AnimatedGooBackground(color: budget.color),
             ),
             Padding(
               padding: EdgeInsetsGeometry.symmetric(
@@ -144,17 +134,12 @@ class AnimatedGooBackground extends StatelessWidget {
 }
 
 class BudgetTimeline extends StatefulWidget {
-  final String startDate;
-  final String endDate;
-  final double percent;
-  final Color color;
+  final Budget budget;
+  final double todayPercent = 45;
 
   const BudgetTimeline({
     super.key,
-    required this.startDate,
-    required this.endDate,
-    required this.percent,
-    required this.color,
+    required this.budget,
   });
 
   @override
@@ -170,17 +155,17 @@ class _BudgetTimelineState extends State<BudgetTimeline> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         TextFont(
-          text: widget.startDate,
+          text: widget.budget.startDate.day.toString(),
           fontSize: 12,
         ),
         Expanded(
           child: BudgetProgress(
-            color: widget.color,
-            percent: widget.percent,
+            color: widget.budget.color,
+            percent: widget.budget.getPercent(),
             todayPercent: todayPercent,
           ),
         ),
-        TextFont(text: widget.endDate, fontSize: 12),
+        TextFont(text: widget.budget.endDate.day.toString(), fontSize: 12),
       ],
     );
   }
