@@ -1,24 +1,19 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-class FAB extends StatefulWidget {
+class FAB extends StatelessWidget {
   final Widget openPage;
 
   const FAB({super.key, required this.openPage});
 
-  @override
-  State<FAB> createState() => _FABState();
-}
-
-class _FABState extends State<FAB> {
-  double fabSize = 50;
+  final double fabSize = 60;
 
   @override
   Widget build(BuildContext context) {
     return OpenContainer(
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext context, VoidCallback _) {
-        return widget.openPage;
+        return openPage;
       },
       closedElevation: 6.0,
       closedShape: RoundedRectangleBorder(
@@ -44,7 +39,6 @@ class _FABState extends State<FAB> {
   }
 }
 
-
 class OpenTestPage extends StatelessWidget {
   const OpenTestPage({super.key});
 
@@ -54,7 +48,17 @@ class OpenTestPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Test Page"),
       ),
-      body: Container(),
+      body: GestureDetector(
+        onDoubleTap: () {
+          print("hello");
+        },
+        onPanUpdate: (details) {
+          if (details.delta.dy > 10 || details.delta.dx > 10) {
+            Navigator.pop(context);
+          }
+        },
+        child: Container(),
+      ),
     );
   }
 }

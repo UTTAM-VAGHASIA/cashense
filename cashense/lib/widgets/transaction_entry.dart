@@ -6,9 +6,11 @@ import 'package:cashense/struct/transaction_category.dart';
 import 'package:cashense/struct/transaction_tag.dart';
 import 'package:cashense/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
-class TransactionEntry extends StatefulWidget {
-  const TransactionEntry({
+class TransactionEntry extends StatelessWidget {
+  TransactionEntry({
     super.key,
     required this.openPage,
     required this.transaction,
@@ -17,103 +19,104 @@ class TransactionEntry extends StatefulWidget {
   final Widget openPage;
   final Transaction transaction;
 
-  @override
-  State<TransactionEntry> createState() => _TransactionEntryState();
-}
+  final double fabSize = 50;
 
-class _TransactionEntryState extends State<TransactionEntry> {
-  double fabSize = 50;
-  TransactionCategory category = findCategory("id");
+  final TransactionCategory category = findCategory("id");
 
   @override
   Widget build(BuildContext context) {
     return OpenContainer<bool>(
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext context, VoidCallback _) {
-        return widget.openPage;
+        return openPage;
       },
       onClosed: () {
         print("hello");
       }(),
+      closedColor: Theme.of(context).canvasColor,
       tappable: false,
       closedShape: RoundedRectangleBorder(),
+      middleColor: Theme.of(context).colorScheme.white,
+      transitionDuration: Duration(milliseconds: 500),
       closedElevation: 0.0,
+      openColor: Theme.of(context).colorScheme.lightDarkAccent,
       closedBuilder: (BuildContext context, VoidCallback openContainer) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
-          child: InkWell(
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            onTap: () {
-              openContainer();
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-              child: Row(
-                children: [
-                  CategoryIcon(category: category, size: 50),
-                  Container(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        widget.transaction.title == ""
-                            ? TagIcon(
-                                tag: TransactionTag(
-                                  title: "test",
-                                  id: "test",
-                                  categoryID: "id",
-                                ),
-                                size: 16,
-                              )
-                            : TextFont(
-                                text: widget.transaction.title,
-                                fontSize: 20,
-                              ),
-                        widget.transaction.title == "" &&
-                                widget.transaction.note != ""
-                            ? Container(
-                                height: 4,
-                              )
-                            : Container(),
-                        widget.transaction.note == ""
-                            ? Container()
-                            : TextFont(
-                                text: widget.transaction.note,
-                                fontSize: 16,
-                                maxLines: 2,
-                              ),
-                        widget.transaction.note == ""
-                            ? Container()
-                            : Container(
-                                height: 4,
-                              ),
-                    
-                        // TODO: loop through all tags relating to this entry
-                        widget.transaction.title == ""
-                            ? Container()
-                            : TagIcon(
-                                tag: TransactionTag(
-                                  title: "test",
-                                  id: "test",
-                                  categoryID: "id",
-                                ),
-                                size: 12,
-                              ),
-                      ],
+        return Material(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+            child: InkWell(
+              customBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              onTap: () {
+                openContainer();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                child: Row(
+                  children: [
+                    CategoryIcon(category: category, size: 50),
+                    Container(
+                      width: 15,
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 8, left: 5),
-                    child: TextFont(
-                      text: convertToMoney(widget.transaction.amount),
-                      fontSize: 25,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          transaction.title == ""
+                              ? TagIcon(
+                                  tag: TransactionTag(
+                                    title: "test",
+                                    id: "test",
+                                    categoryID: "id",
+                                  ),
+                                  size: 16,
+                                )
+                              : TextFont(
+                                  text: transaction.title,
+                                  fontSize: 20,
+                                ),
+                          transaction.title == "" && transaction.note != ""
+                              ? Container(
+                                  height: 4,
+                                )
+                              : Container(),
+                          transaction.note == ""
+                              ? Container()
+                              : TextFont(
+                                  text: transaction.note,
+                                  fontSize: 16,
+                                  maxLines: 2,
+                                ),
+                          transaction.note == ""
+                              ? Container()
+                              : Container(
+                                  height: 4,
+                                ),
+
+                          // TODO: loop through all tags relating to this entry
+                          transaction.title == ""
+                              ? Container()
+                              : TagIcon(
+                                  tag: TransactionTag(
+                                    title: "test",
+                                    id: "test",
+                                    categoryID: "id",
+                                  ),
+                                  size: 12,
+                                ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.only(right: 8, left: 5),
+                      child: TextFont(
+                        text: convertToMoney(transaction.amount),
+                        fontSize: 25,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -138,7 +141,8 @@ class CategoryIcon extends StatelessWidget {
       child: Center(
         child: Image(
           image: AssetImage(
-            "cashense/assets/icons/categories/${category.icon}",
+            bundle: rootBundle,
+            "assets/icons/categories/${category.icon}",
           ),
           width: size * 0.5,
         ),
@@ -170,6 +174,28 @@ class TagIcon extends StatelessWidget {
         child: TextFont(
           text: "My text",
           fontSize: size,
+        ),
+      ),
+    );
+  }
+}
+
+class DateDivider extends StatelessWidget {
+  final DateTime date;
+
+  const DateDivider({super.key, required this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.accentColor,
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsetsGeometry.symmetric(vertical: 8),
+        child: TextFont(
+          text: DateFormat.MMMMEEEEd('en_US').format(date).toString(),
+          fontSize: 15,
         ),
       ),
     );

@@ -280,16 +280,18 @@ class TodayIndicator extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: 3,
-                  height: 21,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(5),
+                Flexible(
+                  child: Container(
+                    width: 3,
+                    height: 21,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(5),
+                      ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.black.withValues(alpha: 0.4),
                     ),
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.black.withValues(alpha: 0.4),
                   ),
                 ),
               ],

@@ -64,6 +64,7 @@ dependencies:
   flutter_svg: ^2.2.0
   sa3_liquid: ^1.0.1
   animations: ^2.0.11
+  flutter_sticky_header: ^0.8.0
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +82,7 @@ flutter:
     - assets/fonts/
     - assets/logos/
     - assets/icons/
+    - assets/icons/categories/
     - assets/images/
 
   fonts:

@@ -5,9 +5,6 @@ extension ColorsDefined on ColorScheme {
       brightness == Brightness.light ? Colors.white : Colors.black;
   Color get black =>
       brightness == Brightness.light ? Colors.black : Colors.white;
-  Color get purpleText => brightness == Brightness.light
-      ? const Color(0xFF824FD4)
-      : const Color(0xFFCB94DB);
   Color get lightDarkAccent => brightness == Brightness.light
       ? const Color(0xFFFAFAFA)
       : const Color(0xFF242424);
@@ -20,9 +17,12 @@ extension ColorsDefined on ColorScheme {
   Color get shadowColorLight => brightness == Brightness.light
       ? const Color(0x2D5A5A5A)
       : const Color(0x4BBDBDBD);
-  Color get purple => brightness == Brightness.light
-      ? const Color(0xFF824FD4)
-      : const Color(0xFFCB94DB);
+  Color get accentColor => brightness == Brightness.light
+      ? const Color(0xFF46A872)
+      : const Color(0xFF1E7A1B);
+  Color get accentColorHeavy => brightness == Brightness.light
+      ? const Color(0xFF1C683E)
+      : const Color(0xFF7CFF77);
 }
 
 Color darken(Color color, [double amount = .1]) {

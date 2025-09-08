@@ -43,3 +43,30 @@ class TextFont extends StatelessWidget {
     );
   }
 }
+
+class TextHeader extends StatelessWidget {
+  final String text;
+
+  const TextHeader({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: Theme.of(context).canvasColor,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 18.0,
+          right: 18,
+          top: 10,
+          bottom: 5,
+        ),
+        child: TextFont(
+          text: text,
+          fontSize: 33,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
