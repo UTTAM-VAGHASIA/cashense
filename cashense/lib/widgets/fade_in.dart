@@ -10,15 +10,14 @@ class FadeIn extends StatefulWidget {
 }
 
 class _FadeInState extends State<FadeIn> {
-  double widegtOpacity = 0;
+  double widgetOpacity = 0;
 
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 10), () {
       setState(() {
-        widegtOpacity = 1;
+        widgetOpacity = 1;
       });
-      print("Changed");
     });
     super.initState();
   }
@@ -26,7 +25,7 @@ class _FadeInState extends State<FadeIn> {
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      opacity: widegtOpacity,
+      opacity: widgetOpacity,
       duration: Duration(seconds: 1),
       child: widget.child,
     );

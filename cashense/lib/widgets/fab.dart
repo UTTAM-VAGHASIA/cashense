@@ -22,7 +22,9 @@ class FAB extends StatelessWidget {
       closedColor: Theme.of(context).colorScheme.secondary,
       closedBuilder: (BuildContext context, VoidCallback openContainer) {
         return InkWell(
-          onTap: () => openContainer,
+          onTap: () {
+            openContainer();
+          },
           child: SizedBox(
             height: fabSize,
             width: fabSize,
@@ -54,10 +56,19 @@ class OpenTestPage extends StatelessWidget {
         },
         onPanUpdate: (details) {
           if (details.delta.dy > 10 || details.delta.dx > 10) {
-            Navigator.pop(context);
+            print("Hello");
+            Navigator.of(context).pop();
           }
         },
-        child: Container(),
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                color: Colors.red[100],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

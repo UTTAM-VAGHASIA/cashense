@@ -2,6 +2,7 @@ import 'package:cashense/struct/budget.dart';
 import 'package:cashense/struct/transaction.dart';
 import 'package:cashense/widgets/budget_container.dart';
 import 'package:cashense/widgets/fab.dart';
+import 'package:cashense/widgets/pie_chart.dart';
 import 'package:cashense/widgets/text_input.dart';
 import 'package:cashense/widgets/text_widgets.dart';
 import 'package:cashense/widgets/transaction_entry.dart';
@@ -28,6 +29,40 @@ class _HomePageState extends State<HomePage> {
               Container(
                 height: 100,
               ),
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: Stack(
+                  children: [
+                    PieChartSample3(),
+                    IgnorePointer(
+                      child: Center(
+                        child: Container(
+                          width: 90,
+                          height: 90,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ),
+                    IgnorePointer(
+                      child: Center(
+                        child: Container(
+                          width: 115,
+                          height: 115,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(height: 100),
               TextInput(labelText: "labelText"),
             ],
           ),
