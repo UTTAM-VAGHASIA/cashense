@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cashense/colors.dart';
+import 'package:cashense/pages/add_transaction_page.dart';
 import 'package:cashense/widgets/fab.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class Cashense extends StatelessWidget {
         body: HomePage(
           title: "Cashense",
         ),
-        floatingActionButton: FAB(openPage: OpenTestPage()),
+        floatingActionButton: FAB(openPage: AddTransactionPage(title: "",)),
       ),
     );
   }

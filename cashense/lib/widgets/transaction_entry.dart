@@ -63,7 +63,14 @@ class TransactionEntry extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          transaction.title == ""
+                          transaction.title != ""
+                              ? TextFont(
+                                  text: transaction.title,
+                                  fontSize: 20,
+                                )
+                              : Container(),
+                          transaction.title == "" &&
+                                  transaction.tagIDs.isNotEmpty
                               ? TagIcon(
                                   tag: TransactionTag(
                                     title: "test",
@@ -72,10 +79,13 @@ class TransactionEntry extends StatelessWidget {
                                   ),
                                   size: 16,
                                 )
-                              : TextFont(
-                                  text: transaction.title,
+                              : Container(),
+                          transaction.title == "" && transaction.tagIDs.isEmpty
+                              ? TextFont(
+                                  text: category.title,
                                   fontSize: 20,
-                                ),
+                                )
+                              : Container(),
                           transaction.title == "" && transaction.note != ""
                               ? Container(
                                   height: 4,
@@ -95,16 +105,17 @@ class TransactionEntry extends StatelessWidget {
                                 ),
 
                           // TODO: loop through all tags relating to this entry
-                          transaction.title == ""
-                              ? Container()
-                              : TagIcon(
+                          transaction.title != "" &&
+                                  transaction.tagIDs.isNotEmpty
+                              ? TagIcon(
                                   tag: TransactionTag(
                                     title: "test",
                                     id: "test",
                                     categoryID: "id",
                                   ),
                                   size: 12,
-                                ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
@@ -164,17 +175,15 @@ class TagIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(1000),
         color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
       ),
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: 5.5 * size / 14,
-          right: 10 * size / 14,
-          left: 10 * size / 14,
-          bottom: 4 * size / 14,
-        ),
-        child: TextFont(
-          text: "My text",
-          fontSize: size,
-        ),
+      padding: EdgeInsets.only(
+        top: 5.5 * size / 14,
+        right: 10 * size / 14,
+        left: 10 * size / 14,
+        bottom: 4 * size / 14,
+      ),
+      child: TextFont(
+        text: "My text",
+        fontSize: size,
       ),
     );
   }
@@ -189,14 +198,11 @@ class DateDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.accentColor,
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: EdgeInsetsGeometry.symmetric(vertical: 8),
-        child: TextFont(
-          text: DateFormat.MMMMEEEEd('en_US').format(date).toString(),
-          fontSize: 15,
-        ),
+      child: TextFont(
+        text: DateFormat.MMMMEEEEd('en_US').format(date).toString(),
+        fontSize: 15,
       ),
     );
   }

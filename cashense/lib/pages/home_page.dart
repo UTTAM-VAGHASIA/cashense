@@ -1,6 +1,7 @@
 import 'package:cashense/struct/budget.dart';
 import 'package:cashense/struct/transaction.dart';
 import 'package:cashense/widgets/budget_container.dart';
+import 'package:cashense/widgets/button.dart';
 import 'package:cashense/widgets/fab.dart';
 import 'package:cashense/widgets/pie_chart.dart';
 import 'package:cashense/widgets/text_input.dart';
@@ -19,13 +20,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      controller: scrollController,
       slivers: [
         SliverList(
           delegate: SliverChildListDelegate(
             [
+              Container(
+                height: 100,
+              ),
+              Button(label: "button", width: 120, height: 40, onTap: () {}),
               Container(
                 height: 100,
               ),
@@ -111,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       amount: 50,
                       categoryID: "id",
                       note: "this is a transaction",
-                      tagIDs: ["id1", "id2"],
+                      tagIDs: ["id1"],
                     ),
                   );
                 },

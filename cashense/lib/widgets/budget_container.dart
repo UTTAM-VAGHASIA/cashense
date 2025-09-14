@@ -40,7 +40,7 @@ class BudgetContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.left,
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.only(bottom: 3.0),
               child: TextFont(
                 text: " left of ${convertToMoney(budget.total)}",
