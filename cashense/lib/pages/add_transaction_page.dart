@@ -2,6 +2,7 @@ import 'package:cashense/widgets/button.dart';
 import 'package:cashense/widgets/text_input.dart';
 import 'package:cashense/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AddTransactionPage extends StatefulWidget {
   const AddTransactionPage({super.key, required this.title});
@@ -13,14 +14,6 @@ class AddTransactionPage extends StatefulWidget {
 }
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
-  int _counter = 0;
-
-  void incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +53,38 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Button(
-              label: "Add Transaction",
+              label: "Select Category",
               width: MediaQuery.of(context).size.width,
               height: 50,
               fractionScaleHeight: 0.93,
               fractionScaleWidth: 0.98,
               onTap: () {
-                Navigator.of(context).pop();
+                showMaterialModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  expand: true,
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Align(
+                      alignment: AlignmentGeometry.bottomLeft,
+                      child: SingleChildScrollView(
+                        controller: ModalScrollController.of(context),
+                        child: Column(
+                          children: [
+                            TextFont(
+                              text: "Select Category",
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
           ),
