@@ -8,18 +8,18 @@ class Button extends StatefulWidget {
     required this.label,
     required this.width,
     required this.height,
-    this.fontSize,
-    this.fractionScaleHeight,
-    this.fractionScaleWidth,
+    this.fontSize = 16,
+    this.fractionScaleHeight = 0.93,
+    this.fractionScaleWidth = 0.93,
     required this.onTap,
   });
 
   final String label;
   final double width;
   final double height;
-  final double? fontSize;
-  final double? fractionScaleHeight;
-  final double? fractionScaleWidth;
+  final double fontSize;
+  final double fractionScaleHeight;
+  final double fractionScaleWidth;
   final VoidCallback onTap;
 
   @override
@@ -66,10 +66,10 @@ class _ButtonState extends State<Button> {
               duration: Duration(milliseconds: 200),
               curve: Curves.easeOutCubic,
               height: isTapped
-                  ? widget.height + (widget.fractionScaleHeight ?? 0.93)
+                  ? widget.height + (widget.fractionScaleHeight)
                   : widget.height,
               width: isTapped
-                  ? widget.width + (widget.fractionScaleWidth ?? 0.93)
+                  ? widget.width + (widget.fractionScaleWidth)
                   : widget.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
@@ -86,7 +86,7 @@ class _ButtonState extends State<Button> {
               child: Center(
                 child: TextFont(
                   text: widget.label,
-                  fontSize: widget.fontSize ?? 16,
+                  fontSize: widget.fontSize,
                 ),
               ),
             ),

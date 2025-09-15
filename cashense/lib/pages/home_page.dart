@@ -3,6 +3,7 @@ import 'package:cashense/struct/transaction.dart';
 import 'package:cashense/widgets/budget_container.dart';
 import 'package:cashense/widgets/button.dart';
 import 'package:cashense/widgets/fab.dart';
+import 'package:cashense/widgets/fade_in.dart';
 import 'package:cashense/widgets/pie_chart.dart';
 import 'package:cashense/widgets/text_input.dart';
 import 'package:cashense/widgets/text_widgets.dart';
@@ -37,6 +38,8 @@ class _HomePageState extends State<HomePage> {
               Container(
                 height: 100,
               ),
+              CountUp(count: 50),
+              CountUpInt(count: 50),
               SizedBox(
                 width: 200,
                 height: 200,

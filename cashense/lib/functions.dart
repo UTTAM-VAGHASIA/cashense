@@ -1,4 +1,5 @@
 import 'package:cashense/colors.dart';
+import 'package:cashense/struct/default_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -52,11 +53,15 @@ String convertToMoney(double amount) {
 // TODO
 TransactionCategory findCategory(String id) {
   return TransactionCategory(
-    title: "Food and Drink",
-    icon: "cutlery.png",
+    title: "Groceries",
+    icon: "groceries.png",
     id: "id",
     color: Colors.orange,
   );
+}
+
+List<TransactionCategory> listCategory() {
+  return defaultCategories();
 }
 
 String getMonth(int currentMonth) {

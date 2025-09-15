@@ -75,7 +75,7 @@ class BudgetContainer extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: budget.color,
-            offset: Offset(0, 4),
+            offset: Offset(0, 4.0),
             blurRadius: 10,
             spreadRadius: -5,
           ),
@@ -207,35 +207,44 @@ class BudgetProgress extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             color: darken(color, 0.5),
           ),
-          margin: EdgeInsets.symmetric(horizontal: 8),
           height: 20,
         ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          height: 20,
-          child: FractionallySizedBox(
-            heightFactor: 1,
-            widthFactor: percent / 100,
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.red,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6.0),
+            child: SlideFadeTransition(
+              animationDuration: Duration(milliseconds: 1000),
+              reverse: true,
+              direction: Direction.horizontal,
+              child: SizedBox(
+                height: 20,
+                child: FractionallySizedBox(
+                  heightFactor: 1,
+                  widthFactor: percent / 100,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.red,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
+                      ),
+                      percent > 40 ? percentText : Container(),
+                    ],
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.white.withValues(alpha: 0.8),
-                  ),
-                ),
-                percent > 40 ? percentText : Container(),
-              ],
+              ),
             ),
           ),
         ),
-        FadeIn(child: TodayIndicator(percent: todayPercent)),
+        TodayIndicator(percent: todayPercent),
         percent <= 40 ? percentText : Container(),
       ],
     );
@@ -260,27 +269,29 @@ class TodayIndicator extends StatelessWidget {
             width: 38,
             child: Column(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Theme.of(context).colorScheme.black,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: 4,
-                      left: 5,
-                      right: 5,
-                      bottom: 3,
+                SlideFadeTransition(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Theme.of(context).colorScheme.black,
                     ),
-                    child: TextFont(
-                      text: "Today",
-                      textAlign: TextAlign.center,
-                      fontSize: 9,
-                      textColor: Theme.of(context).colorScheme.white,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 4,
+                        left: 5,
+                        right: 5,
+                        bottom: 3,
+                      ),
+                      child: TextFont(
+                        text: "Today",
+                        textAlign: TextAlign.center,
+                        fontSize: 9,
+                        textColor: Theme.of(context).colorScheme.white,
+                      ),
                     ),
                   ),
                 ),
-                Flexible(
+                FadeIn(
                   child: Container(
                     width: 3,
                     height: 21,
