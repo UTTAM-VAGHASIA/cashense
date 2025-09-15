@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+import 'dart:math';
 import 'package:cashense/functions.dart';
 import 'package:cashense/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
