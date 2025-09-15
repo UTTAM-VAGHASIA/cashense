@@ -12,6 +12,7 @@ class Button extends StatefulWidget {
     this.fractionScaleHeight = 0.93,
     this.fractionScaleWidth = 0.93,
     required this.onTap,
+    this.color,
   });
 
   final String label;
@@ -21,6 +22,7 @@ class Button extends StatefulWidget {
   final double fractionScaleHeight;
   final double fractionScaleWidth;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   State<Button> createState() => _ButtonState();
@@ -48,9 +50,11 @@ class _ButtonState extends State<Button> {
       child: Center(
         child: Material(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(
-            context,
-          ).colorScheme.accentColor.withValues(alpha: 0.8),
+          color:
+              widget.color ??
+              Theme.of(
+                context,
+              ).colorScheme.accentColor.withValues(alpha: 0.8),
           child: InkWell(
             onHighlightChanged: (value) {
               setState(() {
@@ -66,18 +70,20 @@ class _ButtonState extends State<Button> {
               duration: Duration(milliseconds: 200),
               curve: Curves.easeOutCubic,
               height: isTapped
-                  ? widget.height + (widget.fractionScaleHeight)
+                  ? widget.height * (widget.fractionScaleHeight)
                   : widget.height,
               width: isTapped
-                  ? widget.width + (widget.fractionScaleWidth)
+                  ? widget.width * (widget.fractionScaleWidth)
                   : widget.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.accentColor.withValues(alpha: 0.5),
+                    color:
+                        widget.color ??
+                        Theme.of(
+                          context,
+                        ).colorScheme.accentColor.withValues(alpha: 0.5),
                     blurRadius: 10,
                     offset: Offset(0, 4),
                   ),

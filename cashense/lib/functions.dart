@@ -35,11 +35,10 @@ extension CapExtension on String {
 }
 
 String convertToMoney(double amount) {
-  String currencyType = "\$";
   final currency = NumberFormat("#,##0.00", "en_US");
   String formatOutput = currency.format(amount);
   if (formatOutput.substring(formatOutput.length - 2) == "00") {
-    return currencyType +
+    return getCurrencyString() +
         formatOutput.replaceRange(
           formatOutput.length - 3,
           formatOutput.length,
@@ -47,7 +46,20 @@ String convertToMoney(double amount) {
         );
   }
 
-  return currencyType + currency.format(amount);
+  return getCurrencyString() + currency.format(amount);
+}
+
+int moneyDecimals(double amount) {
+  final currency = NumberFormat("#,##0.00", "en_US");
+  String formatOutput = currency.format(amount);
+  if (formatOutput.substring(formatOutput.length - 2) == "00") {
+    return 0;
+  }
+  return 2;
+}
+
+String getCurrencyString() {
+  return "\$";
 }
 
 // TODO

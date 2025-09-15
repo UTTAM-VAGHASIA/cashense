@@ -22,6 +22,22 @@ class AddTransactionPage extends StatefulWidget {
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (mounted) {
+        openBottomSheet(
+          context,
+          PopupFramework(
+            title: "Select Category",
+            child: SelectCategory(),
+          ),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -66,7 +82,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               fractionScaleHeight: 0.93,
               fractionScaleWidth: 0.98,
               onTap: () {
-                openSelectCategory(context);
+                openBottomSheet(
+                  context,
+                  PopupFramework(
+                    title: "Select Category",
+                    child: SelectCategory(),
+                  ),
+                );
               },
             ),
           ),
@@ -74,33 +96,40 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       ),
     );
   }
-
-  Future<dynamic> openSelectCategory(BuildContext context) {
-    return showMaterialModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      expand: true,
-      context: context,
-      builder: (context) => GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        behavior: HitTestBehavior.opaque,
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: SingleChildScrollView(
-            controller: ModalScrollController.of(context),
-            child: SelectCategory(),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-class SelectCategory extends StatelessWidget {
-  const SelectCategory({
+Future<dynamic> openBottomSheet(BuildContext context, Widget child) {
+  return showMaterialModalBottomSheet(
+    animationCurve: Curves.fastOutSlowIn,
+    duration: Duration(milliseconds: 500),
+    backgroundColor: Colors.transparent,
+    expand: true,
+    context: context,
+    builder: (context) => GestureDetector(
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: child,
+        ),
+      ),
+    ),
+  );
+}
+
+class PopupFramework extends StatelessWidget {
+  const PopupFramework({
     super.key,
+    required this.child,
+    this.title,
   });
+
+  final Widget child;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -119,35 +148,37 @@ class SelectCategory extends StatelessWidget {
         Container(
           height: 5,
         ),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-            color: Theme.of(context).colorScheme.lightDarkAccent,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18.0,
-              vertical: 10.0,
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+              color: Theme.of(context).colorScheme.lightDarkAccent,
             ),
-            child: Column(
-              children: [
-                Container(
-                  height: 20,
-                ),
-                TextFont(
-                  text: "Select Category",
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-                Container(
-                  height: 10,
-                ),
-                SelectCategoryList(),
-                Container(
-                  height: 20,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 10.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 15,
+                  ),
+                  title == null
+                      ? Container(height: 5)
+                      : TextFont(
+                          text: title ?? "",
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  Container(height: 10),
+                  child,
+                  Container(height: 10),
+                ],
+              ),
             ),
           ),
         ),
@@ -156,14 +187,14 @@ class SelectCategory extends StatelessWidget {
   }
 }
 
-class SelectCategoryList extends StatefulWidget {
-  const SelectCategoryList({super.key});
+class SelectCategory extends StatefulWidget {
+  const SelectCategory({super.key});
 
   @override
-  State<SelectCategoryList> createState() => _SelectCategoryListState();
+  State<SelectCategory> createState() => _SelectCategoryState();
 }
 
-class _SelectCategoryListState extends State<SelectCategoryList> {
+class _SelectCategoryState extends State<SelectCategory> {
   int selectedIndex = 0;
 
   @override
@@ -184,6 +215,20 @@ class _SelectCategoryListState extends State<SelectCategoryList> {
                     setState(() {
                       selectedIndex = index;
                     });
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      setState(() {
+                        Navigator.of(context).pop();
+                      });
+                      if (context.mounted) {
+                        openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "Enter Amount",
+                            child: SelectAmount(),
+                          ),
+                        );
+                      }
+                    });
                   },
                   outline: selectedIndex == index,
                 ),
@@ -191,6 +236,212 @@ class _SelectCategoryListState extends State<SelectCategoryList> {
             )
             .values
             .toList(),
+      ),
+    );
+  }
+}
+
+class SelectAmount extends StatefulWidget {
+  const SelectAmount({super.key});
+
+  @override
+  State<SelectAmount> createState() => _SelectAmountState();
+}
+
+class _SelectAmountState extends State<SelectAmount> {
+  String amount = "";
+  void addToAmount(String input) {
+    setState(() {
+      amount += input;
+    });
+  }
+
+  void removeToAmount() {
+    setState(() {
+      if (amount.isNotEmpty) {
+        amount = amount.substring(0, amount.length - 1);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          TextFont(
+            text: getCurrencyString() + (amount == "" ? "0" : amount),
+            textAlign: TextAlign.right,
+            fontSize: 28,
+          ),
+          Row(
+            children: [
+              CalculatorButton(
+                label: "1",
+                editAmount: () {
+                  addToAmount("1");
+                },
+              ),
+              CalculatorButton(
+                label: "2",
+                editAmount: () {
+                  addToAmount("2");
+                },
+              ),
+              CalculatorButton(
+                label: "3",
+                editAmount: () {
+                  addToAmount("3");
+                },
+              ),
+              CalculatorButton(
+                label: "÷",
+                editAmount: () {
+                  addToAmount("÷");
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CalculatorButton(
+                label: "4",
+                editAmount: () {
+                  addToAmount("4");
+                },
+              ),
+              CalculatorButton(
+                label: "5",
+                editAmount: () {
+                  addToAmount("5");
+                },
+              ),
+              CalculatorButton(
+                label: "6",
+                editAmount: () {
+                  addToAmount("6");
+                },
+              ),
+              CalculatorButton(
+                label: "×",
+                editAmount: () {
+                  addToAmount("×");
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CalculatorButton(
+                label: "7",
+                editAmount: () {
+                  addToAmount("7");
+                },
+              ),
+              CalculatorButton(
+                label: "8",
+                editAmount: () {
+                  addToAmount("8");
+                },
+              ),
+              CalculatorButton(
+                label: "9",
+                editAmount: () {
+                  addToAmount("9");
+                },
+              ),
+              CalculatorButton(
+                label: "-",
+                editAmount: () {
+                  addToAmount("-");
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CalculatorButton(
+                label: ".",
+                editAmount: () {
+                  addToAmount(".");
+                },
+              ),
+              CalculatorButton(
+                label: "0",
+                editAmount: () {
+                  addToAmount("0");
+                },
+              ),
+              CalculatorButton(
+                label: "<",
+                editAmount: () {
+                  removeToAmount();
+                },
+              ),
+              CalculatorButton(
+                label: "+",
+                editAmount: () {
+                  addToAmount("+");
+                },
+              ),
+            ],
+          ),
+          AnimatedSwitcher(
+            duration: Duration(milliseconds: 500),
+            child: amount != ""
+                ? Button(
+                    key: Key("addSuccess"),
+                    label: "Add Transaction",
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    fractionScaleHeight: 0.93,
+                    fractionScaleWidth: 0.91,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
+                  )
+                : Button(
+                    key: Key("addNoSuccess"),
+                    label: "Add Transaction",
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    fractionScaleHeight: 0.93,
+                    fractionScaleWidth: 0.91,
+                    onTap: () {},
+                    color: Colors.grey,
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CalculatorButton extends StatelessWidget {
+  const CalculatorButton({
+    super.key,
+    required this.label,
+    required this.editAmount,
+  });
+
+  final String label;
+  final VoidCallback editAmount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Material(
+        child: InkWell(
+          onTap: editAmount,
+          child: SizedBox(
+            height: 50,
+            child: Center(
+              child: TextFont(text: label),
+            ),
+          ),
+        ),
       ),
     );
   }

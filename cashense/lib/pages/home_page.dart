@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
                 height: 100,
               ),
               CountUp(count: 50),
-              CountUpInt(count: 50),
+              CountUpInt(count: 1, duration: Duration(seconds: 100)),
               SizedBox(
                 width: 200,
                 height: 200,

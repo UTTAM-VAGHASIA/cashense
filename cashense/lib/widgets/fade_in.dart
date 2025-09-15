@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
 import 'package:cashense/functions.dart';
+import 'package:cashense/widgets/text_widgets.dart';
 import 'package:flutter/material.dart';
 
 class FadeIn extends StatefulWidget {
@@ -122,9 +124,32 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
 }
 
 class CountUp extends StatefulWidget {
-  const CountUp({super.key, required this.count});
+  const CountUp({
+    super.key,
+    required this.count,
+    this.fontSize = 16,
+    this.prefix = "",
+    this.suffix = "",
+    this.fontWeight = FontWeight.normal,
+    this.textColor,
+    this.textAlign = TextAlign.left,
+    this.maxLines,
+    this.duration = const Duration(milliseconds: 3000),
+    this.decimals = 2,
+    this.curve = Curves.easeOutExpo,
+  });
 
   final double count;
+  final double fontSize;
+  final String prefix;
+  final String suffix;
+  final FontWeight fontWeight;
+  final Color? textColor;
+  final TextAlign textAlign;
+  final int? maxLines;
+  final Duration duration;
+  final int decimals;
+  final Curve curve;
 
   @override
   State<CountUp> createState() => _CountUpState();
@@ -133,41 +158,34 @@ class CountUp extends StatefulWidget {
 class _CountUpState extends State<CountUp> {
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      tween: Tween<double>(
-        begin: widget.count - widget.count * 0.1,
-        end: widget.count,
-      ),
-      duration: const Duration(seconds: 4),
-      curve: Curves.easeOutExpo,
-      builder: (BuildContext context, double animatedCount, Widget? child) {
-        return Column(
-          children: [Text(convertToMoney(animatedCount).toString())],
-        );
-      },
-    );
-  }
-}
-
-class CountUpInt extends StatefulWidget {
-  const CountUpInt({super.key, required this.count});
-
-  final int count;
-
-  @override
-  State<CountUpInt> createState() => _CountUpIntState();
-}
-
-class _CountUpIntState extends State<CountUpInt> {
-  @override
-  Widget build(BuildContext context) {
     return TweenAnimationBuilder<int>(
-      tween: IntTween(begin: 0, end: widget.count),
-      duration: const Duration(seconds: 4),
-      curve: Curves.easeOutExpo,
+      tween: IntTween(
+        begin: 0,
+        end: (widget.count * pow(10, widget.decimals)).toInt(),
+      ),
+      duration: widget.duration,
+      curve: widget.curve,
       builder: (BuildContext context, int animatedCount, Widget? child) {
-        return Column(
-          children: [Text(animatedCount.toString())],
+        String countString = animatedCount.toString();
+        return TextFont(
+          text:
+              widget.prefix +
+              ((countString.length >= widget.decimals + 1)
+                  ? countString.substring(
+                      0,
+                      countString.length - widget.decimals,
+                    )
+                  : "0") +
+              (widget.decimals > 0 ? "." : "") +
+              (countString.length >= widget.decimals
+                  ? countString.substring(countString.length - widget.decimals)
+                  : countString.substring(countString.length - 1)) +
+              widget.suffix,
+          fontSize: widget.fontSize,
+          fontWeight: widget.fontWeight,
+          textAlign: widget.textAlign,
+          textColor: widget.textColor,
+          maxLines: widget.maxLines,
         );
       },
     );
