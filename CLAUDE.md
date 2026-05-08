@@ -62,23 +62,29 @@ features/{name}/
 
 ---
 
-## Current Status (April 2026)
+## Current Status (May 2026)
 
-### Done
+### Done (Phase 0)
 - [x] Project scaffolding, clean architecture, flavors
 - [x] Firebase multi-environment (dev/staging/prod)
-- [x] Google Sign-In + Firebase Auth (Android & Web)
+- [x] Google Sign-In + Firebase Auth (Android)
 - [x] Material 3 theme (light/dark)
 - [x] Core utilities (logger, formatters, validators, device helpers)
-- [x] Auth flow UI (Welcome, Login, Biometrics screens)
+- [x] Routing (go_router) — `lib/routes/`
+- [x] 9 core data models — `lib/data/models/`
+- [x] Home dashboard scaffold (empty state)
 
-### Immediate Blockers (do these first)
-- [ ] iOS Google Sign-In client ID (flavor_constants.dart — 3 TODOs)
-- [ ] App navigation & routing (go_router — routes/ folder is empty)
-- [ ] Core data models (Transaction, Account, Budget, Goal, Group)
+### Up Next: Phase A — Auth + Net Worth Skeleton (target end May 28)
+- [ ] Add Phone OTP auth (Google + OTP per locked decision)
+- [ ] Net worth dashboard with empty state (the launch hero)
+- [ ] Wealth tab: assets/liabilities list shells
+- [ ] Bottom navigation: Home / Wealth / Transactions / Settings
 
-### Not Started
-See `docs/MASTER_PLAN.md` for the full phase-wise breakdown.
+### Deferred (no longer blockers)
+- iOS Google Sign-In TODOs in `flavor_constants.dart` — Android-first launch, iOS is v1.1+
+
+### Full Plan
+See `docs/ROADMAP.md` for vision, scope, phases A–I, decision log, and discipline rules.
 
 ---
 
@@ -100,18 +106,21 @@ See `docs/MASTER_PLAN.md` for the full phase-wise breakdown.
 
 | Document | Purpose |
 |----------|---------|
-| `docs/MASTER_PLAN.md` | Phase-wise feature plan with file-level tasks |
-| `docs/AGENT_WORKFLOW.md` | How agent and human work together |
+| `docs/ROADMAP.md` | **Single source of truth** — vision, v1 scope, phases, decisions, workflow |
 | `docs/FIRESTORE_SCHEMA.md` | Database collections design |
-| `docs/PRD.md` | Full product requirements document |
+| `docs/V1_BACKLOG.md` | Created when first deferred request arrives |
+| `docs/BETA_FEEDBACK.md` | Created at start of Phase H (closed beta) |
 
 ---
 
 ## Rules for Claude
 
-1. Always read this file and `docs/MASTER_PLAN.md` before starting any session
+1. Always read this file and `docs/ROADMAP.md` before starting any session
 2. Work one phase at a time — do not jump ahead without user saying "done"
 3. Never commit — give commands, let human execute
 4. Run `flutter analyze` guidance after every phase
-5. Mark tasks done in MASTER_PLAN.md as phases complete
-6. iOS Google Sign-In is broken until `flavor_constants.dart` TODOs are filled
+5. Update phase status in `docs/ROADMAP.md` §13 as phases complete
+6. iOS auth is **deferred** (Android-first); do not flag iOS TODOs as blockers
+7. Respect the cuts list (`docs/ROADMAP.md` §3 OUT) — new feature requests for AI/SMS/goals/receipts/live-prices go to `docs/V1_BACKLOG.md`, not the active phase
+8. All Firestore access through Repository classes, never direct in controllers
+9. Never put API keys in client code — use Firebase Cloud Functions
