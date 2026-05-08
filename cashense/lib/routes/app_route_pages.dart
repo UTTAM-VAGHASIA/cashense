@@ -6,6 +6,8 @@ import 'package:cashense/features/authentication/controllers/authentication_cont
 import 'package:cashense/features/authentication/views/biometrics_page.dart';
 import 'package:cashense/features/authentication/views/login_screen.dart';
 import 'package:cashense/features/authentication/views/welcome_screen.dart';
+import 'package:cashense/features/home/bindings/home_binding.dart';
+import 'package:cashense/features/home/views/home_screen.dart';
 import 'package:cashense/routes/routes.dart';
 import 'package:cashense/routes/routes_middleware.dart';
 import 'package:cashense/routes/routes_observer.dart';
@@ -57,7 +59,10 @@ class AppRoutePages {
         GoRoute(
           path: AppRoutes.home,
           name: 'home',
-          builder: (_, _) => const _ComingSoonScreen(title: 'Home'),
+          builder: (_, _) {
+            HomeBinding().dependencies();
+            return const HomeScreen();
+          },
         ),
         GoRoute(
           path: AppRoutes.profile,
