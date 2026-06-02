@@ -1,0 +1,11 @@
+openapi: 3.1.0
+info:
+  title: Cashense API
+  version: 0.0.1
+  description: >
+    Cashense is client-only at v1 (Flutter + Firebase SDK direct access).
+    There is no custom HTTP backend yet. This skeleton stays empty until
+    Cloud Functions arrive (v1.1+, e.g. price feeds, AI). See docs/03-api-contract.md.
+paths: {}
+components:
+  schemas: {}

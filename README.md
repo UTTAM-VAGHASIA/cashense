@@ -1,78 +1,23 @@
-<div align="center">
+# Cashense
 
-# 💰 Cashense
+> A personal finance super-app for young Indians. Everything you own and owe, in one screen — daily expenses, group splits, budgets, bills, and a net-worth dashboard.
 
-**Your intelligent finance companion. Make every rupee count.**
+Young Indians juggle Splitwise, spreadsheets, bank apps, and broker apps. Cashense combines Splitwise-style group splitting, daily expense/budget/bill tracking, and a complete net-worth dashboard (assets + liabilities) into one calm, India-first app. The marketing wedge is the **Net Worth Dashboard** — *"See everything you own and owe in one screen"* — which ships early (empty state) and gets richer each phase; every other feature is the daily-use layer underneath.
 
-![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+**User #1 = Yaksi.** This is a portfolio/learning build in a brutally saturated market (Cred, Jupiter, Slice, Fi, Walnut, Khatabook). The defensible angle is the *combination*, not any single feature — said plainly so the scope stays honest.
 
-*Smart. Simple. Cashense.*
+**Stack:** Flutter 3 (Dart ^3.8.1, FVM) · GetX (state + DI) · go_router (`GetMaterialApp.router`) · Firebase (Auth, Firestore, Analytics) · Drift (present, unused at v1) · Dio · Android-first.
 
-</div>
+**v1 (Dec 31, 2026):** app live on the Play Store, first 100 installs, one post-launch fix shipped. Manual asset values at launch; AI/NLP, SMS import, live price feeds, iOS, and insurance are v1.1+.
 
----
-
-## ✨ Overview
-
-Cashense is a personal finance super-app built for young Indians — tracking expenses, managing group splits, setting saving goals, and delivering AI-powered insights. One app to replace the chaos of juggling UPI apps, notes, and spreadsheets.
-
----
-
-## 🧩 Features
-
-| Feature | Description |
-|---------|-------------|
-| 💸 **Expense Tracking** | Log transactions by category, account, and tag |
-| 🏦 **Accounts** | Wallet, bank, UPI, cash — all in one place |
-| 📊 **Budgeting** | Monthly caps, category budgets, visual progress |
-| 🎯 **Saving Goals** | Define goals with timelines and AI suggestions |
-| 👥 **Group Expenses** | Split, settle, or collect — friends, couples, roommates |
-| 🤝 **Debt Tracker** | Track money lent/borrowed with settlement options |
-| 🔁 **Subscriptions** | Track recurring payments with renewal alerts |
-| 🤖 **AI Assistant** | *"I spent ₹500 on groceries from HDFC"* — auto-logged |
-| 📈 **Analytics** | Pie charts, trends, weekly summaries, income vs. expense |
-| 🏠 **Multi-Workspace** | Separate spaces for personal, business, or shared finances |
-
----
-
-## ⚙️ Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Framework | Flutter (Dart) · managed with FVM |
-| State Management | GetX |
-| Backend | Firebase — Auth, Firestore, Storage, FCM |
-| AI | OpenAI API (NLP transactions + suggestions) |
-| Charts | fl_chart |
-| Payments | Razorpay |
-| CI/CD | GitHub Actions |
-
----
-
-## 💡 AI Highlights
-
-- *"I spent ₹500 on groceries yesterday from HDFC"* → auto-logged, categorised
-- Voice command support for hands-free transaction entry
-- Smart category suggestions based on amount and text
-- Goal advisor: tells you how much to save monthly to hit a target
-- Auto debt settlement: calculates minimum transactions to clear group dues
-
----
-
-## 🚀 Getting Started
+## Getting started
 
 ```bash
-flutter pub get
-flutter run
+cd cashense          # the Flutter app is nested one level down
+fvm flutter pub get
+fvm flutter run --flavor dev -t lib/flavors/main_development.dart
 ```
 
-> See [`docs/`](docs/) for detailed architecture, database schema, and API docs.
+> **Repo layout:** the Flutter app is nested at [`cashense/`](cashense/) (pubspec, lib, android, ios). Planning docs and contracts live at the repo root.
 
----
-
-<div align="center">
-<sub>India-first personal finance · Flutter + Firebase + AI</sub>
-</div>
+**Docs:** Machine-readable contracts live in [contracts/](./contracts). Full plan & spec: kept in the portfolio `planning/` workspace (not in this public repo).

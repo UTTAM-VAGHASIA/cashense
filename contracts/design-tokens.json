@@ -1,0 +1,96 @@
+{
+  "$comment": "Mirrors lib/utils/constants/colors.dart and sizes.dart. Source of truth is the Dart code; this file is the portable contract.",
+  "color": {
+    "primary": "#2563EB",
+    "primaryLight": "#3B82F6",
+    "primaryDark": "#1D4ED8",
+    "primaryVariant": "#1E40AF",
+    "secondary": "#10B981",
+    "secondaryLight": "#34D399",
+    "secondaryDark": "#059669",
+    "accent": "#F59E0B",
+    "success": "#10B981",
+    "warning": "#F59E0B",
+    "error": "#EF4444",
+    "info": "#3B82F6",
+    "financial": {
+      "income": "#10B981",
+      "expense": "#EF4444",
+      "savings": "#3B82F6",
+      "investment": "#8B5CF6",
+      "debt": "#F59E0B"
+    },
+    "category": {
+      "food": "#FF6B6B",
+      "transport": "#4ECDC4",
+      "shopping": "#45B7D1",
+      "entertainment": "#96CEB4",
+      "health": "#FECA57",
+      "education": "#6C5CE7",
+      "utilities": "#A29BFE",
+      "travel": "#FF7675",
+      "business": "#00B894",
+      "other": "#636E72"
+    },
+    "background": {
+      "light": "#FFFFFF",
+      "dark": "#0F172A",
+      "surfaceLight": "#F8FAFC",
+      "surfaceDark": "#1E293B"
+    },
+    "text": {
+      "primary": "#1F2937",
+      "secondary": "#6B7280",
+      "tertiary": "#9CA3AF",
+      "primaryDark": "#F9FAFB",
+      "secondaryDark": "#D1D5DB"
+    }
+  },
+  "typography": {
+    "$comment": "Inter for UI body/headings; Inconsolata 700 for numeric/amount displays.",
+    "fontFamily": {
+      "ui": "Inter",
+      "numeric": "Inconsolata"
+    },
+    "fontSize": {
+      "headlineLarge": 32,
+      "headlineMedium": 24,
+      "headlineSmall": 18,
+      "title": 16,
+      "body": 14,
+      "label": 12
+    },
+    "fontWeight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "black": 900,
+      "$rule": "Weight <= 300 forbidden (portfolio rule)."
+    }
+  },
+  "spacing": {
+    "$comment": "AppSizes — base unit 4dp.",
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32,
+    "defaultSpace": 24,
+    "spaceBtwItems": 16,
+    "spaceBtwSections": 32
+  },
+  "radius": {
+    "sm": 4,
+    "md": 8,
+    "lg": 12,
+    "cardSm": 10,
+    "cardMd": 12,
+    "cardLg": 16,
+    "input": 12,
+    "button": 10
+  },
+  "elevation": {
+    "card": 2,
+    "button": 4
+  }
+}

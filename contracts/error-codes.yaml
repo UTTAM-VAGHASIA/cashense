@@ -1,0 +1,55 @@
+# Cashense client-visible error codes with en/hi copy.
+# Codes are kebab-case strings. Used by snackbar_helper / dialog_helper.
+# Backend errors (Firebase) are mapped to these before reaching the UI.
+
+auth/sign-in-failed:
+  en: "Couldn't sign you in. Please try again."
+  hi: "साइन इन नहीं हो सका। कृपया फिर से प्रयास करें।"
+
+auth/network:
+  en: "No internet connection. Check your network and retry."
+  hi: "इंटरनेट कनेक्शन नहीं है। अपना नेटवर्क जांचें और दोबारा कोशिश करें।"
+
+auth/cancelled:
+  en: "Sign-in was cancelled."
+  hi: "साइन इन रद्द कर दिया गया।"
+
+auth/otp-invalid:
+  en: "That OTP is incorrect or expired."
+  hi: "यह OTP गलत है या समाप्त हो गया है।"
+
+auth/session-expired:
+  en: "Your session expired. Please sign in again."
+  hi: "आपका सत्र समाप्त हो गया। कृपया फिर से साइन इन करें।"
+
+data/load-failed:
+  en: "Couldn't load your data. Pull to refresh."
+  hi: "आपका डेटा लोड नहीं हो सका। रीफ्रेश करने के लिए नीचे खींचें।"
+
+data/save-failed:
+  en: "Couldn't save. Please try again."
+  hi: "सहेजा नहीं जा सका। कृपया फिर से प्रयास करें।"
+
+validation/amount-required:
+  en: "Enter an amount."
+  hi: "राशि दर्ज करें।"
+
+validation/amount-invalid:
+  en: "Enter a valid amount."
+  hi: "एक मान्य राशि दर्ज करें।"
+
+validation/name-required:
+  en: "Name can't be empty."
+  hi: "नाम खाली नहीं हो सकता।"
+
+split/total-mismatch:
+  en: "Splits must add up to the total amount."
+  hi: "विभाजन कुल राशि के बराबर होना चाहिए।"
+
+permission/denied:
+  en: "You don't have access to this."
+  hi: "आपके पास इसकी अनुमति नहीं है।"
+
+unknown:
+  en: "Something went wrong. Please try again."
+  hi: "कुछ गलत हो गया। कृपया फिर से प्रयास करें।"

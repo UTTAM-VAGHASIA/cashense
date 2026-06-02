@@ -1,0 +1,66 @@
+# Cashense enum contract.
+# Source of truth is the Dart code in lib/data/models/*. Wire values shown here.
+# Convention: wire values are lower_snake_case (see account_type), but most
+# models persist Dart enum .name (camelCase) verbatim — both noted per enum.
+
+transaction_type:
+  # lib/data/models/transaction_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [expense, income, transfer]
+
+recurring_interval:
+  # transaction_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [weekly, monthly, yearly]
+
+account_type:
+  # lib/data/models/account_model.dart — custom toJson maps to lower_snake_case
+  wire_style: lower_snake_case
+  values: [bank, cash, upi_wallet, credit_card]
+
+budget_period:
+  # lib/data/models/budget_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [weekly, monthly, yearly]
+
+bill_type:
+  # lib/data/models/bill_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [subscription, rent, emi, utility, insurance, custom]
+
+bill_status:
+  # bill_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [pending, paid, overdue]
+
+billing_cycle:
+  # lib/data/models/subscription_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [weekly, monthly, quarterly, yearly]
+
+split_type:
+  # lib/data/models/group_expense_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [equal, percentage, exact, shares]
+
+group_type:
+  # lib/data/models/group_model.dart — persisted via .name
+  wire_style: camelCase
+  values: [trip, roommates, couple, event, other]
+
+flavor:
+  # lib/utils/constants/enums.dart — build flavor, not persisted
+  values: [dev, staging, prod]
+
+# Documented in docs/FIRESTORE_SCHEMA.md, not yet a Dart enum (Phase B/C):
+asset_class:
+  status: planned
+  values: [fds, stocks, mutual_funds, gold, property, other]
+
+liability_type:
+  status: planned
+  values: [loan, credit_card, informal_debt]
+
+workspace_role:
+  status: planned
+  values: [admin, editor, viewer]
