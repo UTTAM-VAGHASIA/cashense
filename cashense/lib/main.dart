@@ -1,3 +1,4 @@
+import 'package:cashense/bindings/general_bindings.dart';
 import 'package:cashense/data/services/firebase_service.dart';
 import 'package:cashense/flavors/flavor_config.dart';
 import 'package:cashense/utils/constants/enums.dart';
@@ -13,6 +14,12 @@ Future<void> commonMain({required Flavor flavor}) async {
 
   // Initialize Firebase
   await FirebaseService.initializeFirebase();
+
+  // Register app-wide dependencies before the widget tree builds. The router
+  // is constructed eagerly inside App.build() and resolves controllers such as
+  // AuthenticationController via Get.find, so those bindings must exist before
+  // runApp — GetMaterialApp's initialBinding runs too late for that lookup.
+  GeneralBindings().dependencies();
 }
 
 Future<void> main() async {

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:cashense/common/widgets/app_shell.dart';
 import 'package:cashense/features/authentication/controllers/authentication_controller.dart';
 import 'package:cashense/features/authentication/views/biometrics_page.dart';
 import 'package:cashense/features/authentication/views/login_screen.dart';
 import 'package:cashense/features/authentication/views/welcome_screen.dart';
 import 'package:cashense/features/home/bindings/home_binding.dart';
 import 'package:cashense/features/home/views/home_screen.dart';
+import 'package:cashense/features/net_worth/bindings/net_worth_binding.dart';
+import 'package:cashense/features/net_worth/views/net_worth_screen.dart';
 import 'package:cashense/routes/routes.dart';
 import 'package:cashense/routes/routes_middleware.dart';
 import 'package:cashense/routes/routes_observer.dart';
@@ -55,29 +58,64 @@ class AppRoutePages {
           builder: (_, _) => const BiometricsPage(),
         ),
 
-        // Stubbed routes — wire to real screens as features ship.
-        GoRoute(
-          path: AppRoutes.home,
-          name: 'home',
-          builder: (_, _) {
-            HomeBinding().dependencies();
-            return const HomeScreen();
-          },
+        // Phase A navigation shell: bottom nav across the four primary
+        // surfaces. Net Worth is the hero surface inside the Wealth tab.
+        StatefulShellRoute.indexedStack(
+          builder: (_, _, navigationShell) =>
+              AppShell(navigationShell: navigationShell),
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.home,
+                  name: 'home',
+                  builder: (_, _) {
+                    HomeBinding().dependencies();
+                    return const HomeScreen();
+                  },
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.netWorth,
+                  name: 'net_worth',
+                  builder: (_, _) {
+                    NetWorthBinding().dependencies();
+                    return const NetWorthScreen();
+                  },
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.transactions,
+                  name: 'transactions',
+                  builder: (_, _) =>
+                      const _ComingSoonScreen(title: 'Transactions'),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.settings,
+                  name: 'settings',
+                  builder: (_, _) => const _ComingSoonScreen(title: 'Settings'),
+                ),
+              ],
+            ),
+          ],
         ),
+
+        // Stubbed routes pushed over the shell — wire to real screens as
+        // features ship.
         GoRoute(
           path: AppRoutes.profile,
           name: 'profile',
           builder: (_, _) => const _ComingSoonScreen(title: 'Profile'),
-        ),
-        GoRoute(
-          path: AppRoutes.settings,
-          name: 'settings',
-          builder: (_, _) => const _ComingSoonScreen(title: 'Settings'),
-        ),
-        GoRoute(
-          path: AppRoutes.transactions,
-          name: 'transactions',
-          builder: (_, _) => const _ComingSoonScreen(title: 'Transactions'),
         ),
         GoRoute(
           path: AppRoutes.accounts,
@@ -115,11 +153,6 @@ class AppRoutePages {
           path: AppRoutes.liabilities,
           name: 'liabilities',
           builder: (_, _) => const _ComingSoonScreen(title: 'Liabilities'),
-        ),
-        GoRoute(
-          path: AppRoutes.netWorth,
-          name: 'net_worth',
-          builder: (_, _) => const _ComingSoonScreen(title: 'Net Worth'),
         ),
         GoRoute(
           path: AppRoutes.goals,
